@@ -33,3 +33,6 @@ async def belozyortseva_callback_handler(call: CallbackQuery, variables: Variabl
         text=text,
         reply_markup=await variables.keyboards.menu.gavrikov_test()
     )
+    await call.answer()
+
+

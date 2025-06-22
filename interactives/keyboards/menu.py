@@ -1,8 +1,9 @@
 from core.operations import KeyboardOperations
 from core.utils.answer_choices import answer_choices
 
+
 class MenuKeyboard(KeyboardOperations):
-    async def belozyortseva_test(self, number_test: int):
+    async def belozerova_test(self, number_test: int):
         test_data = answer_choices[number_test - 1]
         options = test_data["options"]
         correct_index = test_data["correct_index"]
@@ -14,10 +15,6 @@ class MenuKeyboard(KeyboardOperations):
 
         return await self.create_keyboard(buttons=buttons)
 
-    async def mendu(self):
-        buttons = {"koigioa": "mendubaev"}
-
-        return await self.create_keyboard(buttons=buttons)
     async def gavrikov_test(self):
         test_data = answer_choices[2]
         options = test_data["options"]

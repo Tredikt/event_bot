@@ -13,6 +13,7 @@ from settings import config
 
 from core.routers import routers
 
+
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
@@ -34,8 +35,8 @@ sys.excepthook = handle_exception
 async def main():
     storage = MemoryStorage()
 
-    # engine = create_async_engine(config.DATABASE_URL)
-    # session = async_sessionmaker(engine, expire_on_commit=False)
+    engine = create_async_engine(config.DATABASE_URL)
+    session = async_sessionmaker(engine, expire_on_commit=False)
 
     bot = Bot(token=config.TG_TOKEN, default=DefaultBotProperties(parse_mode="HTML"))
     dp = Dispatcher(bot=bot, storage=storage)
