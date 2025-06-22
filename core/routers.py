@@ -1,5 +1,6 @@
-# сюда импортить роутеры из всех приложений, затем объединять в общий список
+from admin.routers import admin_routers
+
 
 routers = [
-    # *admin_routers
+    *admin_routers,
 ]
