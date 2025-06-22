@@ -1,0 +1,30 @@
+from aiogram import Router, F
+from aiogram.types import Message, CallbackQuery
+
+from core.utils.enums import Variables
+
+test_router = Router()
+
+@test_router.callback_query(F.data.startswith("belozerova_test_"))
+async def belozerova_callback_handler(call: CallbackQuery, variables: Variables):
+    parts = call.data.split("_")
+    number_test = parts[-2]
+    is_correct = parts[-1] == "true"
+    text = "✅ Верно!" if is_correct else "❌ Неверно!"
+    number_test += 1
+    if number_test == 2:
+        await call.message.edit_text(
+            text=text,
+            reply_markup=await variables.keyboards.menu.belozerova_test(number_test=number_test)
+        )
+    else:
+        await call.message.edit_text(
+        text=text,
+        reply_markup=await variables.keyboards.menu.gavrikov_test()
+    )
+
+
+@test_router.callback_query(F.data == "gavrikov_3_selected")
+async def gavrikov(call: CallbackQuery, variables: Variables):
+    pass
+

@@ -34,15 +34,15 @@ sys.excepthook = handle_exception
 async def main():
     storage = MemoryStorage()
 
-    engine = create_async_engine(config.DATABASE_URL)
-    session = async_sessionmaker(engine, expire_on_commit=False)
+    # engine = create_async_engine(config.DATABASE_URL)
+    # session = async_sessionmaker(engine, expire_on_commit=False)
 
     bot = Bot(token=config.TG_TOKEN, default=DefaultBotProperties(parse_mode="HTML"))
     dp = Dispatcher(bot=bot, storage=storage)
 
     dp.include_routers(*routers)
-    async with session() as session:
-        dp.update.middleware(BasicMiddleware(db=DBClass(session=session)))
+    # async with session() as session:
+    #     dp.update.middleware(BasicMiddleware(db=DBClass(session=session)))
     await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot)
 
