@@ -3,7 +3,9 @@ from aiogram.types import Message, CallbackQuery
 
 from core.utils.enums import Variables
 
+
 test_router = Router()
+
 
 @test_router.callback_query(F.data.startswith("belozerova_test_"))
 async def belozerova_callback_handler(call: CallbackQuery, variables: Variables):
@@ -22,9 +24,9 @@ async def belozerova_callback_handler(call: CallbackQuery, variables: Variables)
         text=text,
         reply_markup=await variables.keyboards.menu.gavrikov_test()
     )
+    await call.answer()
 
 
 @test_router.callback_query(F.data == "gavrikov_3_selected")
 async def gavrikov(call: CallbackQuery, variables: Variables):
     pass
-
