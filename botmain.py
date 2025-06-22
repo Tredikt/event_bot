@@ -41,8 +41,8 @@ async def main():
     dp = Dispatcher(bot=bot, storage=storage)
 
     dp.include_routers(*routers)
-    # async with session() as session:
-    #     dp.update.middleware(BasicMiddleware(db=DBClass(session=session)))
+    async with session() as session:
+        dp.update.middleware(BasicMiddleware(bot=bot, db=DBClass(session=session)))
     await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot)
 
