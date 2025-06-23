@@ -13,6 +13,7 @@ from settings import config
 
 from core.routers import routers
 
+
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
@@ -42,7 +43,7 @@ async def main():
 
     dp.include_routers(*routers)
     async with session() as session:
-        dp.update.middleware(BasicMiddleware(db=DBClass(session=session)))
+        dp.update.middleware(BasicMiddleware(bot=bot, db=DBClass(session=session)))
     await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot)
 

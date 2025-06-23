@@ -1,1 +1,1 @@
-from .keyboard_operations import KeyboardOperations
+from core.operations.keyboard_operations import KeyboardOperations

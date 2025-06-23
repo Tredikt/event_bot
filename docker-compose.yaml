@@ -12,6 +12,10 @@ services:
   db:
     image: postgres:15
     restart: always
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: event_bot
     env_file:
       - .env
     volumes:
