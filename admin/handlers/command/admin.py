@@ -1,23 +1,21 @@
-from aiogram import Router, Bot
+from aiogram import Router
 from aiogram.filters import Command
 from aiogram.types import Message
 
+from core.utils.enums import Variables
 from settings import config
 
 
-admin_command_router = Router()
+router = Router(name="admin_command")
 
 
-@admin_command_router.message(Command(commands=["admin"]))
-async def admin_command_handler(update: Message, bot: Bot, variables):
-    user_id = str(update.from_user.id)
+@router.message(Command(commands=["admin"]))
+async def admin_command_handler(message: Message, variables: Variables):
+    user_id = str(message.from_user.id)
     admins = config.ADMINS.split(",")
 
     if user_id in admins:
-        text = "Админ-панель:"
-        keyboard = await variables.keyboards.admin.menu()
-
-        await update.answer(
-            text=text,
-            reply_markup=keyboard
+        await message.answer(
+            text="Админ-панель:",
+            reply_markup=await variables.keyboards.admin.menu()
         )

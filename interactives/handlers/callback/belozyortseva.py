@@ -3,10 +3,10 @@ from aiogram.types import Message, CallbackQuery
 
 from core.utils.enums import Variables
 
-belozyortseva_router = Router()
 
+router = Router(name="tests_callback_router")
 
-@belozyortseva_router.callback_query(F.data == "belozyortseva")
+@router.callback_query(F.data == "belozyortseva")
 async def belozyortseva(call: CallbackQuery, variables: Variables):
     text = "Угадай продолжение термина фронтенд и бэкенд"
     number_test = 1

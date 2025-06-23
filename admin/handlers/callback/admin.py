@@ -1,12 +1,13 @@
-from aiogram import Router, Bot
+from aiogram import Router, F
 from aiogram.types import CallbackQuery
+from core.utils.enums import Variables
 
 
-admin_callback_router = Router()
+router = Router(name="admin_callback")
 
 
-@admin_callback_router.callback_query(lambda c: c.data.startswith("admin_page_"))
-async def admin_page_handler(callback: CallbackQuery, variables):
+@router.callback_query(F.data.startswith("admin_page_"))
+async def admin_page_handler(callback: CallbackQuery, variables: Variables):
     page = int(callback.data.split("admin_page_")[1])
     
     text = "Админ-панель:"
@@ -20,18 +21,19 @@ async def admin_page_handler(callback: CallbackQuery, variables):
     await callback.answer()
 
 
-@admin_callback_router.callback_query(lambda c: "/" in c.data and c.data.replace("/", "").replace(" ", "").isdigit())
+@router.callback_query(F.data.startswith("number_page_"))
 async def admin_page_info_handler(callback: CallbackQuery):
     await callback.answer()
 
 
-@admin_callback_router.callback_query(lambda c: c.data.startswith("interactive_") or c.data.startswith("finished_"))
-async def speaker_action_handler(callback: CallbackQuery, variables):
+@router.callback_query(F.data.startswith("interactive_"))
+@router.callback_query(F.data.startswith("finished_"))
+async def speaker_action_handler(callback: CallbackQuery, variables: Variables):
     callback_data = callback.data
     
     was_already_pressed = callback_data in variables.keyboards.admin.pressed_buttons
     
-    await variables.keyboards.admin.mark_button_pressed(callback_data)
+    await variables.keyboards.admin.mark_button_pressed(callback_data=callback_data)
     
     button_text = None
     for text, data in variables.keyboards.admin.all_buttons:
