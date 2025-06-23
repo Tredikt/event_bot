@@ -1,0 +1,1 @@
+from interactives.handlers.callback.tests import router as tests_callback_router

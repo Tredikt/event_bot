@@ -1,1 +1,1 @@
-from interactives.keyboards.menu import MenuKeyboard
+from interactives.keyboards.menu import InteractiveKeyboard

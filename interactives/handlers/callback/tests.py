@@ -1,13 +1,13 @@
 from aiogram import Router, F
-from aiogram.types import Message, CallbackQuery
+from aiogram.types import CallbackQuery
 
 from core.utils.enums import Variables
 
 
-test_router = Router()
+router = Router(name="tests_callback_router")
 
 
-@test_router.callback_query(F.data.startswith("belozerova_test_"))
+@router.callback_query(F.data.startswith("belozerova_test_"))
 async def belozerova_callback_handler(call: CallbackQuery, variables: Variables):
     parts = call.data.split("_")
     number_test = parts[-2]
@@ -27,6 +27,6 @@ async def belozerova_callback_handler(call: CallbackQuery, variables: Variables)
     await call.answer()
 
 
-@test_router.callback_query(F.data == "gavrikov_3_selected")
+@router.callback_query(F.data == "gavrikov_3_selected")
 async def gavrikov(call: CallbackQuery, variables: Variables):
     pass

@@ -1,8 +1,8 @@
-from interactives.keyboards import MenuKeyboard
+from interactives.keyboards import InteractiveKeyboard
 from admin.keyboards import AdminKeyboard
 
 
 class Keyboards:
     def __init__(self):
-        self.menu = MenuKeyboard()
+        self.menu = InteractiveKeyboard()
         self.admin = AdminKeyboard()

@@ -2,14 +2,14 @@ from core.operations import KeyboardOperations
 from core.utils.answer_choices import answer_choices
 
 
-class MenuKeyboard(KeyboardOperations):
+class InteractiveKeyboard(KeyboardOperations):
     async def belozerova_test(self, number_test: int):
         test_data = answer_choices[number_test - 1]
         options = test_data["options"]
         correct_index = test_data["correct_index"]
 
         buttons = {
-            option: f"interactive_belozertseva_{number_test}_{'true' if idx == correct_index else 'false'}"
+            option: f"belozerova_test_{number_test}_{'true' if idx == correct_index else 'false'}"
             for idx, option in enumerate(options)
         }
 

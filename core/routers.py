@@ -1,8 +1,8 @@
-from interactives.handlers.callback.tests import test_router
-from admin.routers import admin_routers
+from interactives.handlers import interactive_routers
+from admin.handlers import admin_routers
 
 
 routers = [
     *admin_routers,
-    test_router,
+    *interactive_routers,
 ]
