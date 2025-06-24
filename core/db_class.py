@@ -5,6 +5,7 @@ from core.repositories import (
     UserRepository,
     InteractiveHistoryRepository,
 )
+from core.services import InteractiveService
 
 class DBClass:
     '''
@@ -14,3 +15,5 @@ class DBClass:
     def __init__(self, session: AsyncSession):
         self.user = UserRepository(session=session)
         self.interactive_history = InteractiveHistoryRepository(session=session)
+        
+        self.interactive_service = InteractiveService(self)

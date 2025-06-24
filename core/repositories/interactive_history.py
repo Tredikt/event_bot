@@ -1,5 +1,5 @@
 from typing import Optional, List
-from sqlalchemy import select, func
+from sqlalchemy import select, func, insert
 from datetime import datetime, timedelta
 
 from core.db_templates import BaseRepository
@@ -9,7 +9,23 @@ from core.models.interactive_history import InteractiveHistory
 class InteractiveHistoryRepository(BaseRepository):
     options = []
 
-    async def get_user_history(self, user_id: int, limit: int = 20) -> List[InteractiveHistory]:
+    async def add_record(
+        self,
+        user_id: str,
+        interactive_name: str,
+        points_earned: int = 1
+    ) -> InteractiveHistory:
+        """Добавляет запись о прохождении интерактива"""
+        history_record = InteractiveHistory(
+            user_id=user_id,
+            interactive_name=interactive_name,
+            points_earned=points_earned
+        )
+        self.session.add(history_record)
+        await self.session.commit()
+        return history_record
+
+    async def get_user_history(self, user_id: str, limit: int = 20) -> List[InteractiveHistory]:
         """Получает историю интерактивов пользователя"""
         select_stmt = (
             select(InteractiveHistory)
@@ -21,7 +37,7 @@ class InteractiveHistoryRepository(BaseRepository):
         result = await self.session.execute(select_stmt)
         return result.scalars().all()
 
-    async def check_already_completed(self, user_id: int, interactive_name: str) -> bool:
+    async def check_already_completed(self, user_id: str, interactive_name: str) -> bool:
         """Проверяет, проходил ли пользователь этот интерактив"""
         select_stmt = select(InteractiveHistory).where(
             InteractiveHistory.user_id == user_id,
