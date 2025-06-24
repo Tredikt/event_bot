@@ -1,5 +1,5 @@
 from core.operations import KeyboardOperations
-from core.utils.answer_choices import answer_choices, horoshutina_sequence
+from core.utils.answer_choices import answer_choices, horoshutina_sequence, sadriev_test
 from interactives.states import interactive_states, HoroshutinaState
 
 
@@ -55,4 +55,15 @@ class InteractiveKeyboard(KeyboardOperations):
                 
             buttons[display_text] = f"horoshutina_{word_id}"
         
+        return await self.create_keyboard(buttons=buttons)
+
+    async def sadriev_test(self):
+        options = sadriev_test["options"]
+        correct_index = sadriev_test["correct_index"]
+
+        buttons = {
+            option: f"sadriev_test_{'true' if idx == correct_index else 'false'}"
+            for idx, option in enumerate(options)
+        }
+
         return await self.create_keyboard(buttons=buttons)

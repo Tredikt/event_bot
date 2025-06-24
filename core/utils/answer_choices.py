@@ -27,3 +27,14 @@ photo_id = [
     "AgACAgIAAxkBAAMKaFcTvstEOfy671PFkdA_LtsbjBYAAhbvMRukirlKOh275kqGKBkBAAMCAAN5AAM2BA",
     "AgACAgIAAxkBAAMMaFcTx-ZSxh7F174w_axhQOWSPCsAAhfvMRukirlKgRT9cB-qn2sBAAMCAAN5AAM2BA"
 ]
+
+sadriev_test = {
+    "options": [
+        "от 100 млн до 500 млн", 
+        "от 500 млн до 1 млрд", 
+        "от 1 млрд до 2 млрд", 
+        "от 2 млрд до 3 млрд", 
+        "более 3 млрд"
+    ],
+    "correct_index": 2
+}
