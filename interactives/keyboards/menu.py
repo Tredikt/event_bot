@@ -1,6 +1,6 @@
 from core.operations import KeyboardOperations
 from core.utils.answer_choices import answer_choices, horoshutina_sequence
-from interactives.states import interactive_states
+from interactives.states import interactive_states, HoroshutinaState
 
 
 class InteractiveKeyboard(KeyboardOperations):
@@ -34,9 +34,9 @@ class InteractiveKeyboard(KeyboardOperations):
         if user_id not in self.horoshutina_states:
             self.horoshutina_states[user_id] = interactive_states["HoroshutinaState"]()
             
-        state = self.horoshutina_states[user_id]
+        state: HoroshutinaState = self.horoshutina_states[user_id]
         
-        if state.is_completed():
+        if await state.is_completed():
             return await self.create_keyboard({"🎉 Завершено!": "horoshutina_completed"})
         
         buttons = {}
