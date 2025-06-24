@@ -12,6 +12,15 @@ answer_choices = [
     }
 ]
 
+horoshutina_sequence = [
+    {"word": "Выявление потребности", "order": 1, "id": "need"},
+    {"word": "Показ", "order": 2, "id": "show"},
+    {"word": "Демоиспользование", "order": 3, "id": "demo"},
+    {"word": "Дожим", "order": 4, "id": "push"},
+    {"word": "Итоговое формирование условий", "order": 5, "id": "terms"},
+    {"word": "Контрактование", "order": 6, "id": "contract"},
+]
+
 photo_id = [
     "AgACAgIAAxkBAAMFaFcQ_bAajmdRRrRUPc1WLuF5uVcAAgLvMRukirlKyfZiVwEziscBAAMCAAN5AAM2BA",
     "AgACAgIAAxkBAAMHaFcTMPZN7jYfB-b3uR_WFMsk_QQAAhXvMRukirlKGXtiRMCU904BAAMCAAN4AAM2BA",

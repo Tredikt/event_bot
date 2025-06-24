@@ -12,13 +12,12 @@ BASE_DIR = Path(__file__).parent.parent
 
 class Config(BaseSettings):
     TG_TOKEN: str
-    DATABASE_URL: str
-
+    
     DB_HOST: str = "localhost"
-    DB_PORT: str = "5432"
+    DB_PORT: str = "5433"
     DB_PASSWORD: str = "password"
     DB_USER: str = "user"
-    DB_NAME: str = "todo"
+    DB_NAME: str = "event_bot"
 
     DB_URL: str = (
         f"postgresql+asyncpg://"
