@@ -16,4 +16,4 @@ class DBClass:
         self.user = UserRepository(session=session)
         self.interactive_history = InteractiveHistoryRepository(session=session)
         
-        self.interactive_service = InteractiveService(self)
+        self.interactive_service = InteractiveService(db=self)

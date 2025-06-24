@@ -1,5 +1,6 @@
 from core.operations import KeyboardOperations
-from core.utils.answer_choices import answer_choices
+from core.utils.answer_choices import answer_choices, horoshutina_sequence
+from interactives.states import interactive_states
 
 
 class InteractiveKeyboard(KeyboardOperations):
@@ -82,26 +83,30 @@ class InteractiveKeyboard(KeyboardOperations):
     async def interactive_horoshutina(self, user_id):
         if user_id not in self.horoshutina_states:
             self.horoshutina_states[user_id] = interactive_states["HoroshutinaState"]()
+            
+        state: HoroshutinaState = self.horoshutina_states[user_id]
+
+        if await state.is_completed():
 
         state = self.horoshutina_states[user_id]
 
         if state.is_completed():
             return await self.create_keyboard({"🎉 Завершено!": "horoshutina_completed"})
-
+        
         buttons = {}
         for item in horoshutina_sequence:
             word = item["word"]
             order = item["order"]
             word_id = item["id"]
-
+            
             display_text = word
-
+            
             if word in state.completed_steps:
                 number_emoji = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣"][order - 1]
                 display_text = f"{number_emoji} {word}"
             elif word in state.wrong_selections:
                 display_text = f"❌ {word}"
-
+                
             buttons[display_text] = f"horoshutina_{word_id}"
-
+        
         return await self.create_keyboard(buttons=buttons)
