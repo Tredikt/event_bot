@@ -25,16 +25,11 @@ def admin_interactive(handler: Callable) -> Callable:
             callback = kwargs['callback']
         if 'variables' in kwargs:
             variables = kwargs['variables']
-            
-        print(f"Callback: {callback}")
-        print(f"Variables: {variables}")
         
         if not callback:
-            print("❌ Callback не найден!")
             return await handler(*args, **kwargs)
             
         callback_data = callback.data
-        print(f"🔧 Обработка {callback_data}")
         
         result = await handler(*args, **kwargs)
         
