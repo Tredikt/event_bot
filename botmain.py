@@ -35,7 +35,7 @@ sys.excepthook = handle_exception
 async def main():
     storage = MemoryStorage()
 
-    engine = create_async_engine(config.DATABASE_URL)
+    engine = create_async_engine(config.DB_URL)
     session = async_sessionmaker(engine, expire_on_commit=False)
 
     bot = Bot(token=config.TG_TOKEN, default=DefaultBotProperties(parse_mode="HTML"))

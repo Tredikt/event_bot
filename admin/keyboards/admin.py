@@ -10,6 +10,7 @@ class AdminKeyboard(KeyboardOperations):
         self.buttons_per_page = 6
         self.total_pages = (len(self.all_buttons) + self.buttons_per_page - 1) // self.buttons_per_page
         self.pressed_buttons = set()
+        self.admin_message_id = None
 
     async def menu(self, page: int = 0):
         start_index = page * self.buttons_per_page
@@ -42,3 +43,7 @@ class AdminKeyboard(KeyboardOperations):
     async def mark_button_pressed(self, callback_data: str):
         """Отмечает кнопку как нажатую"""
         self.pressed_buttons.add(callback_data)
+    
+    def set_admin_message_id(self, message_id: int):
+        """Устанавливает ID сообщения с админ-панелью для последующего обновления"""
+        self.admin_message_id = message_id
