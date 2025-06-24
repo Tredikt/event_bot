@@ -4,7 +4,7 @@ from sqlalchemy import insert, select
 from sqlalchemy.exc import IntegrityError
 
 from core.db_templates import BaseRepository
-from core.models import User, InteractiveHistory
+from core.models import User
 
 
 class UserRepository(BaseRepository):
@@ -17,7 +17,7 @@ class UserRepository(BaseRepository):
         first_name: str = None,
     ) -> User:
         """Добавляет пользователя или возвращает существующего"""
-        existing_user = await self.get_by_telegram_id(telegram_user_id)
+        existing_user = await self.get_by_telegram_id(telegram_user_id=telegram_user_id)
         if existing_user:
             return existing_user
             
@@ -27,23 +27,23 @@ class UserRepository(BaseRepository):
                 username=username,
                 first_name=first_name,
             )
-            await self.session.execute(insert_stmt)
+            await self.session.execute(statement=insert_stmt)
             await self.session.commit()
-            return await self.get_by_telegram_id(telegram_user_id)
+            return await self.get_by_telegram_id(telegram_user_id=telegram_user_id)
         except IntegrityError:
             await self.session.rollback()
-            return await self.get_by_telegram_id(telegram_user_id)
+            return await self.get_by_telegram_id(telegram_user_id=telegram_user_id)
 
     async def get_by_id(self, id: int) -> Optional[User]:
         """Получает пользователя по внутреннему ID (первичный ключ)"""
         select_stmt = select(User).where(User.id == id).options(*self.options)
-        result = await self.session.execute(select_stmt)
+        result = await self.session.execute(statement=select_stmt)
         return result.scalar_one_or_none()
     
     async def get_by_telegram_id(self, telegram_user_id: str) -> Optional[User]:
         """Получает пользователя по Telegram user_id"""
         select_stmt = select(User).where(User.user_id == telegram_user_id).options(*self.options)
-        result = await self.session.execute(select_stmt)
+        result = await self.session.execute(statement=select_stmt)
         return result.scalar_one_or_none()
     
     async def update_user_info(
@@ -53,7 +53,7 @@ class UserRepository(BaseRepository):
         first_name: str = None,
     ) -> Optional[User]:
         """Обновляет информацию о пользователе"""
-        user = await self.get_by_telegram_id(telegram_user_id)
+        user = await self.get_by_telegram_id(telegram_user_id=telegram_user_id)
         if not user:
             return None
             
@@ -68,30 +68,21 @@ class UserRepository(BaseRepository):
     async def get_all_users(self) -> list[User]:
         """Получает всех пользователей"""
         select_stmt = select(User).order_by(User.id).options(*self.options)
-        result = await self.session.execute(select_stmt)
+        result = await self.session.execute(statement=select_stmt)
         return result.scalars().all()
     
     async def add_points(
         self,
         telegram_user_id: str,
-        points: int,
-        interactive_name: str
+        points: int
     ) -> Optional[User]:
-        """Начисляет баллы пользователю и записывает в историю"""
+        """Начисляет баллы пользователю"""
         
-        user = await self.get_by_telegram_id(telegram_user_id)
+        user = await self.get_by_telegram_id(telegram_user_id=telegram_user_id)
         if not user:
             return None
             
         user.rating += points
-        
-        history_record = InteractiveHistory(
-            user_id=user.id,
-            interactive_name=interactive_name,
-            points_earned=points
-        )
-        self.session.add(history_record)
-        
         await self.session.commit()
         return user
     
@@ -103,5 +94,5 @@ class UserRepository(BaseRepository):
     async def get_top_users(self, limit: int = 10) -> list[User]:
         """Получает топ пользователей по рейтингу"""
         select_stmt = select(User).order_by(User.rating.desc()).limit(limit).options(*self.options)
-        result = await self.session.execute(select_stmt)
+        result = await self.session.execute(statement=select_stmt)
         return result.scalars().all()

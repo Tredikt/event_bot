@@ -4,9 +4,10 @@ from aiogram.types import CallbackQuery
 from core.utils.enums import Variables
 from core.utils.answer_choices import horoshutina_sequence
 from core.utils.decorators import admin_interactive
+from interactives.states.horoshutina_states import HoroshutinaState
 
 
-def get_word_by_id(word_id):
+async def get_word_by_id(word_id: int) -> str:
     for item in horoshutina_sequence:
         if item["id"] == word_id:
             return item["word"]
@@ -26,7 +27,7 @@ async def start_horoshutina_interactive(callback: CallbackQuery, variables: Vari
     
     await callback.message.answer(
         text="🎯 Расставьте правильную последовательность этапов продаж:",
-        reply_markup=await variables.keyboards.menu.interactive_horoshutina(user_id)
+        reply_markup=await variables.keyboards.menu.interactive_horoshutina(user_id=user_id)
     )
 
 
@@ -39,39 +40,37 @@ async def process_horoshutina_selection(callback: CallbackQuery, variables: Vari
         await callback.answer("❌ Интерактив не активен")
         return
     
-    state = variables.keyboards.menu.horoshutina_states[user_id]
-    selected_word = get_word_by_id(selected_id)
-    expected_word = state.get_expected_word(horoshutina_sequence)
+    state: HoroshutinaState = variables.keyboards.menu.horoshutina_states[user_id]
+    selected_word = await get_word_by_id(word_id=selected_id)
+    expected_word = state.get_expected_word(sequence_data=horoshutina_sequence)
     
     if selected_word == expected_word:
-        handle_correct_selection(state, selected_word)
+        await handle_correct_selection(state=state, selected_word=selected_word)
     else:
-        state.add_wrong_selection(selected_word)
+        state.add_wrong_selection(word=selected_word)
     
-    new_keyboard = await variables.keyboards.menu.interactive_horoshutina(user_id)
+    new_keyboard = await variables.keyboards.menu.interactive_horoshutina(user_id=user_id)
     await callback.message.edit_reply_markup(reply_markup=new_keyboard)
     
     if state.is_completed():
-        user = await variables.db.user.add_or_get(
-            telegram_user_id=str(callback.from_user.id),
+        telegram_user_id = str(callback.from_user.id)
+        
+        current_rating = await variables.db.interactive_service.complete_interactive(
+            telegram_user_id=telegram_user_id,
             username=callback.from_user.username,
-            first_name=callback.from_user.first_name
+            first_name=callback.from_user.first_name,
+            interactive_name="horoshutina",
+            points=1
         )
         
-        await variables.db.user.add_points(
-            telegram_user_id=str(callback.from_user.id),
-            points=1,
-            interactive_name="horoshutina"
-        )
-        
-        current_rating = await variables.db.user.get_user_rating(str(callback.from_user.id))
         await callback.message.answer(f"🎉 +1 балл! Ваш рейтинг: {current_rating}")
     
     await callback.answer()
 
 
-def handle_correct_selection(state, selected_word):
-    state.complete_step(selected_word)
+async def handle_correct_selection(state: HoroshutinaState, selected_word: str) -> None:
+    """Обработка правильного выбора"""
+    state.complete_step(word=selected_word)
 
 
 @router.callback_query(F.data == "horoshutina_completed")
