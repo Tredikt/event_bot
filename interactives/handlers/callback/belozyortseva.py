@@ -4,7 +4,7 @@ from aiogram.types import Message, CallbackQuery
 from core.utils.enums import Variables
 
 
-router = Router(name="belozyortseva_router")
+router = Router(name="belozyortseva_callback_router")
 
 
 @router.callback_query(F.data == "belozyortseva")

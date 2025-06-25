@@ -20,7 +20,7 @@ class InteractiveKeyboard(KeyboardOperations):
 
         return await self.create_keyboard(buttons=buttons)
 
-    async def gavrikov_test(self):
+    async def gavrikov_start(self):
         test_data = answer_choices[2]
         options = test_data["options"]
 
@@ -59,27 +59,12 @@ class InteractiveKeyboard(KeyboardOperations):
         }
         return await self.create_keyboard(buttons=buttons)
 
-    async def start_zabegayev(self):
+    async def zabegayev(self, step: str):
         buttons = {
-            "Правда": "start_zabegayev_false",
-            "Ложь": "start_zabegayev_true"
+            "Правда": f"zabegayev_{step}_true",
+            "Ложь": f"zabegayev_{step}_false"
         }
-        return await self.create_keyboard(buttons=buttons)
 
-    async def zabegayev_1(self):
-        buttons = {
-            "Правда": "zabegayev_1_false",
-            "Ложь": "zabegayev_1_true"
-        }
-        return await self.create_keyboard(buttons=buttons)
-
-
-    async def zabegayev_2(self):
-        buttons = {
-            "Правда": "zabegayev_2_true",
-            "Ложь": "zabegayev_2_false"
-        }
-        return await self.create_keyboard(buttons=buttons)
     async def interactive_horoshutina(self, user_id):
         if user_id not in self.horoshutina_states:
             self.horoshutina_states[user_id] = interactive_states["HoroshutinaState"]()
@@ -109,4 +94,37 @@ class InteractiveKeyboard(KeyboardOperations):
                 
             buttons[display_text] = f"horoshutina_{word_id}"
         
+        return await self.create_keyboard(buttons=buttons)
+
+
+    async def interactive_nurkhametova(self):
+        buttons = {
+            "семейные права": "interactive_nurkhametova_0_true",
+            "гражданские права": "interactive_nurkhametova_0_false",
+            "административные права": "interactive_nurkhametova_0_false"
+        }
+        return await self.create_keyboard(buttons=buttons)
+
+    async def interactive_nurkhametova_1(self):
+        buttons = {
+            "Право на справедливый суд (ст. 46 Конституции)": "interactive_nurkhametova_1_true",
+            "Гражданское право": "interactive_nurkhametova_1_false",
+            "Право на предпринимательство": "interactive_nurkhametova_1_false"
+        }
+        return await self.create_keyboard(buttons=buttons)
+
+    async def interactive_nurkhametova_2(self):
+        buttons = {
+            "Гражданское право": "interactive_nurkhametova_2_false",
+            "Социальное право": "interactive_nurkhametova_2_true",
+            "Право на образование": "interactive_nurkhametova_2_false"
+        }
+        return await self.create_keyboard(buttons=buttons)
+
+    async def interactive_nurkhametova_3(self):
+        buttons = {
+            "Гражданские права": "interactive_nurkhametova_3_false",
+            "Административные права": "interactive_nurkhametova_3_true",
+            "Жилищные права": "interactive_nurkhametova_3_false"
+        }
         return await self.create_keyboard(buttons=buttons)
