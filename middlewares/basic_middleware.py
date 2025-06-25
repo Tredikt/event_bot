@@ -32,16 +32,15 @@ class BasicMiddleware(BaseMiddleware):
         if callback_query:
             print(callback_query.data)
         elif message:
-            if message.from_user:
-                user_id = str(message.from_user.id)
-                user = await self.db.user.get_by_telegram_id(telegram_user_id=user_id)
+            user_id = str(message.from_user.id)
+            user = await self.db.user.get_by_telegram_id(telegram_user_id=user_id)
 
-                if not user:
-                    user_data = message.from_user
-                    await self.db.user.add_or_get(
-                        telegram_user_id=user_id,
-                        username=user_data.username,
-                        first_name=user_data.first_name
-                    )
+            if not user:
+                user_data = message.from_user
+                await self.db.user.add_or_get(
+                    telegram_user_id=user_id,
+                    username=user_data.username,
+                    first_name=user_data.first_name
+                )
 
         return await handler(event, data)
