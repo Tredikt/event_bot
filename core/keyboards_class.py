@@ -6,3 +6,4 @@ class Keyboards:
     def __init__(self):
         self.menu = InteractiveKeyboard()
         self.admin = AdminKeyboard()
+        self.interactives = InteractiveKeyboard()

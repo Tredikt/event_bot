@@ -11,8 +11,10 @@ class AdminKeyboard(KeyboardOperations):
         self.total_pages = (len(self.all_buttons) + self.buttons_per_page - 1) // self.buttons_per_page
         self.pressed_buttons = set()
         self.admin_message_id = None
+        self.current_page = 0
 
     async def menu(self, page: int = 0):
+        self.current_page = page
         start_index = page * self.buttons_per_page
         end_index = start_index + self.buttons_per_page
         current_page_buttons = self.all_buttons[start_index:end_index]
