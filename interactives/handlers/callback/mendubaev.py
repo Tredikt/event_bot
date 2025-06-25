@@ -1,4 +1,5 @@
 from aiogram import Router, F
+from aiogram.fsm.context import FSMContext
 from aiogram.types import Message, CallbackQuery
 
 from core.utils.enums import Variables
@@ -8,7 +9,9 @@ router = Router(name="mendubaev_callback_router")
 
 
 @router.callback_query(F.data == "mendubaev")
-async def first_mendubaev(call: CallbackQuery, variables: Variables):
+async def first_mendubaev(call: CallbackQuery, state: FSMContext, variables: Variables):
+    await state.set_state(BotStates.base)
+    await state.update_data(interactive_name="mendubaev")
     text = mendubaev_texts[0]
     keyboard = await variables.keyboards.menu.mendubaev_start()
     await call.message.answer(
@@ -75,7 +78,7 @@ async def fourth_mendubaev(call: CallbackQuery, variables: Variables):
 
 
 @router.callback_query(F.data.startswith("final_mendubaev"))
-async def final_mendubaev(call: CallbackQuery):
+async def final_mendubaev(call: CallbackQuery, variables: Variables):
     mode = call.data.split("_")[-1]
     if mode == "1":
         text = mendubaev_texts[7]
@@ -84,4 +87,8 @@ async def final_mendubaev(call: CallbackQuery):
 
     await call.message.edit_text(
         text=text
+    )
+    await call.edit_text(
+        text="Как вам это выступление? / материалы спикера в easy",
+        reply_markup=await variables.keyboards.menu.ending()
     )

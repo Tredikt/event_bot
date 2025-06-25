@@ -1,4 +1,5 @@
 from aiogram import Router, F
+from aiogram.fsm.context import FSMContext
 from aiogram.types import Message, CallbackQuery
 
 from core.utils.enums import Variables
@@ -7,14 +8,16 @@ from core.utils.nurkhamedova_text import nurkhametova_text
 router = Router(name="nurkhametova_callback_router")
 
 @router.callback_query(F.data == "nurkhametova")
-async def nurkhametova_start(call: CallbackQuery, variables):
+async def nurkhametova_start(call: CallbackQuery, state: FSMContext, variables):
+    await state.set_state(BotStates.base)
+    await state.update_data(interactive_name="nurkhametova")
     text = nurkhametova_text[0]["text"]
     keyboard = await variables.keyboards.menu.interactive_nurkhametova()
     await call.message.edit_text(text=text, reply_markup=keyboard)
 
 
 @router.callback_query(F.data.startswith("interactive_nurkhametova_"))
-async def handle_nurkhametova_step(call: CallbackQuery, variables):
+async def handle_nurkhametova_step(call: CallbackQuery, variables: Variables):
     try:
         _, _, step_str, user_answer = call.data.split("_")
         step_index = int(step_str)
@@ -50,3 +53,7 @@ async def handle_nurkhametova_step(call: CallbackQuery, variables):
     else:
         messages.append("🎉 Это был финальный шаг. Спасибо за участие!")
         await call.message.edit_text("\n\n".join(messages), reply_markup=None)
+        await call.edit_text(
+            text="Как вам это выступление? / материалы спикера в easy",
+            reply_markup=await variables.keyboards.menu.ending()
+        )

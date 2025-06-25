@@ -1,4 +1,5 @@
 from aiogram import Router, F
+from aiogram.fsm.context import FSMContext
 from aiogram.types import Message, CallbackQuery
 
 from core.utils.enums import Variables
@@ -8,7 +9,9 @@ router = Router(name="zabegaev_callback_router")
 
 
 @router.callback_query(F.data == "zabegayev")
-async def start_zabegayev(call: CallbackQuery, variables: Variables):
+async def start_zabegayev(call: CallbackQuery, state: FSMContext, variables: Variables):
+    await state.set_state(BotStates.base)
+    await state.update_data(interactive_name="zabegayev")
     step = "0"
     keyboard = await variables.keyboards.menu.zabegayev(step)
     text = zabegayev_steps[step]["question"]
@@ -43,3 +46,7 @@ async def handle_step(call: CallbackQuery, variables: Variables):
     else:
         response += "🎉 Это был финальный шаг. Спасибо за участие!"
         await call.message.edit_text(text=response, reply_markup=None)
+        await call.edit_text(
+            text="Как вам это выступление? / материалы спикера в easy",
+            reply_markup=await variables.keyboards.menu.ending()
+        )
