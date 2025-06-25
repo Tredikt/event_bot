@@ -1,8 +1,8 @@
-from admin.routers import admin_routers
+from interactives.handlers import interactive_routers
+from admin.handlers import admin_routers
 
-from interactives.routers import interactives_routers
 
 routers = [
     *admin_routers,
-    *interactives_routers
+    *interactive_routers,
 ]

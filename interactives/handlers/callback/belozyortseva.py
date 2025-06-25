@@ -4,7 +4,7 @@ from aiogram.types import Message, CallbackQuery
 from core.utils.enums import Variables
 
 
-router = Router(name="tests_callback_router")
+router = Router(name="belozyortseva_router")
 
 
 @router.callback_query(F.data == "belozyortseva")
@@ -34,7 +34,5 @@ async def belozyortseva_callback_handler(call: CallbackQuery, variables: Variabl
         await call.message.edit_text(
         text=text,
         reply_markup=await variables.keyboards.menu.gavrikov_test()
-        )
+    )
     await call.answer()
-
-
