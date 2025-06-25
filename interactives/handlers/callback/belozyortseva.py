@@ -6,6 +6,7 @@ from core.utils.enums import Variables
 
 router = Router(name="tests_callback_router")
 
+
 @router.callback_query(F.data == "belozyortseva")
 async def belozyortseva(call: CallbackQuery, variables: Variables):
     text = "Угадай продолжение термина фронтенд и бэкенд"
@@ -16,7 +17,8 @@ async def belozyortseva(call: CallbackQuery, variables: Variables):
         reply_markup=keyboard
     )
 
-@belozyortseva_router.callback_query(F.data.startswith("belozyortseva_test_"))
+
+@router.callback_query(F.data.startswith("belozyortseva_test_"))
 async def belozyortseva_callback_handler(call: CallbackQuery, variables: Variables):
     parts = call.data.split("_")
     number_test = parts[-2]
@@ -32,7 +34,7 @@ async def belozyortseva_callback_handler(call: CallbackQuery, variables: Variabl
         await call.message.edit_text(
         text=text,
         reply_markup=await variables.keyboards.menu.gavrikov_test()
-    )
+        )
     await call.answer()
 
 
