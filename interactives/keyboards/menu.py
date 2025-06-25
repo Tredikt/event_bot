@@ -7,6 +7,14 @@ class InteractiveKeyboard(KeyboardOperations):
     def __init__(self):
         super().__init__()
         self.horoshutina_states = {}
+        
+    async def performance_ending(self):
+        buttons = {
+            "Круто": "ending_cool",
+            "Неплохо": "ending_good",
+            "Задать вопрос спикеру": "ask_speaker"
+        }
+        return await self.create_keyboard(buttons=buttons)
 
     async def belozerova_test(self, number_test: int):
         test_data = answer_choices[number_test - 1]
@@ -80,6 +88,7 @@ class InteractiveKeyboard(KeyboardOperations):
             "Ложь": "zabegayev_2_false"
         }
         return await self.create_keyboard(buttons=buttons)
+
     async def interactive_horoshutina(self, user_id):
         if user_id not in self.horoshutina_states:
             self.horoshutina_states[user_id] = interactive_states["HoroshutinaState"]()
@@ -87,8 +96,7 @@ class InteractiveKeyboard(KeyboardOperations):
         state: HoroshutinaState = self.horoshutina_states[user_id]
 
         if await state.is_completed():
-
-        state = self.horoshutina_states[user_id]
+            state = self.horoshutina_states[user_id]
 
         if state.is_completed():
             return await self.create_keyboard({"🎉 Завершено!": "horoshutina_completed"})

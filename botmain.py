@@ -8,6 +8,7 @@ from aiogram.fsm.storage.memory import MemoryStorage
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 
 from core.db_class import DBClass
+from feedback_checker import check
 from middlewares.basic_middleware import BasicMiddleware
 from settings import config
 
@@ -43,7 +44,10 @@ async def main():
 
     dp.include_routers(*routers)
     async with session() as session:
-        dp.update.middleware(BasicMiddleware(bot=bot, db=DBClass(session=session)))
+        db = DBClass(session=session)
+        dp.update.middleware(BasicMiddleware(bot=bot, db=db))
+
+    asyncio.create_task(check(bot=bot, db=db))
     await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot)
 

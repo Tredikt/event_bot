@@ -1,13 +1,17 @@
 from aiogram import Router, F
+from aiogram.fsm.context import FSMContext
 from aiogram.types import Message, CallbackQuery
 
+from core.bot_states import BotStates
 from core.utils.enums import Variables
 
 zabegayev_router = Router()
 
 
 @zabegayev_router.callback_query(F.data == "zabegayev")
-async def zabegayev(call: CallbackQuery, variables: Variables):
+async def zabegayev(call: CallbackQuery, state: FSMContext, variables: Variables):
+    await state.set_state(BotStates.base)
+    await state.update_data(interactive_name="zabegayev")
     text = "Sprinter требует установки толстых клиентов в каждую систему"
     keyboard = await variables.keyboards.menu.start_zabegayev()
     await call.message.edit_text(

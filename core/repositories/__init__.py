@@ -1,2 +1,3 @@
 from core.repositories.user import UserRepository
 from core.repositories.interactive_history import InteractiveHistoryRepository
+from core.repositories.feedback import FeedbackRepository
