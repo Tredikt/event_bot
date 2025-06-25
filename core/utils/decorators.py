@@ -53,12 +53,6 @@ def admin_interactive(handler: Callable) -> Callable:
                             message_id=variables.keyboards.admin.admin_message_id,
                             reply_markup=keyboard
                         )
-                    else:
-                        sent_message = await callback.message.answer(
-                            "🔧 Админ-панель:",
-                            reply_markup=keyboard
-                        )
-                        variables.keyboards.admin.set_admin_message_id(sent_message.message_id)
                 except Exception as e:
                     print(f"❌ Ошибка обновления админской клавиатуры: {e}")
         

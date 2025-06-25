@@ -1,6 +1,6 @@
 from core.operations import KeyboardOperations
-from core.utils.answer_choices import answer_choices, horoshutina_sequence
-from interactives.states import interactive_states
+from core.utils.answer_choices import answer_choices, horoshutina_sequence, sadriev_test
+from interactives.states import interactive_states, HoroshutinaState
 
 
 class InteractiveKeyboard(KeyboardOperations):
@@ -97,6 +97,7 @@ class InteractiveKeyboard(KeyboardOperations):
         return await self.create_keyboard(buttons=buttons)
 
 
+
     async def interactive_nurkhametova(self):
         buttons = {
             "семейные права": "interactive_nurkhametova_0_true",
@@ -128,3 +129,15 @@ class InteractiveKeyboard(KeyboardOperations):
             "Жилищные права": "interactive_nurkhametova_3_false"
         }
         return await self.create_keyboard(buttons=buttons)
+
+    async def sadriev_test(self):
+        options = sadriev_test["options"]
+        correct_index = sadriev_test["correct_index"]
+
+        buttons = {
+            option: f"sadriev_test_{'true' if idx == correct_index else 'false'}"
+            for idx, option in enumerate(options)
+        }
+
+        return await self.create_keyboard(buttons=buttons)
+
