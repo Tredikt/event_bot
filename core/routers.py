@@ -1,6 +1,7 @@
 # сюда импортить роутеры из всех приложений, затем объединять в общий список
-from interactives.handlers.callback.tests import router
+from interactives.routers import interactives_routers
+
 routers = [
     # *admin_routers
-    router
+    * interactives_routers
 ]

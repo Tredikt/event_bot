@@ -3,10 +3,21 @@ from aiogram.types import Message, CallbackQuery
 
 from core.utils.enums import Variables
 
-test_router = Router()
+belozyortseva_router = Router()
 
-@test_router.callback_query(F.data.startswith("belozerova_test_"))
-async def belozerova_callback_handler(call: CallbackQuery, variables: Variables):
+
+@belozyortseva_router.callback_query(F.data == "belozyortseva")
+async def belozyortseva(call: CallbackQuery, variables: Variables):
+    text = "Угадай продолжение термина фронтенд и бэкенд"
+    number_test = 1
+    keyboard = await variables.keyboards.menu.belozerova_test(number_test=number_test)
+    await call.message.answer(
+        text=text,
+        reply_markup=keyboard
+    )
+
+@belozyortseva_router.callback_query(F.data.startswith("belozyortseva_test_"))
+async def belozyortseva_callback_handler(call: CallbackQuery, variables: Variables):
     parts = call.data.split("_")
     number_test = parts[-2]
     is_correct = parts[-1] == "true"
@@ -22,9 +33,3 @@ async def belozerova_callback_handler(call: CallbackQuery, variables: Variables)
         text=text,
         reply_markup=await variables.keyboards.menu.gavrikov_test()
     )
-
-
-@test_router.callback_query(F.data == "gavrikov_3_selected")
-async def gavrikov(call: CallbackQuery, variables: Variables):
-    pass
-
