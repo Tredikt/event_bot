@@ -1,1 +1,3 @@
-from interactives.handlers.callback.tests import router as tests_callback_router
+from interactives.handlers.callback.gavrikov import router as gavrikov_router
+from interactives.handlers.callback.belozyortseva import router as belozyortseva_router
+from interactives.handlers.callback.mendubaev import router as mendubaev_router
