@@ -8,15 +8,6 @@ from core.utils.decorators import admin_interactive
 router = Router(name="speaker_sadriev_callback")
 
 
-@router.callback_query(F.data == "interactive_sadriev")
-@admin_interactive
-async def start_sadriev_interactive(callback: CallbackQuery, variables: Variables):
-    await callback.message.answer(
-        text="Как вы думаете, сколько кибератак было в России в 2024 году?",
-        reply_markup=await variables.keyboards.menu.sadriev_test()
-    )
-
-
 @router.callback_query(F.data.startswith("sadriev_test_"))
 async def process_sadriev_test(callback: CallbackQuery, variables: Variables):
     is_correct = callback.data.endswith("_true")

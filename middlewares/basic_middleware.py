@@ -6,6 +6,7 @@ from aiogram.types import TelegramObject
 from core.db_class import DBClass
 from core.keyboards_class import Keyboards
 from core.utils.enums import Variables
+from core.services.interactive_broadcast_service import InteractiveBroadcastService
 
 
 class BasicMiddleware(BaseMiddleware):
@@ -23,10 +24,16 @@ class BasicMiddleware(BaseMiddleware):
         callback_query = event.callback_query
         message = event.message
 
+        broadcast_service = InteractiveBroadcastService(
+            bot=self.bot,
+            user_repository=self.db.user
+        )
+        
         data["variables"] = Variables(
             bot=self.bot,
             db=self.db,
-            keyboards=self.keyboards
+            keyboards=self.keyboards,
+            broadcast_service=broadcast_service
         )
 
         if callback_query:

@@ -17,28 +17,13 @@ async def get_word_by_id(word_id: int) -> str | None:
 router = Router(name="speaker_horoshutina_callback")
 
 
-@router.callback_query(F.data == "interactive_horoshutina")
-@admin_interactive
-async def start_horoshutina_interactive(callback: CallbackQuery, variables: Variables):
-    user_id = callback.from_user.id
-    
-    if user_id in variables.keyboards.menu.horoshutina_states and variables.keyboards.menu.horoshutina_states[user_id] is not None:
-        await variables.keyboards.menu.horoshutina_states[user_id].reset()
-    
-    await callback.message.answer(
-        text="🎯 Расставьте правильную последовательность этапов продаж:",
-        reply_markup=await variables.keyboards.menu.interactive_horoshutina(user_id=user_id)
-    )
-
-
 @router.callback_query(F.data.startswith("horoshutina_"))
 async def process_horoshutina_selection(callback: CallbackQuery, variables: Variables):
     user_id = callback.from_user.id
     selected_id = callback.data.replace("horoshutina_", "")
     
     if user_id not in variables.keyboards.menu.horoshutina_states or variables.keyboards.menu.horoshutina_states[user_id] is None:
-        await callback.answer("❌ Интерактив не активен")
-        return
+        variables.keyboards.menu.horoshutina_states[user_id] = HoroshutinaState()
     
     state: HoroshutinaState = variables.keyboards.menu.horoshutina_states[user_id]
     selected_word = await get_word_by_id(word_id=selected_id)
