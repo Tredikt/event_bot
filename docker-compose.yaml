@@ -1,13 +1,13 @@
 version: "3.7"
 
 services:
-  bot:
-    build:
-      context: ./
-      dockerfile: Dockerfile
-    networks:
-      - bot-net
-    restart: always
+#  bot:
+#    build:
+#      context: ./
+#      dockerfile: Dockerfile
+#    networks:
+#      - bot-net
+#    restart: always
 
   db:
     image: postgres:15

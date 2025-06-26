@@ -7,7 +7,7 @@ from sqlalchemy.ext.asyncio import async_engine_from_config
 
 from alembic import context
 
-from settings import config as app_config
+from settings import config as app_config, DB_URL
 from core.db_templates import BaseModel
 from core.models import User, InteractiveHistory
 
@@ -31,7 +31,7 @@ target_metadata = BaseModel.metadata
 # my_important_option = config.get_main_option("my_important_option")
 # ... etc.
 
-config.set_main_option(name="sqlalchemy.url", value=app_config.DB_URL)
+config.set_main_option(name="sqlalchemy.url", value=DB_URL)
 
 
 def run_migrations_offline() -> None:

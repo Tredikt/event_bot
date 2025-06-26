@@ -24,6 +24,7 @@ class InteractiveBroadcastService:
         users = await self._get_all_active_users()
         
         if not users:
+            print("Тут нет")
             return {
                 "total_sent": 0,
                 "total_failed": 0,
@@ -54,6 +55,7 @@ class InteractiveBroadcastService:
         users = await self._get_all_active_users()
         
         if not users:
+            print("не-а")
             return {
                 "total_sent": 0,
                 "total_failed": 0,

@@ -30,7 +30,8 @@ class UserRepository(BaseRepository):
             await self.session.execute(statement=insert_stmt)
             await self.session.commit()
             return await self.get_by_telegram_id(telegram_user_id=telegram_user_id)
-        except IntegrityError:
+        except IntegrityError as e:
+            print(e)
             await self.session.rollback()
             return await self.get_by_telegram_id(telegram_user_id=telegram_user_id)
 
@@ -64,7 +65,7 @@ class UserRepository(BaseRepository):
     
     async def get_all_users(self) -> list[User]:
         """Получает всех пользователей"""
-        select_stmt = select(User).order_by(User.id).options(*self.options)
+        select_stmt = select(User)
         result = await self.session.execute(statement=select_stmt)
         return result.scalars().all()
     
