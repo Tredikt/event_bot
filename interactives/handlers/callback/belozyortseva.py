@@ -16,10 +16,11 @@ async def belozyortseva_callback_handler(call: CallbackQuery, variables: Variabl
     is_correct = parts[-1] == "true"
     text = "✅ Верно!" if is_correct else "❌ Неверно!"
     number_test += 1
+    await call.message.edit_text(
+        text=text,
+    )
     if number_test == 2:
-        await call.message.edit_text(
-            text=text,
-        )
+
         await call.message.answer(
             text="Фронтенд — это адаптивное веб-приложение, которое общается с сервером через…",
             reply_markup=await variables.keyboards.menu.belozyortseva_menu(number_test=number_test)

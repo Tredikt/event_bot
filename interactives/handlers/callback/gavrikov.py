@@ -6,7 +6,7 @@ from core.utils.enums import Variables
 router = Router(name="gavrikov_router")
 
 
-@router.callback_query(F.data == "gavrikov_menu")
+@router.callback_query(F.data == "gavrikov_start")
 async def gavrikov_callback_handler(call: CallbackQuery, variables: Variables):
     text = "Выбери свой вариант"
 
@@ -17,11 +17,20 @@ async def gavrikov_callback_handler(call: CallbackQuery, variables: Variables):
         InputMediaPhoto(media="AgACAgIAAxkBAAMMaFcTx-ZSxh7F174w_axhQOWSPCsAAhfvMRukirlKgRT9cB-qn2sBAAMCAAN5AAM2BA")
     ]
 
+
     # Отправляем медиагруппу (альбом)
     await call.message.answer_media_group(media=media)
 
     # Затем отправляем сообщение с кнопками
     await call.message.answer(
         text=text,
-        reply_markup=await variables.keyboards.menu.gavrikov_menu()
+        reply_markup=await variables.keyboards.menu.gavrikov_start()
+    )
+
+
+@router.callback_query(F.data == "gavrikov_pictures")
+async def gavrikov_pictures(call: CallbackQuery, variables: Variables):
+    text="Круто, сейчас посмотрим, сколько такихже как ты"
+    await call.message.edit_text(
+        text=text
     )

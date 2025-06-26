@@ -16,6 +16,38 @@ class InteractiveKeyboard(KeyboardOperations):
         }
         return await self.create_keyboard(buttons=buttons)
 
+    async def nurkhametova_menu(self):
+        buttons = {
+            "Cемейные права": "nurkhametova_menu_true",
+            "Гражданские права": "nurkhametova_menu_false",
+            "Административные права": "nurkhametova_menu_false"
+        }
+        return await self.create_keyboard(buttons=buttons)
+
+    async def nurkhametova_start(self):
+        buttons = {
+            "Право на справедливый суд (ст. 46 Конституции)": "nurkhametova_start_true",
+            "Гражданское право": "nurkhametova_start_false",
+            "Право на предпринимательство": "nurkhametova_start_false"
+        }
+        return await self.create_keyboard(buttons=buttons)
+
+    async def nurkhametova_start1(self):
+        buttons = {
+            "Гражданское право": "nurkhametova_start1_false",
+            "Социальное право": "nurkhametova_start1_true",
+            "Право на образование": "nurkhametova_start1_false"
+        }
+        return await self.create_keyboard(buttons=buttons)
+
+    async def nurkhametova_start2(self):
+        buttons = {
+            "Гражданские права": "nurkhametova_start2_false",
+            "Административные права": "nurkhametova_start2_true",
+            "Жилищные права": "nurkhametova_start2_false"
+        }
+        return await self.create_keyboard(buttons=buttons)
+
     async def belozyortseva_menu(self, number_test: int):
         test_data = answer_choices[number_test - 1]
         options = test_data["options"]
@@ -28,12 +60,18 @@ class InteractiveKeyboard(KeyboardOperations):
 
         return await self.create_keyboard(buttons=buttons)
 
+    async def gavrikov_menu(self):
+        buttons = {
+            "Начать тест": "gavrikov_start"
+        }
+        return await self.create_keyboard(buttons=buttons)
+
     async def gavrikov_start(self):
         buttons = {
-            "Что такое ЖКХ?": "gavrikov_pictures_1",
-            "Не понимаю": "gavrikov_pictures_2",
-            "Понимаю": "gavrikov_pictures_3",
-            "Я сам участвовал в реализации этого проекта": "gavrikov_pictures_4",
+            "Что такое ЖКХ?": "gavrikov_pictures",
+            "Не понимаю": "gavrikov_pictures",
+            "Понимаю": "gavrikov_pictures",
+            "Я сам участвовал в реализации этого проекта": "gavrikov_pictures",
         }
         return await self.create_keyboard(buttons=buttons)
 
@@ -72,12 +110,12 @@ class InteractiveKeyboard(KeyboardOperations):
         }
         return await self.create_keyboard(buttons=buttons)
 
-    async def start_zabegayev(self):
+    async def zabegayev_menu(self):
         buttons = {
             "Правда": "start_zabegayev_false",
             "Ложь": "start_zabegayev_true"
         }
-        return await self.create_keyboard(buttons=buttons), await self.start_zabegayev()
+        return await self.create_keyboard(buttons=buttons)
 
     async def zabegayev_1(self):
         buttons = {
@@ -155,11 +193,3 @@ class InteractiveKeyboard(KeyboardOperations):
         }
         return await self.create_keyboard(buttons=buttons)
 
-    async def nurhametova_menu(self):
-        """Интерактив Нурхаметовой - основные варианты"""
-        buttons = {
-            "Ответ А": "nurhametova_a",
-            "Ответ Б": "nurhametova_b",
-            "Ответ В": "nurhametova_c"
-        }
-        return await self.create_keyboard(buttons=buttons)
