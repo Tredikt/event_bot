@@ -165,11 +165,11 @@ class InteractiveBroadcastService:
             print(f"Ошибка рассылки окончания {speaker_name}: {e}")
             return {"total_sent": 0, "total_failed": 1, "total_users": 0, "error": str(e)}
 
-    async def get_interactive_keyboard(self, speaker_name: str):
+    async def get_interactive_keyboard(self, speaker_name: str, **kwargs):
         """Получает клавиатуру для конкретного интерактива"""
         
         keyboard_mapping = {
-            "belozertseva": self._get_keyboard_method("belozyortseva_menu"),
+            "belozertseva": lambda: self._get_keyboard_method("belozyortseva_menu")(kwargs.get("number_test")),
             "gavrikov": self._get_keyboard_method("gavrikov_menu"),
             "zabegaev": self._get_keyboard_method("zabegaev_menu"),
             "zargaryan": self._get_keyboard_method("zargaryan_menu"),

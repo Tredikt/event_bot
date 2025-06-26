@@ -39,7 +39,11 @@ async def interactive_start_handler(callback: CallbackQuery, variables: Variable
     
     await AdminPanelService.update_admin_panel(callback=callback, variables=variables)
     
-    keyboard = await variables.broadcast_service.get_interactive_keyboard(speaker_name=speaker_name)
+    if speaker_name == "belozertseva":
+        keyboard = await variables.broadcast_service.get_interactive_keyboard(speaker_name=speaker_name, number_test=1)
+    else:
+        keyboard = await variables.broadcast_service.get_interactive_keyboard(speaker_name=speaker_name)
+
     
     text = get_interactive_message(speaker_name=speaker_name, message_type="start")
     
