@@ -98,9 +98,7 @@ class InteractiveKeyboard(KeyboardOperations):
         if await state.is_completed():
             state = self.horoshutina_states[user_id]
 
-        if await state.is_completed():
-            return await self.create_keyboard({"🎉 Завершено!": "horoshutina_completed"})
-        
+    
         buttons = {}
         for item in horoshutina_sequence:
             word = item["word"]
