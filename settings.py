@@ -20,6 +20,7 @@ class Config(BaseSettings):
     DB_NAME: str
 
     ADMINS: str
+    ADMINS_USERNAMES: str
 
 
     class ConfigDict:

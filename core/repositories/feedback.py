@@ -24,7 +24,7 @@ class FeedbackRepository(BaseRepository):
         try:
             insert_stmt = insert(Feedback).values(
                 user_id=telegram_user_id,
-                name=name,
+                interactive_name=name,
                 **kwargs
             ).returning(Feedback)
             result = await self.session.execute(statement=insert_stmt)
@@ -51,8 +51,8 @@ class FeedbackRepository(BaseRepository):
         update_stmt = update(Feedback).where(
             Feedback.user_id == telegram_user_id,
             Feedback.interactive_name == name
-        ).values(**kwargs).returing(Feedback)
-
+        ).values(**kwargs)
+        #.returing(Feedback)
         result = await self.session.execute(statement=update_stmt)
         await self.session.commit()
-        return result.scalar_one()
+        # return result.scalar_one()

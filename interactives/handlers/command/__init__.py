@@ -1,0 +1,1 @@
+from interactives.handlers.command.start import router as start_command_router

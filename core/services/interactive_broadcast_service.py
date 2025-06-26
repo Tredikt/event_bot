@@ -2,6 +2,7 @@ from typing import List, Optional
 from aiogram import Bot
 from aiogram.types import InlineKeyboardMarkup
 
+from core.keyboards_class import Keyboards
 from core.models import User
 from core.repositories import UserRepository
 from core.services.broadcast_service import BroadcastService
@@ -129,9 +130,6 @@ class InteractiveBroadcastService:
         """Отправляет рассылку начала интерактива с инициализацией состояний"""
         
         try:
-            if speaker_name == "gilmanova":
-                await self._initialize_gilmanova_states()
-            
             result = await self.send_interactive_start(
                 interactive_name=speaker_name,
                 text=text,
@@ -148,14 +146,16 @@ class InteractiveBroadcastService:
     async def send_end_broadcast(
         self,
         speaker_name: str,
-        text: str
+        text: str,
+        keyboard: Optional[InlineKeyboardMarkup]
     ) -> dict[str, int]:
         """Отправляет рассылку об окончании выступления"""
         
         try:
             result = await self.send_interactive_end(
                 interactive_name=speaker_name,
-                text=text
+                text=text,
+                keyboard=keyboard
             )
             
             print(f"Окончание {speaker_name}: отправлено {result['total_sent']} сообщений, ошибок: {result['total_failed']}")
@@ -191,14 +191,7 @@ class InteractiveBroadcastService:
 
         return None
 
-    async def _initialize_gilmanova_states(self) -> None:
-        """Инициализирует состояния Гильмановой для всех пользователей"""
-
-        print("Состояния Гильмановой будут инициализированы при первом ответе пользователей")
-
     def _get_keyboard_method(self, method_name: str):
         """Получает метод клавиатуры по имени"""
-        
-        from core.keyboards_class import Keyboards
         keyboards = Keyboards()
         return getattr(keyboards.interactives, method_name, None) 

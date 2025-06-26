@@ -38,12 +38,13 @@ async def interactive_start_handler(callback: CallbackQuery, variables: Variable
     await variables.keyboards.admin.mark_button_pressed(callback_data=callback.data)
 
     await AdminPanelService.update_admin_panel(callback=callback, variables=variables)
-
+    
     if speaker_name == "belozertseva":
         keyboard = await variables.broadcast_service.get_interactive_keyboard(speaker_name=speaker_name, number_test=1)
     else:
         keyboard = await variables.broadcast_service.get_interactive_keyboard(speaker_name=speaker_name)
 
+    
     text = get_interactive_message(speaker_name=speaker_name, message_type="start")
 
     asyncio.create_task(variables.broadcast_service.send_interactive_broadcast(
@@ -67,7 +68,8 @@ async def interactive_end_handler(callback: CallbackQuery, variables: Variables)
     
     asyncio.create_task(variables.broadcast_service.send_end_broadcast(
         speaker_name=speaker_name,
-        text=text
+        text=text,
+        keyboard=await variables.keyboards.interactives.performance_ending(interactive_name=speaker_name)
     ))
     
     await callback.answer(text=f"Запущена рассылка об окончании выступления {get_speaker_display_name(speaker_name=speaker_name)}")

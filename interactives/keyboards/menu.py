@@ -141,9 +141,6 @@ class InteractiveKeyboard(KeyboardOperations):
         if await state.is_completed():
             state = self.horoshutina_states[user_id]
 
-        if await state.is_completed():
-            return await self.create_keyboard({"🎉 Завершено!": "horoshutina_completed"})
-        
         buttons = {}
         for item in horoshutina_sequence:
             word = item["word"]
@@ -184,12 +181,21 @@ class InteractiveKeyboard(KeyboardOperations):
         
         return await self.create_keyboard(buttons=buttons)
 
+    async def gilmanova_menu(self):
+        """Интерактив Гильмановой - после нажатия на кнопку отправляет вопрос"""
+        buttons = {
+            "Открыть вопрос": "start_gilmanova"
+        }
+        return await self.create_keyboard(buttons=buttons)
+
+    async def zabegaev_menu(self):
+        """Интерактив Забегаева - сразу первый вопрос"""
+        return await self.start_zabegayev()
+
     async def zargaryan_menu(self):
         """Интерактив Заргарян - основные варианты"""
         buttons = {
-            "Вариант 1": "zargaryan_1",
-            "Вариант 2": "zargaryan_2",
-            "Вариант 3": "zargaryan_3"
+            "Ответить на вопросы": "answer_questions_zargaryan"
         }
         return await self.create_keyboard(buttons=buttons)
 
