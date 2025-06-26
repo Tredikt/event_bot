@@ -12,6 +12,7 @@ router = Router(name="admin_command")
 @router.message(Command(commands=["admin"]))
 async def admin_command_handler(message: Message, variables: Variables):
     user_id = str(message.from_user.id)
+    print(user_id)
     admins = config.ADMINS.split(",")
 
     if user_id in admins:

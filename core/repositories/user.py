@@ -18,7 +18,6 @@ class UserRepository(BaseRepository):
     ) -> User:
         """Добавляет пользователя или возвращает существующего"""
         existing_user = await self.get_by_telegram_id(telegram_user_id=telegram_user_id)
-        print(existing_user)
         if existing_user:
             return existing_user
             
@@ -66,7 +65,7 @@ class UserRepository(BaseRepository):
         ).values(**kwargs)
         result = await self.session.execute(statement=update_stmt)
         await self.session.commit()
-        return result.scalar_one()
+        # return result.scalar_one()
     
     async def get_all_users(self) -> list[User]:
         """Получает всех пользователей"""
