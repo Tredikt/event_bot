@@ -23,7 +23,7 @@ async def start_gilmanova_interactive(callback: CallbackQuery, state: FSMContext
     variables.keyboards.menu.gilmanova_states[user_id] = gilmanova_state_service
 
     await callback.answer()
-    await callback.message.answer("Как вы думаете, что мы сделали?")
+    await callback.message.answer(text="Как вы думаете, что мы сделали?")
     await state.set_state(BotStates.gilmanova)
 
 
