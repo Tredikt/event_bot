@@ -5,10 +5,10 @@ from aiogram.types import Message, CallbackQuery
 from core.bot_states import BotStates
 from core.utils.enums import Variables
 
-zabegayev_router = Router()
+router = Router(name="zabegayev_callback_router")
 
 
-@zabegayev_router.callback_query(F.data == "zabegayev")
+@router.callback_query(F.data == "zabegayev")
 async def zabegayev(call: CallbackQuery, state: FSMContext, variables: Variables):
     await state.set_state(BotStates.base)
     await state.update_data(interactive_name="zabegayev")
@@ -20,7 +20,7 @@ async def zabegayev(call: CallbackQuery, state: FSMContext, variables: Variables
     )
 
 
-@zabegayev_router.callback_query(F.data.startswith("start_zabegayev_"))
+@router.callback_query(F.data.startswith("start_zabegayev_"))
 async def start_zabegayev(call: CallbackQuery, variables: Variables):
     mode = call.data.split("_")[-1]
     keyboard = await variables.keyboards.menu.zabegayev_1()
@@ -34,7 +34,7 @@ async def start_zabegayev(call: CallbackQuery, variables: Variables):
     )
 
 
-@zabegayev_router.callback_query(F.data.startswith("zabegayev_1_"))
+@router.callback_query(F.data.startswith("zabegayev_1_"))
 async def zabegayev_2(call: CallbackQuery, variables: Variables):
     mode = call.data.split("_")[-1]
     keyboard = await variables.keyboards.menu.zabegayev_2()
