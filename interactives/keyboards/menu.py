@@ -98,7 +98,6 @@ class InteractiveKeyboard(KeyboardOperations):
         if await state.is_completed():
             state = self.horoshutina_states[user_id]
 
-    
         buttons = {}
         for item in horoshutina_sequence:
             word = item["word"]
