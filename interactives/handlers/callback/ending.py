@@ -16,12 +16,12 @@ router = Router(name="ending")
 async def ending_handler(call: CallbackQuery, state: FSMContext, variables: Variables):
     user_id = call.from_user.id
     data = call.data.split("_")
-    review = data[-1]
+    rate = data[-1]
     interactive_name = data[-2]
     await variables.db.feedback.add_or_update(
         telegram_user_id=user_id,
         name=interactive_name,
-        review=answers[review]
+        rate=answers[rate]
     )
     await call.message.edit_text(
         text="Оставь инсайт по поводу выступления спикера в ответ на это сообщение, мы обязательно передадим его спикеру",

@@ -8,12 +8,16 @@ from aiogram.fsm.storage.memory import MemoryStorage
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 
 from core.db_class import DBClass
+from core.utils.get_async_db import get_async_db
 from feedback_checker import check
 from middlewares.basic_middleware import BasicMiddleware
-from settings import config
+from settings import config, DB_URL
 
 from core.routers import routers
 
+
+loop = asyncio.get_event_loop()
+db: DBClass = loop.run_until_complete(get_async_db())
 
 logging.basicConfig(
     level=logging.INFO,
@@ -36,16 +40,11 @@ sys.excepthook = handle_exception
 async def main():
     storage = MemoryStorage()
 
-    engine = create_async_engine(config.DB_URL)
-    session = async_sessionmaker(engine, expire_on_commit=False)
-
     bot = Bot(token=config.TG_TOKEN, default=DefaultBotProperties(parse_mode="HTML"))
     dp = Dispatcher(bot=bot, storage=storage)
 
     dp.include_routers(*routers)
-    async with session() as session:
-        db = DBClass(session=session)
-        dp.update.middleware(BasicMiddleware(bot=bot, db=db))
+    dp.update.middleware(BasicMiddleware(bot=bot, db=db))
 
     asyncio.create_task(check(bot=bot, db=db))
     await bot.delete_webhook(drop_pending_updates=True)

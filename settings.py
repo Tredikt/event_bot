@@ -13,21 +13,22 @@ BASE_DIR = Path(__file__).parent.parent
 class Config(BaseSettings):
     TG_TOKEN: str
     
-    DB_HOST: str = "localhost"
-    DB_PORT: str = "5433"
-    DB_PASSWORD: str = "password"
-    DB_USER: str = "user"
-    DB_NAME: str = "event_bot"
-
-    DB_URL: str = (
-        f"postgresql+asyncpg://"
-        f"{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
-    )
+    DB_HOST: str
+    DB_PORT: str
+    DB_PASSWORD: str
+    DB_USER: str
+    DB_NAME: str
 
     ADMINS: str
+
 
     class ConfigDict:
         env: Path = BASE_DIR / ".env"
 
 
 config = Config()
+# DB_URL: str = (
+#     f"postgresql+asyncpg://"
+#     f"{config.DB_USER}:{config.DB_PASSWORD}@{config.DB_HOST}:{config.DB_PORT}/{config.DB_NAME}"
+# )
+DB_URL: str = "sqlite+aiosqlite:///event_bot.db"

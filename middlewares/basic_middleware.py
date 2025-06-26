@@ -37,7 +37,6 @@ class BasicMiddleware(BaseMiddleware):
         elif message:
             user_id = str(message.from_user.id)
             user = await self.db.user.get_by_telegram_id(telegram_user_id=user_id)
-
             if not user:
                 user_data = message.from_user
                 await self.db.user.add_or_get(
@@ -45,5 +44,4 @@ class BasicMiddleware(BaseMiddleware):
                     username=user_data.username,
                     first_name=user_data.first_name
                 )
-
         return await handler(event, data)

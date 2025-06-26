@@ -21,7 +21,7 @@ async def belozyortseva(call: CallbackQuery, variables: Variables):
 @router.callback_query(F.data.startswith("belozyortseva_test_"))
 async def belozyortseva_callback_handler(call: CallbackQuery, variables: Variables):
     parts = call.data.split("_")
-    number_test = parts[-2]
+    number_test = int(parts[-2])
     is_correct = parts[-1] == "true"
     text = "✅ Верно!" if is_correct else "❌ Неверно!"
     number_test += 1
@@ -32,7 +32,7 @@ async def belozyortseva_callback_handler(call: CallbackQuery, variables: Variabl
         )
     else:
         await call.message.edit_text(
-        text=text,
-        reply_markup=await variables.keyboards.menu.gavrikov_test()
-    )
+            text=text,
+            reply_markup=await variables.keyboards.menu.gavrikov_test()
+        )
     await call.answer()
