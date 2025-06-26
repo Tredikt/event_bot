@@ -15,8 +15,9 @@ router = Router(name="ending")
 @router.callback_query(F.data.startswith("ending"))
 async def ending_handler(call: CallbackQuery, state: FSMContext, variables: Variables):
     user_id = call.from_user.id
-    review = call.data.split("_")[-1]
-    interactive_name = (await state.get_data())["interactive_name"]
+    data = call.data.split()
+    review = data[-1]
+    interactive_name = data[-2]
     await variables.db.feedback.add_or_update(
         telegram_user_id=user_id,
         name=interactive_name,
@@ -31,3 +32,4 @@ async def ending_handler(call: CallbackQuery, state: FSMContext, variables: Vari
         feedback_waiting=datetime.now(pytz.timezone("Europe/Moscow"))
     )
     await state.set_state(BotStates.ending)
+    await state.update_data(interactive_name=interactive_name)

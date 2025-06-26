@@ -8,11 +8,11 @@ class InteractiveKeyboard(KeyboardOperations):
         super().__init__()
         self.horoshutina_states = {}
         
-    async def performance_ending(self):
+    async def performance_ending(self, interactive_name: str):
         buttons = {
-            "Круто": "ending_cool",
-            "Неплохо": "ending_good",
-            "Задать вопрос спикеру": "ask_speaker"
+            "Круто": f"ending_{interactive_name}_cool",
+            "Неплохо": f"ending_{interactive_name}_good",
+            "Задать вопрос спикеру": f"ask_speaker_{interactive_name}"
         }
         return await self.create_keyboard(buttons=buttons)
 
