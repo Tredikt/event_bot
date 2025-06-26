@@ -1,7 +1,7 @@
 from typing import Optional
 
 from sqlalchemy import insert, select, update
-from sqlalchemy.exc import IntegrityError
+from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 
 from core.db_templates import BaseRepository
 from core.models import User
@@ -18,6 +18,7 @@ class UserRepository(BaseRepository):
     ) -> User:
         """Добавляет пользователя или возвращает существующего"""
         existing_user = await self.get_by_telegram_id(telegram_user_id=telegram_user_id)
+        print(existing_user)
         if existing_user:
             return existing_user
             
@@ -30,7 +31,8 @@ class UserRepository(BaseRepository):
             await self.session.execute(statement=insert_stmt)
             await self.session.commit()
             return await self.get_by_telegram_id(telegram_user_id=telegram_user_id)
-        except IntegrityError:
+        except IntegrityError as ie:
+            print(f"Error: {ie}")
             await self.session.rollback()
             return await self.get_by_telegram_id(telegram_user_id=telegram_user_id)
 
@@ -43,8 +45,12 @@ class UserRepository(BaseRepository):
     async def get_by_telegram_id(self, telegram_user_id: str) -> Optional[User]:
         """Получает пользователя по Telegram user_id"""
         select_stmt = select(User).where(User.user_id == telegram_user_id).options(*self.options)
-        result = await self.session.execute(statement=select_stmt)
-        return result.scalar_one_or_none()
+        try:
+            result = await self.session.execute(statement=select_stmt)
+            return result.scalar_one_or_none()
+        except SQLAlchemyError as e:
+            await self.session.rollback()
+            raise e
     
     async def update_user_info(
         self,

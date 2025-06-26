@@ -15,7 +15,7 @@ router = Router(name="ending")
 @router.callback_query(F.data.startswith("ending"))
 async def ending_handler(call: CallbackQuery, state: FSMContext, variables: Variables):
     user_id = call.from_user.id
-    data = call.data.split()
+    data = call.data.split("_")
     review = data[-1]
     interactive_name = data[-2]
     await variables.db.feedback.add_or_update(

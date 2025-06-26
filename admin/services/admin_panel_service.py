@@ -9,8 +9,9 @@ class AdminPanelService:
         """Обновляет админ-панель после изменения состояния кнопок"""
         
         try:
+            symbol = "!" if "." in callback.message.text else "."
             users_count = await variables.broadcast_service.get_users_count()
-            text = f"Админ-панель:\nПользователей в базе: {users_count}"
+            text = f"Админ-панель:\nПользователей в базе: {users_count}{symbol}"
             keyboard = await variables.keyboards.admin.menu(page=variables.keyboards.admin.current_page)
             
             await callback.message.edit_text(
