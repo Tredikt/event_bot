@@ -5,7 +5,7 @@ from aiogram.types import Message, CallbackQuery
 from core.bot_states import BotStates
 from core.utils.enums import Variables
 
-router = Router("zabegayev_callback_router")
+router = Router(name="zabegayev_callback_router")
 
 
 @router.callback_query(F.data == "zabegayev")

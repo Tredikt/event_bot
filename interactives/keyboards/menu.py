@@ -28,15 +28,13 @@ class InteractiveKeyboard(KeyboardOperations):
 
         return await self.create_keyboard(buttons=buttons)
 
-    async def gavrikov_test(self):
-        test_data = answer_choices[2]
-        options = test_data["options"]
-
+    async def gavrikov_menu(self):
         buttons = {
-            option: "gavrikov_3_selected"
-            for option in options
+            "Что такое ЖКХ?": "gavrikov_pictures_1",
+            "Не понимаю": "gavrikov_pictures_2",
+            "Понимаю": "gavrikov_pictures_3",
+            "Я сам участвовал в реализации этого проекта": "gavrikov_pictures_4",
         }
-
         return await self.create_keyboard(buttons=buttons)
 
     async def mendubaev_start(self):
@@ -72,7 +70,7 @@ class InteractiveKeyboard(KeyboardOperations):
             "Правда": "start_zabegayev_false",
             "Ложь": "start_zabegayev_true"
         }
-        return await self.create_keyboard(buttons=buttons)
+        return await self.create_keyboard(buttons=buttons), await self.start_zabegayev()
 
     async def zabegayev_1(self):
         buttons = {
@@ -133,10 +131,6 @@ class InteractiveKeyboard(KeyboardOperations):
     async def belozyortseva_menu(self):
         """Интерактив Белозерцевой - сразу первый тест"""
         return await self.belozerova_test(number_test=1)
-
-    async def gavrikov_menu(self):
-        """Интерактив Гаврикова - сразу тест"""
-        return await self.gavrikov_test()
 
     async def mendubaev_menu(self):
         """Интерактив Мендубаева - сразу варианты"""

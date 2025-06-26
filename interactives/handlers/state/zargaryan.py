@@ -3,7 +3,7 @@ from aiogram.filters import StateFilter
 from aiogram.types import Message
 from aiogram.fsm.context import FSMContext
 
-from event_bot.interactives.fsm.interactives import InteractivesStates
+from interactives.fsm.interactives import InteractivesStates
 
 # путь к твоему классу состояний
 

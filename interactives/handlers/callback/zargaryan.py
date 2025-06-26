@@ -5,7 +5,7 @@ from aiogram.types import Message, CallbackQuery
 from core.bot_states import BotStates
 from core.utils.enums import Variables
 
-from event_bot.interactives.fsm.interactives import InteractivesStates
+from interactives.fsm.interactives import InteractivesStates
 
 router = Router(name="zargaryan_callback_router")
 
