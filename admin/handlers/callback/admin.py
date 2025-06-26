@@ -35,13 +35,13 @@ async def admin_page_info_handler(callback: CallbackQuery):
 async def interactive_start_handler(callback: CallbackQuery, variables: Variables):
     speaker_name = callback.data.split("interactive_")[1]
     
-    await variables.keyboards.admin.mark_button_pressed(callback.data)
+    await variables.keyboards.admin.mark_button_pressed(callback_data=callback.data)
     
     await AdminPanelService.update_admin_panel(callback=callback, variables=variables)
     
-    keyboard = await variables.broadcast_service.get_interactive_keyboard(speaker_name)
+    keyboard = await variables.broadcast_service.get_interactive_keyboard(speaker_name=speaker_name)
     
-    text = get_interactive_message(speaker_name, "start")
+    text = get_interactive_message(speaker_name=speaker_name, message_type="start")
     
     asyncio.create_task(variables.broadcast_service.send_interactive_broadcast(
         speaker_name=speaker_name,
@@ -49,25 +49,22 @@ async def interactive_start_handler(callback: CallbackQuery, variables: Variable
         keyboard=keyboard
     ))
     
-    await callback.answer(f"Запущена рассылка интерактива {get_speaker_display_name(speaker_name)}")
+    await callback.answer(text=f"Запущена рассылка интерактива {get_speaker_display_name(speaker_name=speaker_name)}")
 
 
 @router.callback_query(F.data.startswith("finished_"))
 async def interactive_end_handler(callback: CallbackQuery, variables: Variables):
     speaker_name = callback.data.split("finished_")[1]
     
-    await variables.keyboards.admin.mark_button_pressed(callback.data)
+    await variables.keyboards.admin.mark_button_pressed(callback_data=callback.data)
     
-    await AdminPanelService.update_admin_panel(callback, variables)
+    await AdminPanelService.update_admin_panel(callback=callback, variables=variables)
     
-    text = get_interactive_message(speaker_name, "end")
+    text = get_interactive_message(speaker_name=speaker_name, message_type="end")
     
     asyncio.create_task(variables.broadcast_service.send_end_broadcast(
         speaker_name=speaker_name,
         text=text
     ))
     
-    await callback.answer(f"Запущена рассылка об окончании выступления {get_speaker_display_name(speaker_name)}")
-
-
-
+    await callback.answer(text=f"Запущена рассылка об окончании выступления {get_speaker_display_name(speaker_name=speaker_name)}")

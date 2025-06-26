@@ -14,6 +14,7 @@ class BasicMiddleware(BaseMiddleware):
         self.bot = bot
         self.db = db
         self.keyboards = Keyboards()
+        self.broadcast_service = InteractiveBroadcastService(bot=bot, user_repository=db.user)
 
     async def __call__(
             self,
@@ -23,17 +24,12 @@ class BasicMiddleware(BaseMiddleware):
 
         callback_query = event.callback_query
         message = event.message
-
-        broadcast_service = InteractiveBroadcastService(
-            bot=self.bot,
-            user_repository=self.db.user
-        )
         
         data["variables"] = Variables(
             bot=self.bot,
             db=self.db,
             keyboards=self.keyboards,
-            broadcast_service=broadcast_service
+            broadcast_service=self.broadcast_service
         )
 
         if callback_query:

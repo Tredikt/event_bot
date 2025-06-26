@@ -14,9 +14,9 @@ router = Router(name="speaker_gilmanova_callback")
 async def process_gilmanova_answer(message: Message, variables: Variables):
     user_id: int = message.from_user.id
     
-    await _ensure_gilmanova_state_exists(variables, user_id)
+    await _ensure_gilmanova_state_exists(variables=variables, user_id=user_id)
     
-    if not await _is_gilmanova_active(variables, user_id):
+    if not await _is_gilmanova_active(variables=variables, user_id=user_id):
         return
     
     state: GilmanovaState = variables.keyboards.menu.gilmanova_states[user_id]
@@ -68,7 +68,7 @@ async def _handle_correct_answer(message: Message, variables: Variables, state: 
         points=1
     )
     
-    await message.answer(f"🎉 Правильно! +1 балл! Ваш рейтинг: {current_rating}")
+    await message.answer(text=f"🎉 Правильно! +1 балл! Ваш рейтинг: {current_rating}")
 
 
 async def _handle_incorrect_answer(message: Message, variables: Variables, state: GilmanovaState) -> None:
@@ -77,7 +77,7 @@ async def _handle_incorrect_answer(message: Message, variables: Variables, state
     
     if await state.has_attempts_left():
         failure_message: str = await state.get_failure_message()
-        await message.answer(failure_message)
+        await message.answer(text=failure_message)
     else:
         await _show_correct_answer(message=message, variables=variables, state=state)
 
@@ -88,7 +88,7 @@ async def _show_correct_answer(message: Message, variables: Variables, state: Gi
     
     failure_message: str = await state.get_failure_message()
     
-    await message.answer(failure_message)
+    await message.answer(text=failure_message)
 
     current_rating: int = await variables.db.interactive_service.complete_interactive(
         telegram_user_id=str(message.from_user.id),
@@ -98,7 +98,7 @@ async def _show_correct_answer(message: Message, variables: Variables, state: Gi
         points=1
     )
     
-    await message.answer(f"За усердие +1 балл! Ваш рейтинг: {current_rating}")
+    await message.answer(text=f"За усердие +1 балл! Ваш рейтинг: {current_rating}")
 
 
 @router.callback_query(F.data.startswith("gilmanova_"))
@@ -114,10 +114,10 @@ async def process_gilmanova_button(callback: CallbackQuery, variables: Variables
         state = variables.keyboards.menu.gilmanova_states[user_id]
         await state.start_interactive()
     
-    await callback.answer("Пожалуйста, ответьте текстом в чат 📝")
+    await callback.answer(text="Пожалуйста, ответьте текстом в чат 📝")
 
 
 @router.callback_query(F.data == "finished_gilmanova")
 @admin_interactive
 async def finished_gilmanova(callback: CallbackQuery, variables: Variables):
-    await callback.message.answer("📢 Гильманова закончила выступление!")
+    await callback.message.answer(text="📢 Гильманова закончила выступление!")

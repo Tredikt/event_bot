@@ -9,7 +9,7 @@ class AnswerValidator:
         """
         Проверяет, содержит ли ответ пользователя один из ключевых слов из списка gilmanova_answers
         """
-        return await AnswerValidator._contains_keywords(user_answer, gilmanova_answers, min_matches=1)
+        return await AnswerValidator._contains_keywords(text=user_answer, keywords=gilmanova_answers, min_matches=1)
     
     @staticmethod
     async def _contains_keywords(text: str, keywords: List[str], min_matches: int = 1) -> bool:

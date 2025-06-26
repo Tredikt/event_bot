@@ -21,6 +21,8 @@ horoshutina_sequence = [
     {"word": "Контрактование", "order": 6, "id": "contract"},
 ]
 
+horoshutina_right_answer = "1️⃣ Выявление потребности\n\n2️⃣ Показ\n\n3️⃣ Демоиспользование\n\n4️⃣ Дожим\n\n5️⃣ Итоговое формирование условий\n\n6️⃣ Контрактование"
+
 photo_id = [
     "AgACAgIAAxkBAAMFaFcQ_bAajmdRRrRUPc1WLuF5uVcAAgLvMRukirlKyfZiVwEziscBAAMCAAN5AAM2BA",
     "AgACAgIAAxkBAAMHaFcTMPZN7jYfB-b3uR_WFMsk_QQAAhXvMRukirlKGXtiRMCU904BAAMCAAN4AAM2BA",
