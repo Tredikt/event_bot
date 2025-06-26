@@ -157,9 +157,7 @@ class InteractiveKeyboard(KeyboardOperations):
     async def zargaryan_menu(self):
         """Интерактив Заргарян - основные варианты"""
         buttons = {
-            "Вариант 1": "zargaryan_1",
-            "Вариант 2": "zargaryan_2",
-            "Вариант 3": "zargaryan_3"
+            "Ответить на вопросы": "answer_questions_zargaryan"
         }
         return await self.create_keyboard(buttons=buttons)
 
