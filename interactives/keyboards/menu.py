@@ -88,6 +88,7 @@ class InteractiveKeyboard(KeyboardOperations):
             "Ложь": "zabegayev_2_false"
         }
         return await self.create_keyboard(buttons=buttons)
+    
     async def interactive_horoshutina(self, user_id):
         if user_id not in self.horoshutina_states:
             self.horoshutina_states[user_id] = HoroshutinaState()
