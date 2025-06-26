@@ -1,6 +1,6 @@
 from typing import Optional
 
-from sqlalchemy import insert, select
+from sqlalchemy import insert, select, update
 from sqlalchemy.exc import IntegrityError
 
 from core.db_templates import BaseRepository
@@ -49,21 +49,18 @@ class UserRepository(BaseRepository):
     async def update_user_info(
         self,
         telegram_user_id: str,
-        username: str = None,
-        first_name: str = None,
+        **kwargs
     ) -> Optional[User]:
         """Обновляет информацию о пользователе"""
         user = await self.get_by_telegram_id(telegram_user_id=telegram_user_id)
         if not user:
             return None
-            
-        if username is not None:
-            user.username = username
-        if first_name is not None:
-            user.first_name = first_name
-            
+        update_stmt = update(User).where(
+            User.user_id == telegram_user_id
+        ).values(**kwargs)
+        result = await self.session.execute(statement=update_stmt)
         await self.session.commit()
-        return user
+        return result.scalar_one()
     
     async def get_all_users(self) -> list[User]:
         """Получает всех пользователей"""
@@ -94,5 +91,10 @@ class UserRepository(BaseRepository):
     async def get_top_users(self, limit: int = 10) -> list[User]:
         """Получает топ пользователей по рейтингу"""
         select_stmt = select(User).order_by(User.rating.desc()).limit(limit).options(*self.options)
+        result = await self.session.execute(statement=select_stmt)
+        return result.scalars().all()
+
+    async def get_users_with_feedback_waiting(self):
+        select_stmt = select(User).where(User.feedback_waiting.isnot(None))
         result = await self.session.execute(statement=select_stmt)
         return result.scalars().all()

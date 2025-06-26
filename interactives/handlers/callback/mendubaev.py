@@ -2,6 +2,7 @@ from aiogram import Router, F
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message, CallbackQuery
 
+from core.bot_states import BotStates
 from core.utils.enums import Variables
 from core.utils.mendubaev_texts import mendubaev_texts
 

@@ -1,6 +1,5 @@
 from aiogram import Router, F
-from aiogram.fsm.context import FSMContext
-from aiogram.types import Message, CallbackQuery, InputMediaPhoto
+from aiogram.types import CallbackQuery, InputMediaPhoto
 
 from core.utils.enums import Variables
 
@@ -30,7 +29,8 @@ async def gavrikov_start(call: CallbackQuery, state: FSMContext, variables: Vari
 async def gavrikov_callback_handler(call: CallbackQuery, variables: Variables):
     text = "Круто, сейчас посмотрим, сколько таких же как ты"
     await call.message.edit_text(
-        text=text
+        text=text,
+        reply_markup=await variables.keyboards.menu.get_empty_keyboard()
     )
     await call.edit_text(
         text="Как вам это выступление? / материалы спикера в easy",

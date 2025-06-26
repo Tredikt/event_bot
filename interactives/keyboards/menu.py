@@ -1,12 +1,20 @@
 from core.operations import KeyboardOperations
 from core.utils.answer_choices import answer_choices, horoshutina_sequence, sadriev_test
-from interactives.states import interactive_states, HoroshutinaState
+from interactives.states import HoroshutinaState
 
 
 class InteractiveKeyboard(KeyboardOperations):
     def __init__(self):
         super().__init__()
         self.horoshutina_states = {}
+
+    async def performance_ending(self, interactive_name: str):
+        buttons = {
+            "Круто": f"ending_{interactive_name}_cool",
+            "Неплохо": f"ending_{interactive_name}_good",
+            "Задать вопрос спикеру": f"ask_speaker_{interactive_name}"
+        }
+        return await self.create_keyboard(buttons=buttons)
 
     async def belozerova_test(self, number_test: int):
         test_data = answer_choices[number_test - 1]
@@ -59,12 +67,27 @@ class InteractiveKeyboard(KeyboardOperations):
         }
         return await self.create_keyboard(buttons=buttons)
 
-    async def zabegayev(self, step: str):
+    async def start_zabegayev(self):
         buttons = {
-            "Правда": f"zabegayev_{step}_true",
-            "Ложь": f"zabegayev_{step}_false"
+            "Правда": "start_zabegayev_false",
+            "Ложь": "start_zabegayev_true"
         }
+        return await self.create_keyboard(buttons=buttons)
 
+    async def zabegayev_1(self):
+        buttons = {
+            "Правда": "zabegayev_1_false",
+            "Ложь": "zabegayev_1_true"
+        }
+        return await self.create_keyboard(buttons=buttons)
+
+
+    async def zabegayev_2(self):
+        buttons = {
+            "Правда": "zabegayev_2_true",
+            "Ложь": "zabegayev_2_false"
+        }
+        return await self.create_keyboard(buttons=buttons)
     async def interactive_horoshutina(self, user_id):
         if user_id not in self.horoshutina_states:
             self.horoshutina_states[user_id] = interactive_states["HoroshutinaState"]()
@@ -96,40 +119,6 @@ class InteractiveKeyboard(KeyboardOperations):
         
         return await self.create_keyboard(buttons=buttons)
 
-
-
-    async def interactive_nurkhametova(self):
-        buttons = {
-            "семейные права": "interactive_nurkhametova_0_true",
-            "гражданские права": "interactive_nurkhametova_0_false",
-            "административные права": "interactive_nurkhametova_0_false"
-        }
-        return await self.create_keyboard(buttons=buttons)
-
-    async def interactive_nurkhametova_1(self):
-        buttons = {
-            "Право на справедливый суд (ст. 46 Конституции)": "interactive_nurkhametova_1_true",
-            "Гражданское право": "interactive_nurkhametova_1_false",
-            "Право на предпринимательство": "interactive_nurkhametova_1_false"
-        }
-        return await self.create_keyboard(buttons=buttons)
-
-    async def interactive_nurkhametova_2(self):
-        buttons = {
-            "Гражданское право": "interactive_nurkhametova_2_false",
-            "Социальное право": "interactive_nurkhametova_2_true",
-            "Право на образование": "interactive_nurkhametova_2_false"
-        }
-        return await self.create_keyboard(buttons=buttons)
-
-    async def interactive_nurkhametova_3(self):
-        buttons = {
-            "Гражданские права": "interactive_nurkhametova_3_false",
-            "Административные права": "interactive_nurkhametova_3_true",
-            "Жилищные права": "interactive_nurkhametova_3_false"
-        }
-        return await self.create_keyboard(buttons=buttons)
-
     async def sadriev_test(self):
         options = sadriev_test["options"]
         correct_index = sadriev_test["correct_index"]
@@ -140,4 +129,3 @@ class InteractiveKeyboard(KeyboardOperations):
         }
 
         return await self.create_keyboard(buttons=buttons)
-
