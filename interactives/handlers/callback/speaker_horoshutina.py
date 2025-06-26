@@ -2,7 +2,7 @@ from aiogram import Router, F
 from aiogram.types import CallbackQuery
 
 from core.utils.enums import Variables
-from core.utils.answer_choices import horoshutina_sequence
+from core.utils.answer_choices import horoshutina_sequence, horoshutina_right_answer
 from core.utils.decorators import admin_interactive
 from interactives.states.horoshutina_states import HoroshutinaState
 
@@ -47,8 +47,8 @@ async def process_horoshutina_selection(callback: CallbackQuery, variables: Vari
             interactive_name="horoshutina",
             points=1
         )
-        
-        await callback.message.answer(f"🎉 +1 балл! Ваш рейтинг: {current_rating}")
+        await callback.message.answer(text=f"Прекрасно! Всё верно, этапы продаж:\n\n{horoshutina_right_answer}")
+        await callback.message.answer(text=f"🎉 +1 балл! Ваш рейтинг: {current_rating}")
     
     await callback.answer()
 
@@ -60,11 +60,11 @@ async def handle_correct_selection(state: HoroshutinaState, selected_word: str) 
 
 @router.callback_query(F.data == "horoshutina_completed")
 async def horoshutina_completed_handler(callback: CallbackQuery):
-    await callback.answer("🎉 Интерактив завершен!")
+    await callback.answer(text="🎉 Интерактив завершен!")
 
 
 @router.callback_query(F.data == "finished_horoshutina")
 @admin_interactive
 async def finished_horoshutina(callback: CallbackQuery, variables: Variables):
     """Отметка о завершении выступления Хорошутиной"""
-    await callback.message.answer("📢 Хорошутина закончила выступление!")
+    await callback.message.answer(text="📢 Хорошутина закончила выступление!")

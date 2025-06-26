@@ -36,4 +36,4 @@ async def process_sadriev_test(callback: CallbackQuery, variables: Variables):
 @admin_interactive
 async def finished_sadriev(callback: CallbackQuery, variables: Variables):
     """Отметка о завершении выступления Садриева"""
-    await callback.message.answer("📢 Садриев закончил выступление!") 
+    await callback.message.answer(text="📢 Садриев закончил выступление!") 

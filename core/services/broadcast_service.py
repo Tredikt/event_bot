@@ -96,18 +96,11 @@ class BroadcastService:
         keyboard: InlineKeyboardMarkup
     ) -> None:
         """Отправляет сообщение конкретному пользователю"""
-        
-        if keyboard:
-            await self.bot.send_message(
-                chat_id=user_id,
-                text=text,
-                reply_markup=keyboard
-            )
-        else:
-            await self.bot.send_message(
-                chat_id=user_id,
-                text=text
-            )
+        await self.bot.send_message(
+            chat_id=user_id,
+            text=text,
+            reply_markup=keyboard
+        )
 
     def _calculate_results(self, results: List[dict]) -> dict[str, int]:
         """Подсчитывает общие результаты рассылки"""
