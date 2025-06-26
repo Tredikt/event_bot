@@ -157,8 +157,11 @@ class InteractiveKeyboard(KeyboardOperations):
         return await self.create_keyboard(buttons=buttons)
 
     async def gilmanova_menu(self):
-        """Интерактив Гильмановой - без кнопок, только текстовый ответ"""
-        return None
+        """Интерактив Гильмановой - после нажатия на кнопку отправляет вопрос"""
+        buttons = {
+            "Открыть вопрос": "start_gilmanova"
+        }
+        return await self.create_keyboard(buttons=buttons)
 
     async def zabegaev_menu(self):
         """Интерактив Забегаева - сразу первый вопрос"""
