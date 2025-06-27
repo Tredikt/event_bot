@@ -13,12 +13,12 @@ answer_choices = [
 ]
 
 horoshutina_sequence = [
-    {"word": "Выявление потребности", "order": 1, "id": "need"},
-    {"word": "Показ", "order": 2, "id": "show"},
     {"word": "Демоиспользование", "order": 3, "id": "demo"},
-    {"word": "Дожим", "order": 4, "id": "push"},
-    {"word": "Итоговое формирование условий", "order": 5, "id": "terms"},
+    {"word": "Выявление потребности", "order": 1, "id": "need"},
     {"word": "Контрактование", "order": 6, "id": "contract"},
+    {"word": "Итоговое формирование условий", "order": 5, "id": "terms"},
+    {"word": "Показ", "order": 2, "id": "show"},
+    {"word": "Дожим", "order": 4, "id": "push"},
 ]
 
 horoshutina_right_answer = "1️⃣ Выявление потребности\n\n2️⃣ Показ\n\n3️⃣ Демоиспользование\n\n4️⃣ Дожим\n\n5️⃣ Итоговое формирование условий\n\n6️⃣ Контрактование"

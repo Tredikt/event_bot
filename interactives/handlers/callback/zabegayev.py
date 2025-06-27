@@ -1,9 +1,9 @@
 from aiogram import Router, F
-from aiogram.fsm.context import FSMContext
-from aiogram.types import Message, CallbackQuery
+from aiogram.types import CallbackQuery
 
-from core.bot_states import BotStates
 from core.utils.enums import Variables
+from core.utils.answers import zabegayev_answers
+
 
 router = Router(name="zabegayev_callback_router")
 
@@ -13,10 +13,11 @@ async def start_zabegayev(call: CallbackQuery, variables: Variables):
     mode = call.data.split("_")[-1]
     keyboard = await variables.keyboards.menu.zabegayev_1()
     text = ""
+    await call.message.delete()
     if mode == "false":
-        text="Неверно! В отличие от legacy-решений, Sprinter работает в браузере без установки — это принципиальное архитектурное преимущество. Никаких зависимостей, никаких 'квестов' с обновлениями. Открыли веб-интерфейс — и работаете даже с планшета!"
+        text="Неверно 😢\n" + zabegayev_answers["zabegaev_1"]
     else:
-        text = "✅ Верно!"
+        text = "✅ Верно!\n" + zabegayev_answers["zabegaev_1"]
     await call.message.answer(
         text=text
     )
@@ -31,10 +32,12 @@ async def zabegayev_2(call: CallbackQuery, variables: Variables):
     mode = call.data.split("_")[-1]
     keyboard = await variables.keyboards.menu.zabegayev_2()
     text = ""
+    await call.message.delete()
     if mode == "false":
-        text="Миф! Sprinter внедряется за 1 день благодаря модульной архитектуре и готовым адаптерам. Например, в Минфине мы подключили генерацию отчетов за 4 часа. Docker + веб-компоненты — и вы в работе!"
+        text = "Миф! \n" + zabegayev_answers["zabegaev_2"]
     else:
-        text = "✅ Верно!"
+        text="✅ Верно!\n" + zabegayev_answers["zabegaev_2"]
+
     await call.message.answer(
         text=text
     )
@@ -48,10 +51,12 @@ async def zabegayev_2(call: CallbackQuery, variables: Variables):
 async def zabegayev_2(call: CallbackQuery, variables: Variables):
     mode = call.data.split("_")[-1]
     text = ""
+    await call.message.delete()
     if mode == "false":
-        text="Миф! Sprinter внедряется за 1 день благодаря модульной архитектуре и готовым адаптерам. Например, в Минфине мы подключили генерацию отчетов за 4 часа. Docker + веб-компоненты — и вы в работе!"
+        text="Не совсем 😢\n" + zabegayev_answers["zabegaev_3"]
     else:
-        text = "✅ Верно!"
-    await call.message.edit_text(
-        text=text
+        text = "✅ Верно!\n" + zabegayev_answers["zabegaev_3"]
+    await call.message.answer(
+        text=text,
+        parse_mode="HTML"
     )
