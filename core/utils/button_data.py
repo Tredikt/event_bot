@@ -1,4 +1,7 @@
 admin_buttons = [
+    ("Адмакин - Закончил выступление", "finished_admakin"),
+    ("Балуков - Закончил выступление", "finished_balukov"),
+
     ("Белозерцева - Интерактив", "interactive_belozertseva"),
     ("Белозерцеева - Закончила выступление", "finished_belozertseva"),
     
