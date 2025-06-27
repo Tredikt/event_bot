@@ -14,7 +14,7 @@ router = Router(name="ending")
 
 @router.callback_query(F.data.startswith("ending"))
 async def ending_handler(call: CallbackQuery, state: FSMContext, variables: Variables):
-    user_id = call.from_user.id
+    user_id = str(call.from_user.id)
     data = call.data.split("_")
     rate = data[-1]
     interactive_name = data[-2]

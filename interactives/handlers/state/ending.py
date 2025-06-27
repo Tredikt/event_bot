@@ -11,7 +11,7 @@ router = Router(name="ending_state")
 
 @router.message(F.text, StateFilter(BotStates.ending))
 async def ending_state_handler(message: Message, state: FSMContext, variables: Variables):
-    user_id = message.from_user.id
+    user_id = str(message.from_user.id)
     user = await variables.db.user.get_by_telegram_id(telegram_user_id=user_id)
     if user.feedback_waiting:
         interactive_name = (await state.get_data())["interactive_name"]

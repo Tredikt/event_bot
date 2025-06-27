@@ -167,20 +167,20 @@ class InteractiveBroadcastService:
 
     async def get_interactive_keyboard(self, speaker_name: str, **kwargs):
         """Получает клавиатуру для конкретного интерактива"""
-        
+
         keyboard_mapping = {
             "belozertseva": lambda: self._get_keyboard_method("belozyortseva_menu")(kwargs.get("number_test")),
             "gavrikov": self._get_keyboard_method("gavrikov_menu"),
-            "zabegaev": self._get_keyboard_method("zabegaev_menu"),
+            "zabegaev": self._get_keyboard_method("zabegayev_menu"),
             "zargaryan": self._get_keyboard_method("zargaryan_menu"),
             "mendubaev": self._get_keyboard_method("mendubaev_menu"),
-            "nurhametova": self._get_keyboard_method("nurhametova_menu"),
+            "nurhametova": self._get_keyboard_method("nurkhametova_menu"),
             "sadriev": self._get_keyboard_method("sadriev_menu"),
             "horoshutina": self._get_keyboard_method("horoshutina_menu"),
             "gilmanova": self._get_keyboard_method("gilmanova_menu"),
             "ending": self._get_keyboard_method("gilmanova_menu"),
         }
-        
+
         keyboard_method = keyboard_mapping.get(speaker_name)
         if keyboard_method:
             try:
@@ -188,7 +188,7 @@ class InteractiveBroadcastService:
             except Exception as e:
                 print(f"Ошибка получения клавиатуры для {speaker_name}: {e}")
                 return None
-        
+
         return None
 
     def _get_keyboard_method(self, method_name: str):
