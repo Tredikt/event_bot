@@ -159,7 +159,7 @@ class InteractiveKeyboard(KeyboardOperations):
         
         return await self.create_keyboard(buttons=buttons)
 
-    async def sadriev_test(self):
+    async def sadriev_menu(self):
         options = sadriev_test["options"]
         correct_index = sadriev_test["correct_index"]
 
