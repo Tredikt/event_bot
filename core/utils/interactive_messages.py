@@ -1,6 +1,12 @@
 from core.utils.mendubaev_texts import mendubaev_texts
 
 interactive_messages = {
+    "admakin": {
+        "end": "Как вам это выступление? / материалы спикера в easy (ссылка)"
+    },
+    "balukov": {
+        "end": "Как вам это выступление? / материалы спикера в easy (ссылка)"
+    },
     "belozertseva": {
         "start": "Бэкенд сервиса разделён на две ключевые части. Какие?",
         "end": "Как вам это выступление? / материалы спикера в <a href='https://t.me/Easyontelegram_bot?startapp=courses_bc69287c-b6e4-4e85-804c-628b63778891'>easy</a>"
