@@ -99,7 +99,8 @@ class BroadcastService:
         await self.bot.send_message(
             chat_id=user_id,
             text=text,
-            reply_markup=keyboard
+            reply_markup=keyboard,
+            parse_mode="HTML"
         )
 
     def _calculate_results(self, results: List[dict]) -> dict[str, int]:
