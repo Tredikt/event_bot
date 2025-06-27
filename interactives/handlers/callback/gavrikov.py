@@ -9,7 +9,6 @@ router = Router(name="gavrikov_router")
 @router.callback_query(F.data == "gavrikov_start")
 async def gavrikov_callback_handler(call: CallbackQuery, variables: Variables):
     text = "Выбери свой вариант"
-    keyboard = await variables.keyboards.menu.get_empty_keyboard()
     media = [
         InputMediaPhoto(media="AgACAgIAAxkBAAMFaFcQ_bAajmdRRrRUPc1WLuF5uVcAAgLvMRukirlKyfZiVwEziscBAAMCAAN5AAM2BA"),
         InputMediaPhoto(media="AgACAgIAAxkBAAMHaFcTMPZN7jYfB-b3uR_WFMsk_QQAAhXvMRukirlKGXtiRMCU904BAAMCAAN4AAM2BA"),
