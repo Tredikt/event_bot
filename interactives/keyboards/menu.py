@@ -18,43 +18,26 @@ class InteractiveKeyboard(KeyboardOperations):
 
     async def nurkhametova_menu(self):
         buttons = {
-            "Cемейные права": "nurkhametova_menu_true",
-            "Гражданские права": "nurkhametova_menu_false",
-            "Административные права": "nurkhametova_menu_false"
+            "Cемейные права": "nurkhametova_menu_0",
+            "Гражданские права": "nurkhametova_menu_1", 
+            "Административные права": "nurkhametova_menu_2"
         }
         return await self.create_keyboard(buttons=buttons)
 
     async def nurkhametova_start(self):
         buttons = {
-            "Право на справедливый суд (ст. 46 Конституции)": "nurkhametova_start_true",
-            "Гражданское право": "nurkhametova_start_false",
-            "Право на предпринимательство": "nurkhametova_start_false"
-        }
-        return await self.create_keyboard(buttons=buttons)
-
-    async def nurkhametova_start1(self):
-        buttons = {
-            "Гражданское право": "nurkhametova_start1_false",
-            "Социальное право": "nurkhametova_start1_true",
-            "Право на образование": "nurkhametova_start1_false"
-        }
-        return await self.create_keyboard(buttons=buttons)
-
-    async def nurkhametova_start2(self):
-        buttons = {
-            "Гражданские права": "nurkhametova_start2_false",
-            "Административные права": "nurkhametova_start2_true",
-            "Жилищные права": "nurkhametova_start2_false"
+            "Право на справедливый суд (ст. 46 Конституции)": "nurkhametova_start_0",
+            "Гражданское право": "nurkhametova_start_1",
+            "Право на предпринимательство": "nurkhametova_start_2"
         }
         return await self.create_keyboard(buttons=buttons)
 
     async def belozyortseva_menu(self, number_test: int):
         test_data = answer_choices[number_test - 1]
         options = test_data["options"]
-        correct_index = test_data["correct_index"]
 
         buttons = {
-            option: f"belozyortseva_test_{number_test}_{'true' if idx == correct_index else 'false'}"
+            option: f"belozyortseva_test_{number_test}_{idx}"
             for idx, option in enumerate(options)
         }
 
@@ -161,10 +144,9 @@ class InteractiveKeyboard(KeyboardOperations):
 
     async def sadriev_menu(self):
         options = sadriev_test["options"]
-        correct_index = sadriev_test["correct_index"]
 
         buttons = {
-            option: f"sadriev_test_{'true' if idx == correct_index else 'false'}"
+            option: f"sadriev_test_{idx}"
             for idx, option in enumerate(options)
         }
 
