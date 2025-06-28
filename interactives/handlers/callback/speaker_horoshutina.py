@@ -1,9 +1,13 @@
+import asyncio
+
 from aiogram import Router, F
+from aiogram.enums import ChatAction
 from aiogram.types import CallbackQuery
 
 from core.utils.enums import Variables
 from core.utils.answer_choices import horoshutina_sequence, horoshutina_right_answer
 from core.utils.decorators import admin_interactive
+from core.utils.scoring_utils import add_user_score
 from interactives.states.horoshutina_states import HoroshutinaState
 
 
@@ -39,17 +43,11 @@ async def process_horoshutina_selection(callback: CallbackQuery, variables: Vari
     
     if await state.is_completed():
         await callback.message.delete()
-        telegram_user_id = str(callback.from_user.id)
-        
-        current_rating = await variables.db.interactive_service.complete_interactive(
-            telegram_user_id=telegram_user_id,
-            username=callback.from_user.username,
-            first_name=callback.from_user.first_name,
-            interactive_name="horoshutina",
-            points=1
-        )
-        await callback.message.answer(text=f"Прекрасно! Всё верно, этапы продаж:\n\n{horoshutina_right_answer}")
-        await callback.message.answer(text=f"🎉 +1 балл! Ваш рейтинг: {current_rating}")
+        await variables.bot.send_chat_action(chat_id=callback.message.chat.id, action=ChatAction.TYPING)
+        await asyncio.sleep(1.5)
+        text = f"Прекрасно! Всё верно, этапы продаж:\n\n{horoshutina_right_answer}"
+        text += await add_user_score(callback, variables, "horoshutina")
+        await callback.message.answer(text=text)
     
     await callback.answer()
 

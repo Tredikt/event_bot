@@ -5,6 +5,7 @@ from aiogram.types import Message, ReactionTypeEmoji
 from core.bot_states import BotStates
 from core.utils.answer_validator import AnswerValidator
 from core.utils.enums import Variables
+from core.utils.animate_waiting_message import animate_answer_analysis
 from interactives.states.gilmanova_states import GilmanovaState
 
 
@@ -21,15 +22,24 @@ async def process_gilmanova_answer(message: Message, variables: Variables):
         return
     
     state: GilmanovaState = variables.keyboards.menu.gilmanova_states[user_id]
-    user_answer: str = message.text
-    await message.react(reaction=[ReactionTypeEmoji(emoji="👍")], is_big=True)
-
-    is_correct: bool = await AnswerValidator.check_gilmanova_answer(user_answer=user_answer)
     
-    if is_correct:
-        await _handle_correct_answer(message=message, variables=variables, state=state)
-    else:
-        await _handle_incorrect_answer(message=message, variables=variables, state=state)
+    if await state.is_currently_processing() or await state.is_interactive_finished():
+        return
+    
+    await state.set_processing(True)
+    
+    try:
+        user_answer: str = message.text
+        await message.react(reaction=[ReactionTypeEmoji(emoji="👍")], is_big=True)
+
+        is_correct: bool = await AnswerValidator.check_gilmanova_answer(user_answer=user_answer)
+        
+        if is_correct:
+            await _handle_correct_answer(message=message, variables=variables, state=state)
+        else:
+            await _handle_incorrect_answer(message=message, variables=variables, state=state)
+    finally:
+        await state.set_processing(False)
 
 
 async def _ensure_gilmanova_state_exists(variables: Variables, user_id: int) -> None:
@@ -59,6 +69,8 @@ async def _is_gilmanova_active(variables: Variables, user_id: int) -> bool:
 async def _handle_correct_answer(message: Message, variables: Variables, state: GilmanovaState) -> None:
     await state.finish_interactive()
     
+    await animate_answer_analysis(message=message, bot=variables.bot)
+    
     telegram_user_id: str = str(message.from_user.id)
     
     current_rating: int = await variables.db.interactive_service.complete_interactive(
@@ -76,6 +88,8 @@ async def _handle_incorrect_answer(message: Message, variables: Variables, state
     """Обработка неправильного ответа"""
     await state.add_attempt()
     
+    await animate_answer_analysis(message=message, bot=variables.bot)
+    
     if await state.has_attempts_left():
         failure_message: str = await state.get_failure_message()
         await message.answer(text=failure_message)
@@ -90,7 +104,7 @@ async def _show_correct_answer(message: Message, variables: Variables, state: Gi
     failure_message: str = await state.get_failure_message()
     
     await message.answer(text=failure_message)
-
+    
     current_rating: int = await variables.db.interactive_service.complete_interactive(
         telegram_user_id=str(message.from_user.id),
         username=message.from_user.username,
