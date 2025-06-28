@@ -3,6 +3,7 @@ from aiogram import Router, F
 from aiogram.types import CallbackQuery
 from aiogram.enums import ChatAction
 
+from core.utils.answer_choices import nurkhametova_correct_answers
 from core.utils.enums import Variables
 from core.utils.nurkhametova_explanation import explanations
 from core.utils.nurkhametova_questions import questions
@@ -19,17 +20,19 @@ keyboards = {
 
 @router.callback_query(F.data.startswith("nurkhametova_menu_"))
 async def nurkhametova(call: CallbackQuery, variables: Variables):
-    answer = call.data.split("_")[-1]
+    selected_index = int(call.data.split("_")[-1])
     key = "menu"
     correct_text = explanations[key]
     
     await call.message.edit_reply_markup(reply_markup=None)
     
-    await variables.bot.send_chat_action(chat_id=call.message.chat.id, action=ChatAction.TYPING)
+    await call.bot.send_chat_action(chat_id=call.message.chat.id, action=ChatAction.TYPING)
     
     await asyncio.sleep(1.5)
     
-    if answer == "false":
+    is_correct = selected_index == nurkhametova_correct_answers[key]
+    
+    if not is_correct:
         text = f"❌ Неверно!\n\n{correct_text}"
     else:
         text = f"✅ Верно!\n\n{correct_text}"
@@ -48,17 +51,19 @@ async def nurkhametova(call: CallbackQuery, variables: Variables):
 
 @router.callback_query(F.data.startswith("nurkhametova_start_"))
 async def nurkhametova1(call: CallbackQuery, variables: Variables):
-    answer = call.data.split("_")[-1]
+    selected_index = int(call.data.split("_")[-1])
     key = "start"
     correct_text = explanations[key]
     
     await call.message.edit_reply_markup(reply_markup=None)
     
-    await variables.bot.send_chat_action(chat_id=call.message.chat.id, action=ChatAction.TYPING)
+    await call.bot.send_chat_action(chat_id=call.message.chat.id, action=ChatAction.TYPING)
     
     await asyncio.sleep(1.5)
     
-    if answer == "false":
+    is_correct = selected_index == nurkhametova_correct_answers[key]
+    
+    if not is_correct:
         text = f"❌ Неверно!\n\n{correct_text}"
     else:
         text = f"✅ Верно!\n\n{correct_text}"
