@@ -1,22 +1,14 @@
+import asyncio
 from aiogram import Router, F
 from aiogram.types import CallbackQuery
+from aiogram.enums import ChatAction
 
 from core.utils.enums import Variables
+from core.utils.answers import belozyortseva_explanations, belozyortseva_next_questions
+from core.utils.animate_waiting_message import animate_next_question_loading
+from core.utils.scoring_utils import add_user_score
 
 router = Router(name="belozyortseva_router")
-
-# Массив с пояснениями для каждого вопроса теста
-explanations = {
-    1: "Бэкенд — это серверная часть приложения, где происходит обработка данных, логика, хранение и выдача информации клиенту.",
-    2: "Фронтенд — это адаптивное веб-приложение, которое общается с сервером через API (обычно REST или GraphQL)."
-    # Можно добавить другие номера вопросов, если будет больше вопросов
-}
-
-# Массив с текстами следующих вопросов (если нужно)
-next_questions = {
-    2: "Фронтенд — это адаптивное веб-приложение, которое общается с сервером через…"
-    # Если больше вопросов, добавляй сюда по ключу номер_теста
-}
 
 
 @router.callback_query(F.data.startswith("belozyortseva_test_"))
@@ -25,20 +17,27 @@ async def belozyortseva_callback_handler(call: CallbackQuery, variables: Variabl
     number_test = int(parts[-2])
     is_correct = parts[-1] == "true"
 
-    correct_explanation = explanations.get(number_test, "")
+    await call.message.edit_reply_markup(reply_markup=None)
+    
+    await variables.bot.send_chat_action(chat_id=call.message.chat.id, action=ChatAction.TYPING)
+    
+    await asyncio.sleep(1.5)
+
+    correct_explanation = belozyortseva_explanations.get(number_test, "")
     if is_correct:
         text = f"✅ Верно!\n\n{correct_explanation}"
+        text += await add_user_score(call, variables, "belozyortseva")
     else:
         text = f"❌ Неверно!\n\n{correct_explanation}"
 
-    # Меняем сообщение с вариантами на результат
-    await call.message.edit_text(text=text)
+    await call.message.answer(text=text)
 
     number_test += 1
 
-    # Если есть следующий вопрос, отправляем его
-    next_question_text = next_questions.get(number_test)
+    next_question_text = belozyortseva_next_questions.get(number_test)
     if next_question_text:
+        await animate_next_question_loading(message=call.message, bot=call.bot)
+        
         await call.message.answer(
             text=next_question_text,
             reply_markup=await variables.keyboards.menu.belozyortseva_menu(number_test=number_test)
