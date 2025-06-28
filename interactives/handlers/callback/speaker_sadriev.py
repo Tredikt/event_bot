@@ -1,8 +1,12 @@
+import asyncio
 from aiogram import Router, F
 from aiogram.types import CallbackQuery
 
 from core.utils.enums import Variables
-from core.utils.decorators import admin_interactive
+from core.utils.answers import sadriev_answers
+from core.utils.answer_choices import sadriev_test
+from core.utils.animate_waiting_message import animate_answer_analysis
+from core.utils.scoring_utils import add_user_score
 
 
 router = Router(name="speaker_sadriev_callback")
@@ -10,30 +14,20 @@ router = Router(name="speaker_sadriev_callback")
 
 @router.callback_query(F.data.startswith("sadriev_test_"))
 async def process_sadriev_test(callback: CallbackQuery, variables: Variables):
-    is_correct = callback.data.endswith("_true")
+    selected_index = int(callback.data.split("_")[-1])
     
+    await callback.message.edit_reply_markup(reply_markup=None)
+        
+    await animate_answer_analysis(message=callback.message, bot=variables.bot)
+
+    correct_index = sadriev_test["correct_index"]
+    is_correct = selected_index == correct_index
+
     if is_correct:
-        text = "✅ Верно! Общее количество кибератак, зарегистрированных в России за 2024 год, составило 1 811 562 707"
-        
-        telegram_user_id = str(callback.from_user.id)
-        current_rating = await variables.db.interactive_service.complete_interactive(
-            telegram_user_id=telegram_user_id,
-            username=callback.from_user.username,
-            first_name=callback.from_user.first_name,
-            interactive_name="sadriev",
-            points=1
-        )
-        
-        text += f"\n\n🎉 +1 балл! Ваш рейтинг: {current_rating}"
+        text = f"✅ Верно!\n\n{sadriev_answers['sadriev_answer']}"
+        text += await add_user_score(callback, variables, "sadriev")
     else:
-        text = "❌ Неверно! Правильный ответ: от 1 млрд до 2 млрд"
+        text = f"❌ Неверно :(\n\nПравильный ответ: {sadriev_answers['sadriev_answer']}"
     
-    await callback.message.edit_text(text=text)
+    await callback.message.answer(text=text)
     await callback.answer()
-
-
-@router.callback_query(F.data == "finished_sadriev")
-@admin_interactive
-async def finished_sadriev(callback: CallbackQuery, variables: Variables):
-    """Отметка о завершении выступления Садриева"""
-    await callback.message.answer(text="📢 Садриев закончил выступление!") 

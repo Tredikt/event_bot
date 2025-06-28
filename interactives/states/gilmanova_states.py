@@ -4,11 +4,13 @@ class GilmanovaState:
         self.max_attempts: int = 3
         self.is_active: bool = False
         self.is_finished: bool = False
+        self.is_processing: bool = False
         
     async def start_interactive(self) -> None:
         self.is_active = True
         self.attempts_count = 0
         self.is_finished = False
+        self.is_processing = False
         
     async def add_attempt(self) -> None:
         self.attempts_count += 1
@@ -28,11 +30,13 @@ class GilmanovaState:
     async def finish_interactive(self) -> None:
         self.is_finished = True
         self.is_active = False
+        self.is_processing = False
         
     async def reset(self) -> None:
         self.attempts_count = 0
         self.is_active = False
         self.is_finished = False
+        self.is_processing = False
         
     async def has_attempts_left(self) -> bool:
         return self.attempts_count < self.max_attempts
@@ -44,3 +48,11 @@ class GilmanovaState:
             return "Подумай ещё"
         else:
             return "Сейчас спикер скажет правильный ответ"
+    
+    async def set_processing(self, is_processing: bool) -> None:
+        """Устанавливает флаг обработки ответа"""
+        self.is_processing = is_processing
+        
+    async def is_currently_processing(self) -> bool:
+        """Проверяет, обрабатывается ли сейчас ответ"""
+        return self.is_processing
