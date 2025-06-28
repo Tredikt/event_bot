@@ -1,7 +1,7 @@
 import asyncio
 from aiogram.enums import ChatAction
 from aiogram.types import Message
-from aiogram.client import Bot
+from aiogram import Bot
 
 
 async def animate_next_question_loading(message: Message, bot: Bot):
