@@ -21,19 +21,15 @@ class InteractiveKeyboard(KeyboardOperations):
         
         return await self.create_keyboard(buttons=buttons)
 
-    async def nurkhametova_menu(self):
+    async def nurkhametova_start_interactive(self):
         buttons = {
-            "Cемейные права": "nurkhametova_menu_0",
-            "Гражданские права": "nurkhametova_menu_1", 
-            "Административные права": "nurkhametova_menu_2"
+            "Запустить интерактив": "nurkhametova_start_interactive"
         }
         return await self.create_keyboard(buttons=buttons)
 
-    async def nurkhametova_start(self):
+    async def belozyortseva_start_interactive(self):
         buttons = {
-            "Право на справедливый суд (ст. 46 Конституции)": "nurkhametova_start_0",
-            "Гражданское право": "nurkhametova_start_1",
-            "Право на предпринимательство": "nurkhametova_start_2"
+            "Запустить интерактив": "start_belozyortseva_interactive"
         }
         return await self.create_keyboard(buttons=buttons)
 
@@ -62,6 +58,12 @@ class InteractiveKeyboard(KeyboardOperations):
             "Я сам участвовал в реализации этого проекта": "gavrikov_pictures",
         }
         return await self.create_keyboard(buttons=buttons, interval=2, count=2)
+
+    async def zabegayev_start_interactive(self):
+        buttons = {
+            "Запустить интерактив": "zabegayev_start_interactive"
+        }
+        return await self.create_keyboard(buttons=buttons)
 
     async def zabegayev_menu(self):
         buttons = {
@@ -112,6 +114,12 @@ class InteractiveKeyboard(KeyboardOperations):
         
         return await self.create_keyboard(buttons=buttons)
 
+    async def sadriev_start_interactive(self):
+        buttons = {
+            "Запустить интерактив": "sadriev_start_interactive"
+        }
+        return await self.create_keyboard(buttons=buttons)
+
     async def sadriev_menu(self):
         options = sadriev_test["options"]
 
@@ -121,7 +129,6 @@ class InteractiveKeyboard(KeyboardOperations):
         }
 
         return await self.create_keyboard(buttons=buttons)
-
 
     async def horoshutina_menu(self):
         """Интерактив Хорошутиной - начальные кнопки"""
@@ -133,15 +140,8 @@ class InteractiveKeyboard(KeyboardOperations):
         
         return await self.create_keyboard(buttons=buttons)
 
-    async def gilmanova_menu(self):
-        """Интерактив Гильмановой - после нажатия на кнопку отправляет вопрос"""
-        buttons = {
-            "Открыть вопрос": "start_gilmanova"
-        }
-        return await self.create_keyboard(buttons=buttons)
-
     async def zabegaev_menu(self):
-        """Интерактив Забегаева - сразу первый вопрос"""
-        return await self.start_zabegayev()
+        """Интерактив Забегаева - кнопка запуска интерактива"""
+        return await self.zabegayev_start_interactive()
 
 

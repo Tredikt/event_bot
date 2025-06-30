@@ -169,16 +169,15 @@ class InteractiveBroadcastService:
         """Получает клавиатуру для конкретного интерактива"""
 
         keyboard_mapping = {
-            "belozertseva": lambda: self._get_keyboard_method("belozyortseva_menu")(kwargs.get("number_test")),
+            "belozertseva": self._get_keyboard_method("belozyortseva_start_interactive"),
+            "nurhametova": self._get_keyboard_method("nurkhametova_start_interactive"),
             "gavrikov": self._get_keyboard_method("gavrikov_menu"),
-            "zabegaev": self._get_keyboard_method("zabegayev_menu"),
+            "zabegaev": self._get_keyboard_method("zabegayev_start_interactive"),
             "zargaryan": self._get_keyboard_method("zargaryan_menu"),
             "mendubaev": self._get_keyboard_method("mendubaev_menu"),
-            "nurhametova": self._get_keyboard_method("nurkhametova_menu"),
-            "sadriev": self._get_keyboard_method("sadriev_menu"),
+            "sadriev": self._get_keyboard_method("sadriev_start_interactive"),
             "horoshutina": self._get_keyboard_method("horoshutina_menu"),
-            "gilmanova": self._get_keyboard_method("gilmanova_menu"),
-            "ending": self._get_keyboard_method("gilmanova_menu"),
+            "ending": self._get_keyboard_method("perfomance_ending"),
         }
 
         keyboard_method = keyboard_mapping.get(speaker_name)
@@ -194,4 +193,4 @@ class InteractiveBroadcastService:
     def _get_keyboard_method(self, method_name: str):
         """Получает метод клавиатуры по имени"""
         keyboards = Keyboards()
-        return getattr(keyboards.interactives, method_name, None) 
+        return getattr(keyboards.interactives, method_name, None)

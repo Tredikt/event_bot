@@ -5,5 +5,3 @@ class BotStates(StatesGroup):
     base = State()
     ending = State()
     question = State()
-
-    gilmanova = State()
