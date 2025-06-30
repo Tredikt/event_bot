@@ -10,7 +10,7 @@ router = Router(name="gavrikov_router")
 @router.callback_query(F.data == "gavrikov_start")
 async def gavrikov_callback_handler(call: CallbackQuery, variables: Variables):
     text = "Выбери свой вариант"
-    photo = "AgACAgIAAxkBAAIItGhhVXEv4ZHmKka3kXYFDdf5VnyvAAIw-DEb-3AJSwLndVBuCXCZAQADAgADeQADNgQ"
+    photo = "AgACAgIAAxkBAAIF02hjAp83NCaRS2VGhZ_8oriUz6ZQAAKJ-jEb-3ARS70AAeF4i2X_UAEAAwIAA3kAAzYE"
 
     # Отправляем медиагруппу (альбом)
     await call.message.answer_photo(

@@ -68,10 +68,10 @@ class InteractiveKeyboard(KeyboardOperations):
 
     async def gavrikov_start(self):
         buttons = {
-            "Что такое ЖКХ?": "gavrikov_pictures",
-            "Не понимаю": "gavrikov_pictures",
-            "Понимаю": "gavrikov_pictures",
-            "Я сам участвовал в реализации этого проекта": "gavrikov_pictures",
+            "1 Вариант": "gavrikov_pictures",
+            "2 Вариант": "gavrikov_pictures",
+            "3 Вариант": "gavrikov_pictures",
+            "4 Вариант": "gavrikov_pictures",
         }
         return await self.create_keyboard(buttons=buttons, interval=2, count=2)
 
