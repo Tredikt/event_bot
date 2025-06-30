@@ -38,6 +38,7 @@ async def process_horoshutina_selection(callback: CallbackQuery, variables: Vari
     await callback.message.edit_reply_markup(reply_markup=new_keyboard)
     
     if await state.is_completed():
+        await callback.message.delete()
         telegram_user_id = str(callback.from_user.id)
         
         current_rating = await variables.db.interactive_service.complete_interactive(

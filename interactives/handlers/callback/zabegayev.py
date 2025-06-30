@@ -1,48 +1,62 @@
 from aiogram import Router, F
-from aiogram.fsm.context import FSMContext
-from aiogram.types import Message, CallbackQuery
+from aiogram.types import CallbackQuery
 
-from core.bot_states import BotStates
 from core.utils.enums import Variables
-
-zabegayev_router = Router()
-
-
-@zabegayev_router.callback_query(F.data == "zabegayev")
-async def zabegayev(call: CallbackQuery, state: FSMContext, variables: Variables):
-    await state.set_state(BotStates.base)
-    await state.update_data(interactive_name="zabegayev")
-    text = "Sprinter требует установки толстых клиентов в каждую систему"
-    keyboard = await variables.keyboards.menu.start_zabegayev()
-    await call.message.edit_text(
-        text=text,
-        reply_markup=keyboard
-    )
+from core.utils.answers import zabegayev_answers
 
 
-@zabegayev_router.callback_query(F.data.startswith("start_zabegayev_"))
+router = Router(name="zabegayev_callback_router")
+
+
+@router.callback_query(F.data.startswith("start_zabegayev_"))
 async def start_zabegayev(call: CallbackQuery, variables: Variables):
     mode = call.data.split("_")[-1]
     keyboard = await variables.keyboards.menu.zabegayev_1()
+    text = ""
+    await call.message.delete()
     if mode == "false":
-        await call.message.edit_text(
-            text="Неверно! В отличие от legacy-решений, Sprinter работает в браузере без установки — это принципиальное архитектурное преимущество. Никаких зависимостей, никаких 'квестов' с обновлениями. Открыли веб-интерфейс — и работаете даже с планшета!"
-        )
+        text="Неверно 😢\n" + zabegayev_answers["zabegaev_1"]
+    else:
+        text = "✅ Верно!\n" + zabegayev_answers["zabegaev_1"]
+    await call.message.answer(
+        text=text
+    )
     await call.message.answer(
         text="Настройка Sprinter под госсистемы (например, 'Электронный бюджет') занимает 3+ месяца из-за сложной интеграции",
         reply_markup=keyboard
     )
 
 
-@zabegayev_router.callback_query(F.data.startswith("zabegayev_1_"))
+@router.callback_query(F.data.startswith("zabegayev_1_"))
 async def zabegayev_2(call: CallbackQuery, variables: Variables):
     mode = call.data.split("_")[-1]
     keyboard = await variables.keyboards.menu.zabegayev_2()
+    text = ""
+    await call.message.delete()
     if mode == "false":
-        await call.message.edit_text(
-            text="Миф! Sprinter внедряется за 1 день благодаря модульной архитектуре и готовым адаптерам. Например, в Минфине мы подключили генерацию отчетов за 4 часа. Docker + веб-компоненты — и вы в работе!"
+        text = "Миф! \n" + zabegayev_answers["zabegaev_2"]
+    else:
+        text="✅ Верно!\n" + zabegayev_answers["zabegaev_2"]
+
+    await call.message.answer(
+        text=text
     )
-    await call.message.edit_text(
+    await call.message.answer(
         text="Sprinter генерирует сложные документы с динамическими таблицами и условным форматированием без ручного программирования шаблонов — в отличие от FastReport/Stimulsoft",
         reply_markup=keyboard
+    )
+
+
+@router.callback_query(F.data.startswith("zabegayev_2_"))
+async def zabegayev_2(call: CallbackQuery, variables: Variables):
+    mode = call.data.split("_")[-1]
+    text = ""
+    await call.message.delete()
+    if mode == "false":
+        text="Не совсем 😢\n" + zabegayev_answers["zabegaev_3"]
+    else:
+        text = "✅ Верно!\n" + zabegayev_answers["zabegaev_3"]
+    await call.message.answer(
+        text=text,
+        parse_mode="HTML"
     )
