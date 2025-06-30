@@ -1,6 +1,7 @@
 from aiogram import Router, F
 from aiogram.types import CallbackQuery, InputMediaPhoto
 
+from core.utils.answer_choices import photo_id
 from core.utils.enums import Variables
 
 router = Router(name="gavrikov_router")
@@ -9,11 +10,11 @@ router = Router(name="gavrikov_router")
 @router.callback_query(F.data == "gavrikov_start")
 async def gavrikov_callback_handler(call: CallbackQuery, variables: Variables):
     text = "Выбери свой вариант"
-
+    photo = "AgACAgIAAxkBAAIItGhhVXEv4ZHmKka3kXYFDdf5VnyvAAIw-DEb-3AJSwLndVBuCXCZAQADAgADeQADNgQ"
 
     # Отправляем медиагруппу (альбом)
     await call.message.answer_photo(
-        photo="AgACAgIAAxkBAAIItGhhVXEv4ZHmKka3kXYFDdf5VnyvAAIw-DEb-3AJSwLndVBuCXCZAQADAgADeQADNgQ"
+        photo=photo
     )
 
     # Затем отправляем сообщение с кнопками
