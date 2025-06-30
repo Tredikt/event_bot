@@ -65,6 +65,12 @@ class InteractiveKeyboard(KeyboardOperations):
         }
         return await self.create_keyboard(buttons=buttons)
 
+    async def zabegayev_start_interactive(self):
+        buttons = {
+            "Запустить интерактив": "zabegayev_start_interactive"
+        }
+        return await self.create_keyboard(buttons=buttons)
+
     async def zabegayev_menu(self):
         buttons = {
             "Правда": "start_zabegayev_false",

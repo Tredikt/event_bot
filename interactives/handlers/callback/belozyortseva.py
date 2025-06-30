@@ -1,12 +1,8 @@
 import asyncio
 from aiogram import Router, F
-<<<<<<< HEAD
-from aiogram.enums import ContentType
-from aiogram.types import CallbackQuery, Message
-=======
+from aiogram.types import CallbackQuery
 from aiogram.types import CallbackQuery
 from aiogram.enums import ChatAction
->>>>>>> 23ffeef (humanazing beheviour and add scores in interactives)
 
 from core.utils.enums import Variables
 from core.utils.answers import belozyortseva_explanations, belozyortseva_next_questions
