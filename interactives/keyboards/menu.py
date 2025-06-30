@@ -8,12 +8,17 @@ class InteractiveKeyboard(KeyboardOperations):
         super().__init__()
         self.horoshutina_states = {}
         
-    async def performance_ending(self, interactive_name: str):
-        buttons = {
+    async def performance_ending(self, interactive_name: str, rows: int = 1):
+        buttons_dict = {
             "Круто": f"ending_{interactive_name}_cool",
             "Неплохо": f"ending_{interactive_name}_good",
             "Задать вопрос спикеру": f"ask_speaker_{interactive_name}"
         }
+        buttons = dict()
+        for num, key, value in enumerate(buttons_dict.items()):
+            if num + 1 <= rows:
+                buttons[key] = value
+        
         return await self.create_keyboard(buttons=buttons)
 
     async def nurkhametova_menu(self):
