@@ -34,17 +34,9 @@ async def admin_page_info_handler(callback: CallbackQuery):
 @router.callback_query(F.data.startswith("interactive_"))
 async def interactive_start_handler(callback: CallbackQuery, variables: Variables):
     speaker_name = callback.data.split("interactive_")[1]
-
     await variables.keyboards.admin.mark_button_pressed(callback_data=callback.data)
-
     await AdminPanelService.update_admin_panel(callback=callback, variables=variables)
-    
-    if speaker_name == "belozertseva":
-        keyboard = await variables.broadcast_service.get_interactive_keyboard(speaker_name=speaker_name, number_test=1)
-    else:
-        keyboard = await variables.broadcast_service.get_interactive_keyboard(speaker_name=speaker_name)
-
-    
+    keyboard = await variables.broadcast_service.get_interactive_keyboard(speaker_name=speaker_name)
     text = get_interactive_message(speaker_name=speaker_name, message_type="start")
 
     asyncio.create_task(variables.broadcast_service.send_interactive_broadcast(
@@ -59,11 +51,8 @@ async def interactive_start_handler(callback: CallbackQuery, variables: Variable
 @router.callback_query(F.data.startswith("finished_"))
 async def interactive_end_handler(callback: CallbackQuery, variables: Variables):
     speaker_name = callback.data.split("finished_")[1]
-    
     await variables.keyboards.admin.mark_button_pressed(callback_data=callback.data)
-    
     await AdminPanelService.update_admin_panel(callback=callback, variables=variables)
-    
     text = get_interactive_message(speaker_name=speaker_name, message_type="end")
     
     asyncio.create_task(variables.broadcast_service.send_end_broadcast(

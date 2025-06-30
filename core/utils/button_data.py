@@ -23,6 +23,5 @@ admin_buttons = [
     ("Гавриков - Интерактив", "interactive_gavrikov"),
     ("Гавриков - Закончил выступление", "finished_gavrikov"),
     
-    ("Гильманова - Интерактив", "interactive_gilmanova"),
     ("Гильманова - Закончила выступление", "finished_gilmanova"),
 ] 
