@@ -1,5 +1,6 @@
 from aiogram import Router, F
-from aiogram.types import CallbackQuery
+from aiogram.enums import ContentType
+from aiogram.types import CallbackQuery, Message
 
 from core.utils.enums import Variables
 
@@ -17,6 +18,14 @@ next_questions = {
     2: "Фронтенд — это адаптивное веб-приложение, которое общается с сервером через…"
     # Если больше вопросов, добавляй сюда по ключу номер_теста
 }
+
+@router.message(F.content_type == ContentType.PHOTO)
+async def handle_photo(message: Message):
+    # Берём самое большое изображение (последний элемент списка)
+    photo = message.photo[-1]
+    photo_id = photo.file_id
+
+    await message.answer(f"photo_id: {photo_id}")
 
 
 @router.callback_query(F.data.startswith("belozyortseva_test_"))

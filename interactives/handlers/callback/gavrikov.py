@@ -9,16 +9,12 @@ router = Router(name="gavrikov_router")
 @router.callback_query(F.data == "gavrikov_start")
 async def gavrikov_callback_handler(call: CallbackQuery, variables: Variables):
     text = "Выбери свой вариант"
-    media = [
-        InputMediaPhoto(media="AgACAgIAAxkBAAMFaFcQ_bAajmdRRrRUPc1WLuF5uVcAAgLvMRukirlKyfZiVwEziscBAAMCAAN5AAM2BA"),
-        InputMediaPhoto(media="AgACAgIAAxkBAAMHaFcTMPZN7jYfB-b3uR_WFMsk_QQAAhXvMRukirlKGXtiRMCU904BAAMCAAN4AAM2BA"),
-        InputMediaPhoto(media="AgACAgIAAxkBAAMKaFcTvstEOfy671PFkdA_LtsbjBYAAhbvMRukirlKOh275kqGKBkBAAMCAAN5AAM2BA"),
-        InputMediaPhoto(media="AgACAgIAAxkBAAMMaFcTx-ZSxh7F174w_axhQOWSPCsAAhfvMRukirlKgRT9cB-qn2sBAAMCAAN5AAM2BA")
-    ]
 
 
     # Отправляем медиагруппу (альбом)
-    await call.message.answer_media_group(media=media)
+    await call.message.answer_photo(
+        photo="AgACAgIAAxkBAAIItGhhVXEv4ZHmKka3kXYFDdf5VnyvAAIw-DEb-3AJSwLndVBuCXCZAQADAgADeQADNgQ"
+    )
 
     # Затем отправляем сообщение с кнопками
     await call.message.answer(
