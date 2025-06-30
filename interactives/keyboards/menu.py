@@ -73,42 +73,7 @@ class InteractiveKeyboard(KeyboardOperations):
             "Понимаю": "gavrikov_pictures",
             "Я сам участвовал в реализации этого проекта": "gavrikov_pictures",
         }
-        return await self.create_keyboard(buttons=buttons)
-
-    async def mendubaev_menu(self):
-        buttons = {
-            "1 Вариант": "mendubaev_1",
-            "2 Вариант": "mendubaev_2"
-        }
-        return await self.create_keyboard(buttons=buttons)
-
-    async def mendubaev_1(self):
-        buttons = {
-            "1 Вариант": "1_mendubaev_1",
-            "2 Вариант": "1_mendubaev_2"
-        }
-        return await self.create_keyboard(buttons=buttons)
-
-    async def mendubaev_2(self):
-        buttons = {
-            "1 Вариант": "2_mendubaev_1",
-            "2 Вариант": "2_mendubaev_2"
-        }
-        return await self.create_keyboard(buttons=buttons)
-
-    async def mendubaev_final_1(self):
-        buttons = {
-            "1 Вариант": "final_mendubaev_1",
-            "2 Вариант": "final_mendubaev_1"
-        }
-        return await self.create_keyboard(buttons=buttons)
-
-    async def mendubaev_final_2(self):
-        buttons = {
-            "1 Вариант": "final_mendubaev_2",
-            "2 Вариант": "final_mendubaev_2"
-        }
-        return await self.create_keyboard(buttons=buttons)
+        return await self.create_keyboard(buttons=buttons, interval=2, count=2)
 
     async def zabegayev_menu(self):
         buttons = {
@@ -192,10 +157,4 @@ class InteractiveKeyboard(KeyboardOperations):
         """Интерактив Забегаева - сразу первый вопрос"""
         return await self.start_zabegayev()
 
-    async def zargaryan_menu(self):
-        """Интерактив Заргарян - основные варианты"""
-        buttons = {
-            "Ответить на вопросы": "answer_questions_zargaryan"
-        }
-        return await self.create_keyboard(buttons=buttons)
 
