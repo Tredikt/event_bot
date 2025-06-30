@@ -1,7 +1,10 @@
+import asyncio
+
 from aiogram import Router, F
 from aiogram.filters import StateFilter
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message
+from aiogram.enums import ChatAction
 
 from core.bot_states import BotStates
 from core.utils.enums import Variables
@@ -9,7 +12,7 @@ from core.utils.enums import Variables
 router = Router(name="ask_speaker_state")
 
 
-@router.message(F.text, StateFilter(BotStates.ask_speaker))
+@router.message(F.text, StateFilter(BotStates.question))
 async def ask_speaker_state_handler(message: Message, state: FSMContext, variables: Variables):
     interactive_name = (await state.get_data())["interactive_name"]
     user_id = str(message.from_user.id)

@@ -15,7 +15,7 @@ class InteractiveKeyboard(KeyboardOperations):
             "Задать вопрос спикеру": f"ask_speaker_{interactive_name}"
         }
         buttons = dict()
-        for num, key, value in enumerate(buttons_dict.items()):
+        for num, (key, value) in enumerate(buttons_dict.items()):
             if num + 1 <= rows:
                 buttons[key] = value
         
@@ -58,12 +58,6 @@ class InteractiveKeyboard(KeyboardOperations):
             "Я сам участвовал в реализации этого проекта": "gavrikov_pictures",
         }
         return await self.create_keyboard(buttons=buttons, interval=2, count=2)
-
-    async def zabegayev_start_interactive(self):
-        buttons = {
-            "Запустить интерактив": "zabegayev_start_interactive"
-        }
-        return await self.create_keyboard(buttons=buttons)
 
     async def zabegayev_start_interactive(self):
         buttons = {

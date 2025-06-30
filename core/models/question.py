@@ -1,6 +1,5 @@
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import Integer, String, DateTime, ForeignKey
-from datetime import datetime
+from sqlalchemy import String, ForeignKey
 
 from core.db_templates import BaseModel
 
@@ -13,4 +12,4 @@ class Question(BaseModel):
     interactive_name: Mapped[str] = mapped_column(String(100), nullable=False)
     body: Mapped[str] = mapped_column(nullable=False)
 
-    user: Mapped["User"] = relationship("User", back_populates="interactive_history")
+    user: Mapped["User"] = relationship("User", back_populates="question")
