@@ -14,13 +14,6 @@ class InteractiveKeyboard(KeyboardOperations):
             "Неплохо": f"ending_{interactive_name}_good",
             "Задать вопрос спикеру": f"ask_speaker_{interactive_name}"
         }
-
-        buttons = dict()
-        for num, (key, value) in enumerate(buttons_dict.items()):
-            if num + 1 <= rows:
-                buttons[key] = value
-        
-
         return await self.create_keyboard(buttons=buttons)
 
     async def nurkhametova_start_interactive(self):
