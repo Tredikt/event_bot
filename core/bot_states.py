@@ -5,6 +5,6 @@ class BotStates(StatesGroup):
     base = State()
     ending = State()
     ask_speaker = State()
-
+    question = State()
     gilmanova = State()
 
