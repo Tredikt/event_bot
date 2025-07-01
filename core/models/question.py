@@ -1,6 +1,5 @@
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import Integer, String, DateTime, ForeignKey
-from datetime import datetime
+from sqlalchemy import String, ForeignKey
 
 from core.db_templates import BaseModel
 

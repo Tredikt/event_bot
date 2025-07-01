@@ -1,76 +1,84 @@
+import asyncio
 from aiogram import Router, F
 from aiogram.types import CallbackQuery
+from aiogram.enums import ChatAction
 
+from core.utils.answer_choices import nurkhametova_correct_answers
 from core.utils.enums import Variables
-from core.utils.nurkhametova_explanation import explanations
-from core.utils.nurkhametova_questions import questions
+from core.utils.nurkhametova_data import explanations, buttons_1, buttons_2
+from core.utils.animate_waiting_message import animate_next_question_loading, send_staged_question
+from core.utils.scoring_utils import add_user_score
+
 
 router = Router(name="nurkhametova_callback_router")
 
-keyboards = {
-    "menu": "nurkhametova_menu",
-    "start": "nurkhametova_start",
-    "start1": "nurkhametova_start1",
-    "start2": "nurkhametova_start2"
-}
 
-# 1. Первый вопрос
-@router.callback_query(F.data.startswith("nurkhametova_menu_"))
+@router.callback_query(F.data == "nurkhametova_start_interactive")
+async def nurkhametova_start_interactive(call: CallbackQuery, variables: Variables):
+    """Обработчик кнопки запуска интерактива - отправляет первый вопрос поэтапно"""
+    await call.answer()
+    await call.message.delete()
+    await asyncio.sleep(1)
+    
+    await send_staged_question(
+        call=call,
+        variables=variables,
+        start_text="После развода",
+        main_text="отец запрещает матери видеться с ребёнком без причины.",
+        question_text="Это ущемляет ______ родителя",
+        buttons_data=buttons_1,
+        callback_prefix="nurkhametova_question_1"
+    )
+
+
+@router.callback_query(F.data.startswith("nurkhametova_question_1_"))
 async def nurkhametova(call: CallbackQuery, variables: Variables):
-    answer = call.data.split("_")[-1]
-    key = "menu"
+    await call.answer()
+    selected_index = int(call.data.split("_")[-1])
+    key = "question_1"
     correct_text = explanations[key]
-    if answer == "false":
+    
+    await call.message.edit_reply_markup(reply_markup=None)
+    await call.bot.send_chat_action(chat_id=call.message.chat.id, action=ChatAction.TYPING)
+    await asyncio.sleep(1.5)
+    
+    is_correct = selected_index == nurkhametova_correct_answers[key]
+    if not is_correct:
         text = f"❌ Неверно!\n\n{correct_text}"
     else:
         text = f"✅ Верно!\n\n{correct_text}"
-    await call.message.edit_text(text=text)
-    await call.message.answer(
-        text=questions["start"],
-        reply_markup=await getattr(variables.keyboards.menu, keyboards["start"])()
+        text += await add_user_score(call=call, variables=variables, interactive_name="nurkhametova")
+        
+    await call.message.answer(text=text)
+    await asyncio.sleep(2)
+    await animate_next_question_loading(message=call.message, bot=call.bot)
+    await send_staged_question(
+        call=call,
+        variables=variables,
+        start_text="Следующий вопрос:\n\nМигранта депортировали,",
+        main_text="не дав возможности обжаловать решение.",
+        question_text="Какое право нарушено?",
+        buttons_data=buttons_2,
+        callback_prefix="nurkhametova_question_2"
     )
 
-# 2. Второй вопрос
-@router.callback_query(F.data.startswith("nurkhametova_start_"))
+
+@router.callback_query(F.data.startswith("nurkhametova_question_2_"))
 async def nurkhametova1(call: CallbackQuery, variables: Variables):
-    answer = call.data.split("_")[-1]
-    key = "start"
+    await call.answer()
+    selected_index = int(call.data.split("_")[-1])
+    key = "question_2"
     correct_text = explanations[key]
-    if answer == "false":
-        text = f"❌ Неверно!\n\n{correct_text}"
-    else:
-        text = f"✅ Верно!\n\n{correct_text}"
-    await call.message.edit_text(text=text)
-    await call.message.answer(
-        text=questions["start1"],
-        reply_markup=await getattr(variables.keyboards.menu, keyboards["start1"])()
-    )
 
-# 3. Третий вопрос
-@router.callback_query(F.data.startswith("nurkhametova_start1_"))
-async def nurkhametova2(call: CallbackQuery, variables: Variables):
-    answer = call.data.split("_")[-1]
-    key = "start1"
-    correct_text = explanations[key]
-    if answer == "false":
+    await call.message.edit_reply_markup(reply_markup=None)
+    await call.bot.send_chat_action(chat_id=call.message.chat.id, action=ChatAction.TYPING)
+    await asyncio.sleep(1.5)
+    
+    is_correct = selected_index == nurkhametova_correct_answers[key]
+    if not is_correct:
         text = f"❌ Неверно!\n\n{correct_text}"
     else:
         text = f"✅ Верно!\n\n{correct_text}"
-    await call.message.edit_text(text=text)
-    await call.message.answer(
-        text=questions["start2"],
-        reply_markup=await getattr(variables.keyboards.menu, keyboards["start2"])()
-    )
-
-# 4. Последний вопрос — финал
-@router.callback_query(F.data.startswith("nurkhametova_start2_"))
-async def nurkhametova3(call: CallbackQuery, variables: Variables):
-    answer = call.data.split("_")[-1]
-    key = "start2"
-    correct_text = explanations[key]
-    if answer == "false":
-        text = f"❌ Неверно!\n\n{correct_text}"
-    else:
-        text = f"✅ Верно!\n\n{correct_text}"
-    await call.message.edit_text(text=text)
-    # Можно добавить финальное сообщение или статистику, если хочешь
+        text += await add_user_score(call=call, variables=variables, interactive_name="nurkhametova")
+        
+    await call.message.answer(text=text)
