@@ -21,7 +21,8 @@ async def gavrikov_callback_handler(call: CallbackQuery, variables: Variables):
     await asyncio.sleep(1)
 
     # Фото
-    photo = "AgACAgIAAxkBAAIIvmhj35aEvWcbKb9PoB-Pd2v2mLbfAAKJ-jEb-3ARSzztszhCRW-dAQADAgADeQADNgQ"
+    photo = "AgACAgIAAxkBAAIF02hjAp83NCaRS2VGhZ_8oriUz6ZQAAKJ-jEb-3ARS70AAeF4i2X_UAEAAwIAA3kAAzYE"
+    # photo = "AgACAgIAAxkBAAIIvmhj35aEvWcbKb9PoB-Pd2v2mLbfAAKJ-jEb-3ARSzztszhCRW-dAQADAgADeQADNgQ"
     await call.message.answer_photo(photo=photo)
 
     await variables.bot.send_chat_action(chat_id=user_id, action=ChatAction.TYPING)
