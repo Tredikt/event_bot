@@ -14,7 +14,7 @@ class BasicMiddleware(BaseMiddleware):
         self.bot = bot
         self.db = db
         self.keyboards = Keyboards()
-        self.broadcast_service = InteractiveBroadcastService(bot=bot, user_repository=db.user)
+        self.broadcast_service = InteractiveBroadcastService(bot=bot)
 
     async def __call__(
             self,
