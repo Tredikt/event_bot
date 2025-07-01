@@ -1,7 +1,10 @@
 from datetime import datetime
 
+import asyncio
 import pytz
+
 from aiogram import Router, F
+from aiogram.enums import ChatAction
 from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery
 
@@ -23,7 +26,15 @@ async def ending_handler(call: CallbackQuery, state: FSMContext, variables: Vari
         name=interactive_name,
         rate=answers[rate]
     )
+    await variables.bot.send_chat_action(chat_id=user_id, action=ChatAction.TYPING)
+    await asyncio.sleep(1)
     await call.message.edit_text(
+        text="Спасибо за обратную связь, учтём!",
+        reply_markup=await variables.keyboards.menu.get_empty_keyboard()
+    )
+    await variables.bot.send_chat_action(chat_id=user_id, action=ChatAction.TYPING)
+    await asyncio.sleep(1)
+    await call.message.answer(
         text="Оставь инсайт по поводу выступления спикера в ответ на это сообщение, мы обязательно передадим его спикеру",
         reply_markup=await variables.keyboards.menu.get_empty_keyboard()
     )
@@ -33,3 +44,15 @@ async def ending_handler(call: CallbackQuery, state: FSMContext, variables: Vari
     )
     await state.set_state(BotStates.ending)
     await state.update_data(interactive_name=interactive_name)
+
+
+
+@router.callback_query(F.data.startswith("ask_speaker"))
+async def ask_speaker_handler(call: CallbackQuery, state: FSMContext, variables: Variables):
+    await variables.bot.send_chat_action(chat_id=call.from_user.id, action=ChatAction.TYPING)
+    await state.set_state(BotStates.ask_speaker)
+    await state.update_data(interactive_name=call.data.split("_")[-1])
+    await call.message.edit_text(
+        text="Задайте вопрос спикеру",
+        reply_markup=await variables.keyboards.menu.get_empty_keyboard()
+    )

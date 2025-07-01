@@ -1,9 +1,13 @@
+import asyncio
+
 from aiogram import Router, F
+from aiogram.enums import ChatAction
 from aiogram.types import CallbackQuery
 
 from core.utils.enums import Variables
-from core.utils.answer_choices import horoshutina_sequence, horoshutina_right_answer
+from core.utils.answer_choices import horoshutina_sequence
 from core.utils.decorators import admin_interactive
+from core.utils.scoring_utils import add_user_score
 from interactives.states.horoshutina_states import HoroshutinaState
 
 
@@ -39,17 +43,7 @@ async def process_horoshutina_selection(callback: CallbackQuery, variables: Vari
     
     if await state.is_completed():
         await callback.message.delete()
-        telegram_user_id = str(callback.from_user.id)
-        
-        current_rating = await variables.db.interactive_service.complete_interactive(
-            telegram_user_id=telegram_user_id,
-            username=callback.from_user.username,
-            first_name=callback.from_user.first_name,
-            interactive_name="horoshutina",
-            points=1
-        )
-        await callback.message.answer(text=f"Прекрасно! Всё верно, этапы продаж:\n\n{horoshutina_right_answer}")
-        await callback.message.answer(text=f"🎉 +1 балл! Ваш рейтинг: {current_rating}")
+        await _send_sales_stages_sequentially(callback, variables)
     
     await callback.answer()
 
@@ -59,13 +53,35 @@ async def handle_correct_selection(state: HoroshutinaState, selected_word: str) 
     await state.complete_step(word=selected_word)
 
 
-@router.callback_query(F.data == "horoshutina_completed")
-async def horoshutina_completed_handler(callback: CallbackQuery):
-    await callback.answer(text="🎉 Интерактив завершен!")
-
-
-@router.callback_query(F.data == "finished_horoshutina")
-@admin_interactive
-async def finished_horoshutina(callback: CallbackQuery, variables: Variables):
-    """Отметка о завершении выступления Хорошутиной"""
-    await callback.message.answer(text="📢 Хорошутина закончила выступление!")
+async def _send_sales_stages_sequentially(callback: CallbackQuery, variables: Variables) -> None:
+    """Отправляет этапы продаж построчно с анимацией в одном редактируемом сообщении"""
+    await variables.bot.send_chat_action(chat_id=callback.message.chat.id, action=ChatAction.TYPING)
+    await asyncio.sleep(1.5)
+    
+    current_text = "🎉 Прекрасно! Всё верно, этапы продаж:"
+    message = await callback.message.answer(text=current_text)
+    sales_stages = [
+        "1️⃣ Выявление потребности",
+        "2️⃣ Показ", 
+        "3️⃣ Демоиспользование",
+        "4️⃣ Дожим",
+        "5️⃣ Итоговое формирование условий",
+        "6️⃣ Контрактование"
+    ]
+    
+    for stage in sales_stages:
+        await asyncio.sleep(1.2)
+        await variables.bot.send_chat_action(chat_id=callback.message.chat.id, action=ChatAction.TYPING)
+        await asyncio.sleep(0.8)
+        
+        current_text += f"\n\n{stage}"
+        await message.edit_text(text=current_text)
+    
+    await asyncio.sleep(1.5)
+    await variables.bot.send_chat_action(chat_id=callback.message.chat.id, action=ChatAction.TYPING)
+    await asyncio.sleep(0.8)
+    
+    score_text = await add_user_score(callback, variables, "horoshutina")
+    if score_text:
+        current_text += f"\n{score_text}"
+        await message.edit_text(text=current_text)

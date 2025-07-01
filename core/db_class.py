@@ -4,7 +4,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from core.repositories import (
     UserRepository,
     InteractiveHistoryRepository,
-    FeedbackRepository
+    FeedbackRepository,
+    QuestionRepository
 )
 from core.services import InteractiveService
 
@@ -18,5 +19,6 @@ class DBClass:
         self.user = UserRepository(session=session)
         self.feedback = FeedbackRepository(session=session)
         self.interactive_history = InteractiveHistoryRepository(session=session)
+        self.question = QuestionRepository(session=session)
 
         self.interactive_service = InteractiveService(db=self)

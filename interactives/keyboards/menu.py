@@ -14,47 +14,33 @@ class InteractiveKeyboard(KeyboardOperations):
             "Неплохо": f"ending_{interactive_name}_good",
             "Задать вопрос спикеру": f"ask_speaker_{interactive_name}"
         }
+
+        buttons = dict()
+        for num, (key, value) in enumerate(buttons_dict.items()):
+            if num + 1 <= rows:
+                buttons[key] = value
+        
+
         return await self.create_keyboard(buttons=buttons)
 
-    async def nurkhametova_menu(self):
+    async def nurkhametova_start_interactive(self):
         buttons = {
-            "Cемейные права": "nurkhametova_menu_true",
-            "Гражданские права": "nurkhametova_menu_false",
-            "Административные права": "nurkhametova_menu_false"
+            "Запустить интерактив": "nurkhametova_start_interactive"
         }
         return await self.create_keyboard(buttons=buttons)
 
-    async def nurkhametova_start(self):
+    async def belozyortseva_start_interactive(self):
         buttons = {
-            "Право на справедливый суд (ст. 46 Конституции)": "nurkhametova_start_true",
-            "Гражданское право": "nurkhametova_start_false",
-            "Право на предпринимательство": "nurkhametova_start_false"
-        }
-        return await self.create_keyboard(buttons=buttons)
-
-    async def nurkhametova_start1(self):
-        buttons = {
-            "Гражданское право": "nurkhametova_start1_false",
-            "Социальное право": "nurkhametova_start1_true",
-            "Право на образование": "nurkhametova_start1_false"
-        }
-        return await self.create_keyboard(buttons=buttons)
-
-    async def nurkhametova_start2(self):
-        buttons = {
-            "Гражданские права": "nurkhametova_start2_false",
-            "Административные права": "nurkhametova_start2_true",
-            "Жилищные права": "nurkhametova_start2_false"
+            "Запустить интерактив": "start_belozyortseva_interactive"
         }
         return await self.create_keyboard(buttons=buttons)
 
     async def belozyortseva_menu(self, number_test: int):
         test_data = answer_choices[number_test - 1]
         options = test_data["options"]
-        correct_index = test_data["correct_index"]
 
         buttons = {
-            option: f"belozyortseva_test_{number_test}_{'true' if idx == correct_index else 'false'}"
+            option: f"belozyortseva_test_{number_test}_{idx}"
             for idx, option in enumerate(options)
         }
 
@@ -68,45 +54,16 @@ class InteractiveKeyboard(KeyboardOperations):
 
     async def gavrikov_start(self):
         buttons = {
-            "Что такое ЖКХ?": "gavrikov_pictures",
-            "Не понимаю": "gavrikov_pictures",
-            "Понимаю": "gavrikov_pictures",
-            "Я сам участвовал в реализации этого проекта": "gavrikov_pictures",
+            "1 Вариант": "gavrikov_pictures",
+            "2 Вариант": "gavrikov_pictures",
+            "3 Вариант": "gavrikov_pictures",
+            "4 Вариант": "gavrikov_pictures",
         }
-        return await self.create_keyboard(buttons=buttons)
+        return await self.create_keyboard(buttons=buttons, interval=2, count=2)
 
-    async def mendubaev_menu(self):
+    async def zabegayev_start_interactive(self):
         buttons = {
-            "1 Вариант": "mendubaev_1",
-            "2 Вариант": "mendubaev_2"
-        }
-        return await self.create_keyboard(buttons=buttons)
-
-    async def mendubaev_1(self):
-        buttons = {
-            "1 Вариант": "1_mendubaev_1",
-            "2 Вариант": "1_mendubaev_2"
-        }
-        return await self.create_keyboard(buttons=buttons)
-
-    async def mendubaev_2(self):
-        buttons = {
-            "1 Вариант": "2_mendubaev_1",
-            "2 Вариант": "2_mendubaev_2"
-        }
-        return await self.create_keyboard(buttons=buttons)
-
-    async def mendubaev_final_1(self):
-        buttons = {
-            "1 Вариант": "final_mendubaev_1",
-            "2 Вариант": "final_mendubaev_1"
-        }
-        return await self.create_keyboard(buttons=buttons)
-
-    async def mendubaev_final_2(self):
-        buttons = {
-            "1 Вариант": "final_mendubaev_2",
-            "2 Вариант": "final_mendubaev_2"
+            "Запустить интерактив": "zabegayev_start_interactive"
         }
         return await self.create_keyboard(buttons=buttons)
 
@@ -159,17 +116,21 @@ class InteractiveKeyboard(KeyboardOperations):
         
         return await self.create_keyboard(buttons=buttons)
 
+    async def sadriev_start_interactive(self):
+        buttons = {
+            "Запустить интерактив": "sadriev_start_interactive"
+        }
+        return await self.create_keyboard(buttons=buttons)
+
     async def sadriev_menu(self):
         options = sadriev_test["options"]
-        correct_index = sadriev_test["correct_index"]
 
         buttons = {
-            option: f"sadriev_test_{'true' if idx == correct_index else 'false'}"
+            option: f"sadriev_test_{idx}"
             for idx, option in enumerate(options)
         }
 
         return await self.create_keyboard(buttons=buttons)
-
 
     async def horoshutina_menu(self):
         """Интерактив Хорошутиной - начальные кнопки"""
@@ -181,21 +142,8 @@ class InteractiveKeyboard(KeyboardOperations):
         
         return await self.create_keyboard(buttons=buttons)
 
-    async def gilmanova_menu(self):
-        """Интерактив Гильмановой - после нажатия на кнопку отправляет вопрос"""
-        buttons = {
-            "Открыть вопрос": "start_gilmanova"
-        }
-        return await self.create_keyboard(buttons=buttons)
-
     async def zabegaev_menu(self):
-        """Интерактив Забегаева - сразу первый вопрос"""
-        return await self.start_zabegayev()
+        """Интерактив Забегаева - кнопка запуска интерактива"""
+        return await self.zabegayev_start_interactive()
 
-    async def zargaryan_menu(self):
-        """Интерактив Заргарян - основные варианты"""
-        buttons = {
-            "Ответить на вопросы": "answer_questions_zargaryan"
-        }
-        return await self.create_keyboard(buttons=buttons)
 
