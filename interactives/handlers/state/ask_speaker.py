@@ -1,7 +1,13 @@
+import asyncio
+import pytz
+from datetime import datetime
+
 from aiogram import Router, F
 from aiogram.filters import StateFilter
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message
+from aiogram.enums import ChatAction
+
 
 from core.bot_states import BotStates
 from core.utils.enums import Variables
@@ -25,6 +31,10 @@ async def ask_speaker_state_handler(message: Message, state: FSMContext, variabl
     await message.answer(
         text="Оставь инсайт по поводу выступления спикера в ответ на это сообщение, мы обязательно передадим его спикеру",
         reply_markup=await variables.keyboards.menu.get_empty_keyboard()
+    )
+    await variables.db.user.update_user_info(
+        telegram_user_id=user_id,
+        feedback_waiting=datetime.now(pytz.timezone("Europe/Moscow"))
     )
     await state.set_state(BotStates.ending)
     await state.update_data(interactive_name=interactive_name)

@@ -4,6 +4,6 @@ from aiogram.fsm.state import StatesGroup, State
 class BotStates(StatesGroup):
     base = State()
     ending = State()
-    question = State()
+    ask_speaker = State()
 
     gilmanova = State()
