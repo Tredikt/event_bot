@@ -10,13 +10,18 @@ from core.db_class import DBClass
 async def check(bot: Bot, db: DBClass):
     while True:
         users = await db.user.get_users_with_feedback_waiting()
-        now = datetime.now(pytz.timezone("Europe/Moscow"))
-        #now = datetime.now()
+        # now = datetime.now(pytz.timezone("Europe/Moscow"))
+        now = datetime.now()
         for user in users:
-            if (user.feedback_waiting + timedelta(minutes=2)) < now:
-                await bot.send_message(
-                    chat_id=user.user_id,
-                    text="Эх, спикер будет грустить, ожидай следующего спикера"
-                )
-                await db.user.update_user_info(telegram_user_id=user.user_id, feedback_waiting=None)
+            # print(user.feedback_waiting, now)
+            try:
+                if (user.feedback_waiting + timedelta(minutes=2)) < now:
+                # if (user.feedback_waiting + timedelta(seconds=15)) < now:
+                    await bot.send_message(
+                        chat_id=user.user_id,
+                        text="Эх, спикер будет грустить, ожидай следующего спикера"
+                    )
+                    await db.user.update_user_info(telegram_user_id=user.user_id, feedback_waiting=None)
+            except Exception as e:
+                print(e)
         await asyncio.sleep(5)

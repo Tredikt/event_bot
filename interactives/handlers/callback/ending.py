@@ -40,7 +40,8 @@ async def ending_handler(call: CallbackQuery, state: FSMContext, variables: Vari
     )
     await variables.db.user.update_user_info(
         telegram_user_id=user_id,
-        feedback_waiting=datetime.now(pytz.timezone("Europe/Moscow"))
+        # feedback_waiting=datetime.now(pytz.timezone("Europe/Moscow"))
+        feedback_waiting=datetime.now()
     )
     await state.set_state(BotStates.ending)
     await state.update_data(interactive_name=interactive_name)
@@ -62,7 +63,8 @@ async def ask_speaker_handler(call: CallbackQuery, state: FSMContext, variables:
     
     await variables.db.user.update_user_info(
         telegram_user_id=user_id,
-        feedback_waiting=datetime.now(pytz.timezone("Europe/Moscow"))
+        # feedback_waiting=datetime.now(pytz.timezone("Europe/Moscow"))
+        feedback_waiting=datetime.now()
     )
     await state.set_state(BotStates.ending)
     await state.update_data(interactive_name=interactive_name)

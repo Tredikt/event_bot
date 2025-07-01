@@ -1,6 +1,6 @@
 answers = {
-    "cool": "Круто!",
-    "good": "Хорошо!"
+    "cool": "Круто",
+    "bore": "Скучаю"
 }
 
 zabegayev_answers = {

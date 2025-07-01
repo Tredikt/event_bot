@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Optional
 
 from sqlalchemy import insert, select, update
@@ -66,7 +67,12 @@ class UserRepository(BaseRepository):
         result = await self.session.execute(statement=update_stmt)
         await self.session.commit()
         # return result.scalar_one()
-    
+
+    async def update_feedback_waiting(self):
+        stmt = update(User).values(feedback_waiting=datetime.now())
+        await self.session.execute(statement=stmt)
+        await self.session.commit()
+
     async def get_all_users(self) -> list[User]:
         """Получает всех пользователей"""
         select_stmt = select(User).order_by(User.id).options(*self.options)

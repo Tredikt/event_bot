@@ -35,7 +35,8 @@ async def ask_speaker_state_handler(message: Message, state: FSMContext, variabl
     )
     await variables.db.user.update_user_info(
         telegram_user_id=user_id,
-        feedback_waiting=datetime.now(pytz.timezone("Europe/Moscow"))
+        # feedback_waiting=datetime.now(pytz.timezone("Europe/Moscow"))
+        feedback_waiting=datetime.now()
     )
     await state.set_state(BotStates.ending)
     await state.update_data(interactive_name=interactive_name)

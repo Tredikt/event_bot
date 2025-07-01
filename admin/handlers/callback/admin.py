@@ -60,5 +60,5 @@ async def interactive_end_handler(callback: CallbackQuery, variables: Variables)
         text=text,
         keyboard=await variables.keyboards.interactives.performance_ending(interactive_name=speaker_name)
     ))
-    
+    await variables.db.user.update_feedback_waiting()
     await callback.answer(text=f"Запущена рассылка об окончании выступления {get_speaker_display_name(speaker_name=speaker_name)}")
