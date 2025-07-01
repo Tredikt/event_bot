@@ -1,23 +1,25 @@
-version: "3.7"
+version: "3.8"
 
 services:
-#  bot:
-#    build:
-#      context: ./
-#      dockerfile: Dockerfile
-#    networks:
-#      - bot-net
-#    restart: always
+  bot:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    networks:
+      - bot-net
+    restart: always
+    depends_on:
+      - db
 
   db:
     image: postgres:15
     restart: always
     ports:
-      - "5433:5432"
+      - "5432:5432"
     environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: event_bot
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
     env_file:
       - .env
     volumes:

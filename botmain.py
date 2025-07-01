@@ -26,6 +26,7 @@ logging.basicConfig(
 )
 
 
+
 def handle_exception(exc_type, exc_value, exc_traceback):
     if issubclass(exc_type, KeyboardInterrupt):
         # Оставить стандартную обработку Ctrl+C
@@ -38,6 +39,7 @@ sys.excepthook = handle_exception
 
 
 async def main():
+    print(DB_URL)
     storage = MemoryStorage()
 
     bot = Bot(token=config.TG_TOKEN, default=DefaultBotProperties(parse_mode="HTML"))
