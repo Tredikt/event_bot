@@ -99,7 +99,7 @@ class InteractiveBroadcastService:
             keyboard=keyboard
         )
         
-        print(f"Рассылка сообщения завершена. "
+        print("Рассылка сообщения завершена. "
               f"Отправлено: {result['total_sent']}, "
               f"Ошибок: {result['total_failed']}")
         
@@ -176,7 +176,7 @@ class InteractiveBroadcastService:
             "zargaryan": self._get_keyboard_method("zargaryan_menu"),
             "mendubaev": self._get_keyboard_method("mendubaev_menu"),
             "sadriev": self._get_keyboard_method("sadriev_start_interactive"),
-            "horoshutina": self._get_keyboard_method("horoshutina_menu"),
+            "horoshutina": self._get_keyboard_method("horoshutina_start_interactive"),
             "ending": self._get_keyboard_method("perfomance_ending"),
         }
 

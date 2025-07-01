@@ -6,9 +6,9 @@ from aiogram.types import CallbackQuery
 
 from core.utils.enums import Variables
 from core.utils.answer_choices import horoshutina_sequence
-from core.utils.decorators import admin_interactive
 from core.utils.scoring_utils import add_user_score
 from interactives.states.horoshutina_states import HoroshutinaState
+from core.utils.animate_waiting_message import send_staged_question
 
 
 async def get_word_by_id(word_id: int) -> str | None:
@@ -18,7 +18,37 @@ async def get_word_by_id(word_id: int) -> str | None:
     return None
 
 
+def create_horoshutina_buttons():
+    """Создает кнопки для интерактива Хорошутиной"""
+    buttons = {}
+    for item in horoshutina_sequence:
+        word = item["word"]
+        word_id = item["id"]
+        buttons[word] = f"horoshutina_{word_id}"
+    return buttons
+
+
 router = Router(name="speaker_horoshutina_callback")
+
+
+@router.callback_query(F.data == "horoshutina_start_interactive")
+async def horoshutina_start_interactive(call: CallbackQuery, variables: Variables):
+    """Обработчик кнопки запуска интерактива - отправляет вопрос поэтапно"""
+    await call.answer()
+    await call.message.delete()
+    await asyncio.sleep(1)
+    
+    buttons_data = create_horoshutina_buttons()
+    
+    await send_staged_question(
+        call=call,
+        variables=variables,
+        start_text="Пора проверить ваши знания по продажам!",
+        main_text="Соберите правильную цепочку",
+        question_text="«шагов продаж»:",
+        buttons_data=buttons_data,
+        callback_prefix="horoshutina"
+    )
 
 
 @router.callback_query(F.data.startswith("horoshutina_"))

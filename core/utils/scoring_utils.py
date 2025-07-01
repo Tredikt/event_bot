@@ -1,8 +1,8 @@
-from aiogram.types import CallbackQuery
+from aiogram.types import CallbackQuery, Message
 from core.utils.enums import Variables
 
 
-async def add_user_score(call: CallbackQuery, variables: Variables, interactive_name: str) -> str:
+async def add_user_score(call: CallbackQuery | Message, variables: Variables, interactive_name: str) -> str:
     """
     Обрабатывает правильный ответ пользователя: начисляет балл и возвращает текст с рейтингом
     

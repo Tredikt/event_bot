@@ -35,7 +35,7 @@ async def ending_handler(call: CallbackQuery, state: FSMContext, variables: Vari
     await variables.bot.send_chat_action(chat_id=user_id, action=ChatAction.TYPING)
     await asyncio.sleep(1)
     await call.message.answer(
-        text="Оставь инсайт по поводу выступления спикера в ответ на это сообщение, мы обязательно передадим его спикеру",
+        text="Оставь инсайт по поводу выступления спикера в ответ на это сообщение\n\nМы обязательно передадим его спикеру",
         reply_markup=await variables.keyboards.menu.get_empty_keyboard()
     )
     await variables.db.user.update_user_info(
@@ -49,10 +49,20 @@ async def ending_handler(call: CallbackQuery, state: FSMContext, variables: Vari
 
 @router.callback_query(F.data.startswith("ask_speaker"))
 async def ask_speaker_handler(call: CallbackQuery, state: FSMContext, variables: Variables):
+    user_id = str(call.from_user.id)
+    interactive_name = call.data.split("_")[-1]
+    
     await variables.bot.send_chat_action(chat_id=call.from_user.id, action=ChatAction.TYPING)
-    await state.set_state(BotStates.ask_speaker)
-    await state.update_data(interactive_name=call.data.split("_")[-1])
+    await asyncio.sleep(1)
+    
     await call.message.edit_text(
-        text="Задайте вопрос спикеру",
+        text="Оставь инсайт по поводу выступления спикера в ответ на это сообщение\n\nМы обязательно передадим его спикеру",
         reply_markup=await variables.keyboards.menu.get_empty_keyboard()
     )
+    
+    await variables.db.user.update_user_info(
+        telegram_user_id=user_id,
+        feedback_waiting=datetime.now(pytz.timezone("Europe/Moscow"))
+    )
+    await state.set_state(BotStates.ending)
+    await state.update_data(interactive_name=interactive_name)

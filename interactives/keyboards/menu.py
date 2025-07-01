@@ -11,7 +11,7 @@ class InteractiveKeyboard(KeyboardOperations):
     async def performance_ending(self, interactive_name: str):
         buttons = {
             "Круто": f"ending_{interactive_name}_cool",
-            "Неплохо": f"ending_{interactive_name}_good",
+            "Скучаю": f"ending_{interactive_name}_bore",
             "Задать вопрос спикеру": f"ask_speaker_{interactive_name}"
         }
         return await self.create_keyboard(buttons=buttons)
@@ -123,6 +123,12 @@ class InteractiveKeyboard(KeyboardOperations):
             for idx, option in enumerate(options)
         }
 
+        return await self.create_keyboard(buttons=buttons)
+
+    async def horoshutina_start_interactive(self):
+        buttons = {
+            "Запустить интерактив": "horoshutina_start_interactive"
+        }
         return await self.create_keyboard(buttons=buttons)
 
     async def horoshutina_menu(self):
