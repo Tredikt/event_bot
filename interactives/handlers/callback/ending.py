@@ -49,8 +49,8 @@ async def ending_handler(call: CallbackQuery, state: FSMContext, variables: Vari
 
 @router.callback_query(F.data.startswith("ask_speaker"))
 async def ask_speaker_handler(call: CallbackQuery, state: FSMContext, variables: Variables):
-    await variables.bot.send_chat_action(chat_id=user_id, action=ChatAction.TYPING)
-    await state.set_state(BotStates.question)
+    await variables.bot.send_chat_action(chat_id=call.from_user.id, action=ChatAction.TYPING)
+    await state.set_state(BotStates.ask_speaker)
     await state.update_data(interactive_name=call.data.split("_")[-1])
     await call.message.edit_text(
         text="Задайте вопрос спикеру",

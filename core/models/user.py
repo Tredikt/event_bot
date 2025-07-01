@@ -19,3 +19,4 @@ class User(BaseModel):
 
     interactive_history: Mapped[List["InteractiveHistory"]] = relationship(argument="InteractiveHistory", back_populates="user")
     feedback: Mapped["Inside"] = relationship(argument="Feedback", back_populates="user")
+    question: Mapped["Question"] = relationship(argument="Question", back_populates="user")
