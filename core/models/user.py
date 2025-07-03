@@ -18,5 +18,5 @@ class User(BaseModel):
     feedback_waiting: Mapped[datetime] = mapped_column(default=None, nullable=True)
 
     interactive_history: Mapped[List["InteractiveHistory"]] = relationship(argument="InteractiveHistory", back_populates="user")
-    feedback: Mapped["Inside"] = relationship(argument="Feedback", back_populates="user")
+    feedback: Mapped["Feedback"] = relationship(argument="Feedback", back_populates="user")
     question: Mapped["Question"] = relationship(argument="Question", back_populates="user")

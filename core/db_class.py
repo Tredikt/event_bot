@@ -7,15 +7,18 @@ from core.repositories import (
     FeedbackRepository,
     QuestionRepository
 )
-from core.services import InteractiveService
+from core.services.interactive_service import InteractiveService
 
 
 class DBClass:
     '''
-    Этот класс предназначен для соединения всех репозиториев и управления базой данных из одного места
+    Этот класс предназначен для соединения всех репозиториев и управления базой данных из одного места.
+    После использования необходимо закрыть сессию: await db.session.close()
     '''
 
     def __init__(self, session: AsyncSession):
+        self.session = session
+        
         self.user = UserRepository(session=session)
         self.feedback = FeedbackRepository(session=session)
         self.interactive_history = InteractiveHistoryRepository(session=session)
