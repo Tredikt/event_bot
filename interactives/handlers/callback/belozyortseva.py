@@ -7,7 +7,7 @@ from aiogram.enums import ChatAction
 from core.utils.enums import Variables
 from core.utils.answers import belozyortseva_explanations, belozyortseva_next_questions
 from core.utils.answer_choices import answer_choices
-from core.utils.animate_waiting_message import animate_next_question_loading, send_staged_question
+from core.utils.animate_waiting_message import animate_next_question_loading, send_staged_question, send_animation_one_question
 from core.utils.scoring_utils import add_user_score
 
 
@@ -28,12 +28,11 @@ async def start_belozyortseva_interactive(call: CallbackQuery, variables: Variab
         for idx, option in enumerate(options)
     }
     
-    await send_staged_question(
+    await send_animation_one_question(
         call=call,
         variables=variables,
-        start_text="Вопрос...",
-        main_text="Бэкенд сервиса разделён на две ключевые части",
-        question_text="Какие?",
+        start_text="А вот и первый вопрос...",
+        question_text="<b>Бэкенд сервиса делится на две главные части.</b> Вопрос на внимательность — <b>какие именно?</b>",
         buttons_data=buttons_data,
         callback_prefix="belozyortseva_test_1"
     )
