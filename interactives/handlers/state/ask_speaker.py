@@ -30,8 +30,9 @@ async def ask_speaker_state_handler(message: Message, state: FSMContext, variabl
     await asyncio.sleep(1)
     await state.clear()
     await message.answer(
-        text="Оставь инсайт по поводу выступления спикера в ответ на это сообщение, мы обязательно передадим его спикеру",
-        reply_markup=await variables.keyboards.menu.get_empty_keyboard()
+        text="✏️ <b>Если хочешь — напиши</b>, что запомнилось с выступления. <i>Инсайт, мысль, вопрос — хоть что. Всё дойдёт до спикера.</i>",
+        reply_markup=await variables.keyboards.menu.get_empty_keyboard(),
+        parse_mode="HTML"
     )
     await variables.db.user.update_user_info(
         telegram_user_id=user_id,

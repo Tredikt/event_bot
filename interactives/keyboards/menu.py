@@ -10,9 +10,9 @@ class InteractiveKeyboard(KeyboardOperations):
         
     async def performance_ending(self, interactive_name: str):
         buttons = {
-            "Круто": f"ending_{interactive_name}_cool",
-            "Скучаю": f"ending_{interactive_name}_bore",
-            "Задать вопрос спикеру": f"ask_speaker_{interactive_name}"
+            "👍 Мне понравилось": f"ending_{interactive_name}_cool",
+            "🤷 Как-то скучно": f"ending_{interactive_name}_bore",
+            "⁉️ Есть вопрос к спикеру": f"ask_speaker_{interactive_name}"
         }
         return await self.create_keyboard(buttons=buttons)
 
@@ -47,10 +47,10 @@ class InteractiveKeyboard(KeyboardOperations):
 
     async def gavrikov_start(self):
         buttons = {
-            "1 Вариант": "gavrikov_pictures",
-            "2 Вариант": "gavrikov_pictures",
-            "3 Вариант": "gavrikov_pictures",
-            "4 Вариант": "gavrikov_pictures",
+            "1 Вариант": "gavrikov_pictures_1",
+            "2 Вариант": "gavrikov_pictures_2",
+            "3 Вариант": "gavrikov_pictures_3",
+            "4 Вариант": "gavrikov_pictures_4",
         }
         return await self.create_keyboard(buttons=buttons, interval=2, count=2)
 

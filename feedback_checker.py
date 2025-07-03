@@ -19,7 +19,7 @@ async def check(bot: Bot, db: DBClass):
                 # if (user.feedback_waiting + timedelta(seconds=15)) < now:
                     await bot.send_message(
                         chat_id=user.user_id,
-                        text="Эх, спикер будет грустить, ожидай следующего спикера"
+                        text="😔 <b>Эх, жаль.</b> Спикеру было бы полезно получить любую обратную связь.\n<i>Но ладно, теперь <b>наша задача — встретить следующего спикера.</b></i>"
                     )
                     await db.user.update_user_info(telegram_user_id=user.user_id, feedback_waiting=None)
             except Exception as e:

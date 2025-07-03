@@ -180,7 +180,6 @@ class InteractiveBroadcastService:
             "nurhametova": self._get_keyboard_method("nurkhametova_start_interactive"),
             "gavrikov": self._get_keyboard_method("gavrikov_menu"),
             "zabegaev": self._get_keyboard_method("zabegayev_start_interactive"),
-            "zargaryan": self._get_keyboard_method("zargaryan_menu"),
             "mendubaev": self._get_keyboard_method("mendubaev_menu"),
             "sadriev": self._get_keyboard_method("sadriev_start_interactive"),
             "horoshutina": self._get_keyboard_method("horoshutina_start_interactive"),
