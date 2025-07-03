@@ -23,4 +23,4 @@ async def add_user_score(call: CallbackQuery | Message, variables: Variables, in
         points=1
     )
     
-    return f"\n\n🎉 +1 балл! Ваш рейтинг: {current_rating}" 
+    return f"\n\n🎉 +1 балл!" 

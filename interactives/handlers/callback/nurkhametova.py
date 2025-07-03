@@ -6,7 +6,7 @@ from aiogram.enums import ChatAction
 from core.utils.answer_choices import nurkhametova_correct_answers
 from core.utils.enums import Variables
 from core.utils.nurkhametova_data import explanations, buttons_1, buttons_2
-from core.utils.animate_waiting_message import animate_next_question_loading, send_staged_question
+from core.utils.animate_waiting_message import animate_next_question_loading, send_animation_one_question
 from core.utils.scoring_utils import add_user_score
 
 
@@ -20,12 +20,11 @@ async def nurkhametova_start_interactive(call: CallbackQuery, variables: Variabl
     await call.message.delete()
     await asyncio.sleep(1)
     
-    await send_staged_question(
+    await send_animation_one_question(
         call=call,
         variables=variables,
-        start_text="После развода",
-        main_text="отец запрещает матери видеться с ребёнком без причины.",
-        question_text="Это ущемляет ______ родителя",
+        start_text="После развода отец запрещает матери",
+        question_text="видеться с ребёнком без причины. Это ущемляет ______ родителя",
         buttons_data=buttons_1,
         callback_prefix="nurkhametova_question_1"
     )
@@ -52,12 +51,11 @@ async def nurkhametova(call: CallbackQuery, variables: Variables):
     await call.message.answer(text=text)
     await asyncio.sleep(2)
     await animate_next_question_loading(message=call.message, bot=call.bot)
-    await send_staged_question(
+    await send_animation_one_question(
         call=call,
         variables=variables,
-        start_text="Следующий вопрос:\n\nМигранта депортировали,",
-        main_text="не дав возможности обжаловать решение.",
-        question_text="Какое право нарушено?",
+        start_text="Следующий вопрос:",
+        question_text="<b>Мигранта депортировали</b>, не дав возможности обжаловать решение. <b>Какое право нарушено?</b>",
         buttons_data=buttons_2,
         callback_prefix="nurkhametova_question_2"
     )

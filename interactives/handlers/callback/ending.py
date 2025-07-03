@@ -11,6 +11,7 @@ from aiogram.types import CallbackQuery
 from core.bot_states import BotStates
 from core.utils.answers import answers
 from core.utils.enums import Variables
+from core.utils.interactive_messages import get_feedback_message
 
 router = Router(name="ending")
 
@@ -28,15 +29,19 @@ async def ending_handler(call: CallbackQuery, state: FSMContext, variables: Vari
     )
     await variables.bot.send_chat_action(chat_id=user_id, action=ChatAction.TYPING)
     await asyncio.sleep(1)
+    
+    text = get_feedback_message(interactive_name)
+    
     await call.message.edit_text(
-        text="Спасибо за обратную связь, учтём!",
+        text=text,
         reply_markup=await variables.keyboards.menu.get_empty_keyboard()
     )
     await variables.bot.send_chat_action(chat_id=user_id, action=ChatAction.TYPING)
     await asyncio.sleep(1)
     await call.message.answer(
-        text="Оставь инсайт по поводу выступления спикера в ответ на это сообщение\n\nМы обязательно передадим его спикеру",
-        reply_markup=await variables.keyboards.menu.get_empty_keyboard()
+        text="✏️ <b>Если хочешь — напиши</b>, что запомнилось с выступления. <i>Инсайт, мысль, вопрос — хоть что. Всё дойдёт до спикера.</i>",
+        reply_markup=await variables.keyboards.menu.get_empty_keyboard(),
+        parse_mode="HTML"
     )
     await variables.db.user.update_user_info(
         telegram_user_id=user_id,
@@ -57,8 +62,9 @@ async def ask_speaker_handler(call: CallbackQuery, state: FSMContext, variables:
     await asyncio.sleep(1)
     
     await call.message.edit_text(
-        text="Оставь инсайт по поводу выступления спикера в ответ на это сообщение\n\nМы обязательно передадим его спикеру",
-        reply_markup=await variables.keyboards.menu.get_empty_keyboard()
+        text="✏️ <b>Если хочешь — напиши</b>, что запомнилось с выступления. <i>Инсайт, мысль, вопрос — хоть что. Всё дойдёт до спикера.</i>",
+        reply_markup=await variables.keyboards.menu.get_empty_keyboard(),
+        parse_mode="HTML"
     )
     
     await variables.db.user.update_user_info(

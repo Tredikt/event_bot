@@ -2,7 +2,7 @@ import asyncio
 from aiogram import Router, F
 from aiogram.types import CallbackQuery
 from core.utils.enums import Variables
-from core.utils.interactive_messages import get_interactive_message
+from core.utils.interactive_messages import get_interactive_message, get_performance_start_message
 from core.utils.speaker_utils import get_speaker_display_name
 from admin.services import AdminPanelService
 
@@ -29,6 +29,18 @@ async def admin_page_handler(callback: CallbackQuery, variables: Variables):
 @router.callback_query(F.data.startswith("number_page_"))
 async def admin_page_info_handler(callback: CallbackQuery):
     await callback.answer()
+
+
+@router.callback_query(F.data.startswith("start_perfomance_"))
+async def performance_start_handler(callback: CallbackQuery, variables: Variables):
+    speaker_name = callback.data.split("start_perfomance_")[1]
+    await variables.keyboards.admin.mark_button_pressed(callback_data=callback.data)
+    await AdminPanelService.update_admin_panel(callback=callback, variables=variables)
+    text = get_performance_start_message(speaker_name=speaker_name)
+
+    asyncio.create_task(variables.broadcast_service.send_custom_message(text=text))
+
+    await callback.answer(text=f"Запущена рассылка о начале выступления {get_speaker_display_name(speaker_name=speaker_name)}")
 
 
 @router.callback_query(F.data.startswith("interactive_"))
@@ -62,3 +74,5 @@ async def interactive_end_handler(callback: CallbackQuery, variables: Variables)
     ))
     await variables.db.user.update_feedback_waiting()
     await callback.answer(text=f"Запущена рассылка об окончании выступления {get_speaker_display_name(speaker_name=speaker_name)}")
+
+

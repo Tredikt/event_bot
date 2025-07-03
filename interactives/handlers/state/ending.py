@@ -21,8 +21,8 @@ async def ending_state_handler(message: Message, state: FSMContext, variables: V
             name=interactive_name,
             inside=message.text
         )
-        text = "Плюсик в карму тебе, ожидай следующего выступления"
+        text = "🎯 Считай, что заработал плюсик в карму. <b>Правда, спасибо.</b> <i>Теперь жди следующего спикера</i>"
         text += await add_user_score(call=message, variables=variables, interactive_name=interactive_name + "_ending")
 
-        await message.answer(text=text)
+        await message.answer(text=text, parse_mode="HTML")
     await state.clear()

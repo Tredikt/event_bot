@@ -90,12 +90,11 @@ async def _send_second_question_sequence(call: CallbackQuery, variables: Variabl
         for idx, option in enumerate(options)
     }
     
-    await send_staged_question(
+    await send_animation_one_question(
         call=call,
         variables=variables,
-        start_text="Вопрос...",
-        main_text="Фронтенд — это адаптивное веб-приложение, которое общается с сервером",
-        question_text="через…",
+        start_text="Второй вопрос...",
+        question_text="<b>Фронтенд</b> — это адаптивное веб-приложение, которое <b>общается с сервером через</b>",
         buttons_data=buttons_data,
         callback_prefix="belozyortseva_test_2"
     )
