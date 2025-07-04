@@ -8,7 +8,7 @@ from core.utils.enums import Variables
 from core.utils.answer_choices import horoshutina_sequence
 from core.utils.scoring_utils import add_user_score
 from interactives.states.horoshutina_states import HoroshutinaState
-from core.utils.animate_waiting_message import send_staged_question
+from core.utils.animate_waiting_message import send_animation_one_question
 
 
 async def get_word_by_id(word_id: int) -> str | None:
@@ -38,14 +38,19 @@ async def horoshutina_start_interactive(call: CallbackQuery, variables: Variable
     await call.message.delete()
     await asyncio.sleep(1)
     
+    user_id = call.from_user.id
+    if user_id in variables.keyboards.menu.horoshutina_states:
+        await variables.keyboards.menu.horoshutina_states[user_id].reset()
+    else:
+        variables.keyboards.menu.horoshutina_states[user_id] = HoroshutinaState()
+    
     buttons_data = create_horoshutina_buttons()
     
-    await send_staged_question(
+    await send_animation_one_question(
         call=call,
         variables=variables,
         start_text="Пора проверить ваши знания по продажам!",
-        main_text="Соберите правильную цепочку",
-        question_text="«шагов продаж»:",
+        question_text="Соберите правильную цепочку «шагов продаж»:",
         buttons_data=buttons_data,
         callback_prefix="horoshutina"
     )
@@ -113,5 +118,5 @@ async def _send_sales_stages_sequentially(callback: CallbackQuery, variables: Va
     
     score_text = await add_user_score(callback, variables, "horoshutina")
     if score_text:
-        current_text += f"\n{score_text}"
+        current_text += f"{score_text}"
         await message.edit_text(text=current_text)
