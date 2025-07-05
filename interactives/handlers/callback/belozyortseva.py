@@ -54,14 +54,15 @@ async def belozyortseva_callback_handler(call: CallbackQuery, variables: Variabl
     correct_index = test_data["correct_index"]
     is_correct = selected_index == correct_index
 
-    correct_explanation = belozyortseva_explanations.get(number_test, "")
+    explanation_data = belozyortseva_explanations.get(number_test, {})
     if is_correct:
-        text = f"✅ Верно!\n\n{correct_explanation}"
-        text += await add_user_score(call=call, variables=variables, interactive_name="belozyortseva")
+        text = explanation_data.get("correct", "✅ Верно!")
+        text += "\n\n🎉 <b>+1 балл!</b>"
+        await add_user_score(call=call, variables=variables, interactive_name="belozyortseva")
     else:
-        text = f"❌ Неверно!\n\n{correct_explanation}"
+        text = explanation_data.get("incorrect", "❌ Неверно!")
 
-    await call.message.answer(text=text)
+    await call.message.answer(text=text, parse_mode="HTML")
     number_test += 1
     await asyncio.sleep(2)
     next_question_text = belozyortseva_next_questions.get(number_test)

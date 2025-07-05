@@ -16,6 +16,7 @@ class User(BaseModel):
     first_name: Mapped[str] = mapped_column(nullable=True)
     rating: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
     feedback_waiting: Mapped[datetime] = mapped_column(default=None, nullable=True)
+    current_speaker: Mapped[str] = mapped_column(nullable=True)
 
     interactive_history: Mapped[List["InteractiveHistory"]] = relationship(argument="InteractiveHistory", back_populates="user")
     feedback: Mapped["Feedback"] = relationship(argument="Feedback", back_populates="user")

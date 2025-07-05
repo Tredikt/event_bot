@@ -2,7 +2,7 @@ from aiogram.types import CallbackQuery, Message
 from core.utils.enums import Variables
 
 
-async def add_user_score(call: CallbackQuery | Message, variables: Variables, interactive_name: str) -> str:
+async def add_user_score(call: CallbackQuery | Message, variables: Variables, interactive_name: str):
     """
     Обрабатывает правильный ответ пользователя: начисляет балл и возвращает текст с рейтингом
     
@@ -15,7 +15,7 @@ async def add_user_score(call: CallbackQuery | Message, variables: Variables, in
         str: Дополнительный текст с информацией о баллах и рейтинге
     """
     telegram_user_id = str(call.from_user.id)
-    current_rating = await variables.db.interactive_service.complete_interactive(
+    await variables.db.interactive_service.complete_interactive(
         telegram_user_id=telegram_user_id,
         username=call.from_user.username,
         first_name=call.from_user.first_name,
@@ -23,4 +23,3 @@ async def add_user_score(call: CallbackQuery | Message, variables: Variables, in
         points=1
     )
     
-    return f"\n\n🎉 +1 балл!" 

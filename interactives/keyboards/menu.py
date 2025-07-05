@@ -10,21 +10,21 @@ class InteractiveKeyboard(KeyboardOperations):
         
     async def performance_ending(self, interactive_name: str):
         buttons = {
-            "👍 Мне понравилось": f"ending_{interactive_name}_cool",
-            "🤷 Как-то скучно": f"ending_{interactive_name}_bore",
+            "👍 Круто, понравилось!": f"ending_{interactive_name}_cool",
+            "🤷 Неплохо": f"ending_{interactive_name}_bore",
             "⁉️ Есть вопрос к спикеру": f"ask_speaker_{interactive_name}"
         }
         return await self.create_keyboard(buttons=buttons)
 
     async def nurkhametova_start_interactive(self):
         buttons = {
-            "Запустить интерактив": "nurkhametova_start_interactive"
+            "▶️ Запустить интерактив": "nurkhametova_start_interactive"
         }
         return await self.create_keyboard(buttons=buttons)
 
     async def belozyortseva_start_interactive(self):
         buttons = {
-            "Запустить интерактив": "start_belozyortseva_interactive"
+            "▶️ Запустить интерактив": "start_belozyortseva_interactive"
         }
         return await self.create_keyboard(buttons=buttons)
 
@@ -41,7 +41,7 @@ class InteractiveKeyboard(KeyboardOperations):
 
     async def gavrikov_menu(self):
         buttons = {
-            "Начать тест": "gavrikov_start"
+            "▶️ Запустить интерактив": "gavrikov_start"
         }
         return await self.create_keyboard(buttons=buttons)
 
@@ -56,7 +56,7 @@ class InteractiveKeyboard(KeyboardOperations):
 
     async def zabegayev_start_interactive(self):
         buttons = {
-            "Запустить интерактив": "zabegayev_start_interactive"
+            "▶️ Запустить интерактив": "zabegayev_start_interactive"
         }
         return await self.create_keyboard(buttons=buttons)
 
@@ -111,7 +111,7 @@ class InteractiveKeyboard(KeyboardOperations):
 
     async def sadriev_start_interactive(self):
         buttons = {
-            "Запустить интерактив": "sadriev_start_interactive"
+            "▶️ Запустить интерактив": "sadriev_start_interactive"
         }
         return await self.create_keyboard(buttons=buttons)
 
@@ -127,7 +127,7 @@ class InteractiveKeyboard(KeyboardOperations):
 
     async def horoshutina_start_interactive(self):
         buttons = {
-            "Запустить интерактив": "horoshutina_start_interactive"
+            "▶️ Запустить интерактив": "horoshutina_start_interactive"
         }
         return await self.create_keyboard(buttons=buttons)
 
