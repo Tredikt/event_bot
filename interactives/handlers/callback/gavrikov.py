@@ -22,7 +22,7 @@ async def gavrikov_callback_handler(call: CallbackQuery, variables: Variables):
     photo = "AgACAgIAAxkBAAIL_GhoYIq9tKqZCIaXcLsX7faQR_I2AAKZ9jEb7Eg5S0j6L_xGf7ilAQADAgADeQADNgQ"
     await call.message.answer_photo(
         photo=photo, 
-        caption="Выбери свой вариант",
+        caption="📍 <b>Вопрос для разогрева\n\nКто понимает, откуда берутся все эти цифры и как формируются начисления?</b>",
         reply_markup=await variables.keyboards.menu.gavrikov_start()
     )
 

@@ -30,8 +30,9 @@ class FeedbackRepository(BaseRepository):
             result = await self.session.execute(statement=insert_stmt)
             await self.session.commit()
             return result.scalar_one()
-        except IntegrityError:
-            await self.session.rollback()
+        except IntegrityError as ie:
+            print(f"Ошибка добавления обратной связи: {ie}")
+            # Возможно, запись уже существует (race condition)
             return await self.get_by_telegram_id_and_name(telegram_user_id=telegram_user_id, name=name)
 
     async def get_by_telegram_id_and_name(self, telegram_user_id: str, name: str) -> Optional[Feedback]:

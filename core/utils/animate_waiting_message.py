@@ -49,7 +49,7 @@ async def animate_answer_analysis(message: Message, bot: Bot):
         empty_blocks = 10 - filled_blocks
         bar = "█" * filled_blocks + "░" * empty_blocks
         dots = thinking_animations[i % len(thinking_animations)]
-        progress_text = (f"╔════════════════════╗\n║ {bar} {percent:3d}%     ║\n╚════════════════════╝\n\n🧠 Анализирую ответ{dots}")
+        progress_text = (f"╔════════════════════╗\n║ {bar} {percent:3d}%     ║\n╚════════════════════╝\n\nПринял. Сейчас сверим с правильным ответом 📊{dots}")
         progress_stages.append(progress_text)
     
     loading_message = await message.answer(text=f"```\n{progress_stages[0]}\n```", parse_mode="Markdown")
