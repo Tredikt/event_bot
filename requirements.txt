@@ -7,3 +7,4 @@ pydantic-settings
 pytz==2024.2
 numpy
 alembic
+openpyxl==3.1.2

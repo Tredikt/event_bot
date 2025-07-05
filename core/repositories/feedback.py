@@ -1,10 +1,10 @@
-from typing import Optional
+from typing import Optional, List
 
 from sqlalchemy import insert, select, update
 from sqlalchemy.exc import IntegrityError
 
 from core.db_templates import BaseRepository
-from core.models import User, Feedback
+from core.models import Feedback
 
 
 class FeedbackRepository(BaseRepository):
@@ -57,3 +57,11 @@ class FeedbackRepository(BaseRepository):
         result = await self.session.execute(statement=update_stmt)
         await self.session.commit()
         # return result.scalar_one()
+
+    async def get_all_feedback(self) -> List[Feedback]:
+        """Получает все отзывы и инсайты для аналитики"""
+        select_stmt = select(Feedback).order_by(
+            Feedback.created_at.desc()
+        ).options(*self.options)
+        result = await self.session.execute(statement=select_stmt)
+        return result.scalars().all()

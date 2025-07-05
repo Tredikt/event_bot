@@ -41,12 +41,13 @@ async def nurkhametova(call: CallbackQuery, variables: Variables):
     await asyncio.sleep(1.5)
     
     is_correct = selected_index == nurkhametova_correct_answers[key]
-    
     if is_correct:
         text = nurkhametova_answers[key]["correct"]
-        await add_user_score(call=call, variables=variables, interactive_name="nurkhametova")
+        points = 1
     else:
         text = nurkhametova_answers[key]["incorrect"][selected_index]
+        points = 1
+    await add_user_score(call=call, variables=variables, interactive_name="nurkhametova_question_1", points=points)
         
     await call.message.answer(text=text)
     await asyncio.sleep(2)
@@ -72,11 +73,12 @@ async def nurkhametova1(call: CallbackQuery, variables: Variables):
     await asyncio.sleep(1.5)
     
     is_correct = selected_index == nurkhametova_correct_answers[key]
-    
     if is_correct:
         text = nurkhametova_answers[key]["correct"]
-        await add_user_score(call=call, variables=variables, interactive_name="nurkhametova")
+        points = 1
     else:
         text = nurkhametova_answers[key]["incorrect"][selected_index]
+        points = 1
+    await add_user_score(call=call, variables=variables, interactive_name="nurkhametova_question_2", points=points)
         
     await call.message.answer(text=text)

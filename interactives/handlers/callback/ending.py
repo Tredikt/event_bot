@@ -1,14 +1,17 @@
+import asyncio
+from datetime import datetime
+
 from aiogram import Router, F
 from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery
 from aiogram.enums import ChatAction
-import asyncio
 
+from core.bot_states import BotStates
 from core.utils.answers import answers
 from core.utils.interactive_messages import get_speaker_insight_message, get_feedback_message
 from core.utils.enums import Variables
-from core.bot_states import BotStates
-from datetime import datetime
+from core.utils.scoring_utils import add_user_score
+
 
 router = Router()
 
@@ -19,6 +22,7 @@ async def ending_handler(call: CallbackQuery, state: FSMContext, variables: Vari
     data = call.data.split("_")
     rate = data[-1]
     interactive_name = data[-2]
+    await add_user_score(call=call, variables=variables, interactive_name=f"{interactive_name}_{rate}", points=1)
     await variables.db.feedback.add_or_update(
         telegram_user_id=user_id,
         name=interactive_name,

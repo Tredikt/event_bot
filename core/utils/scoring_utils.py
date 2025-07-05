@@ -2,7 +2,7 @@ from aiogram.types import CallbackQuery, Message
 from core.utils.enums import Variables
 
 
-async def add_user_score(call: CallbackQuery | Message, variables: Variables, interactive_name: str):
+async def add_user_score(call: CallbackQuery | Message, variables: Variables, interactive_name: str, points: int):
     """
     Обрабатывает правильный ответ пользователя: начисляет балл и возвращает текст с рейтингом
     
@@ -20,6 +20,6 @@ async def add_user_score(call: CallbackQuery | Message, variables: Variables, in
         username=call.from_user.username,
         first_name=call.from_user.first_name,
         interactive_name=interactive_name,
-        points=1
+        points=points
     )
     
