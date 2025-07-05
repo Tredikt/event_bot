@@ -1,7 +1,7 @@
 admin_buttons = [
     ("Белозерцева - Начало выступления", "start_perfomance_belozertseva"),
     ("Белозерцева - Интерактив", "interactive_belozertseva"),
-    ("Белозерцеева - Закончила выступление", "finished_belozertseva"),
+    ("Белозерцева - Закончила выступление", "finished_belozertseva"),
 
     ("Мендубаев - Начало выступления", "start_perfomance_mendubaev"),
     ("Мендубаев - Закончил выступление", "finished_mendubaev"),
