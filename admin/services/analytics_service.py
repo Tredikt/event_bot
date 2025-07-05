@@ -205,7 +205,7 @@ class AnalyticsService:
                 # Определяем тип активности по rate
                 if rate == "Круто":
                     activity_name = f"{interactive_name}_cool"
-                elif rate == "Скучаю":
+                elif rate == "Неплохо":
                     activity_name = f"{interactive_name}_notbad"
                 elif rate == "insight":
                     activity_name = f"{interactive_name}_ending"
