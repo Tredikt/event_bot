@@ -43,10 +43,12 @@ async def zabegayev_question_1(call: CallbackQuery, variables: Variables):
     if selected_index == correct_answer_index:
         result_text = zabegayev_answers['zabegaev_1']['correct']
         result_text += "\n\n🎯 <i><b>+1 балл.</b> Едем дальше!</i>"
-        await add_user_score(call=call, variables=variables, interactive_name="zabegayev")
+        points = 1
     else:
         result_text = zabegayev_answers['zabegaev_1']['incorrect']
-    
+        points = 0
+    await add_user_score(call=call, variables=variables, interactive_name="zabegayev_question_1", points=points)
+
     await call.message.answer(text=result_text)
     await asyncio.sleep(2)
     await animate_next_question_loading(message=call.message, bot=call.bot)
@@ -73,8 +75,10 @@ async def zabegayev_question_2(call: CallbackQuery, variables: Variables):
     if selected_index == correct_answer_index:
         result_text = zabegayev_answers['zabegaev_2']['correct']
         result_text += "\n\n🎯 <i><b>+1 балл.</b> Так держать.</i>"
-        await add_user_score(call=call, variables=variables, interactive_name="zabegayev")
+        points = 1
     else:
         result_text = zabegayev_answers['zabegaev_2']['incorrect']
-    
+        points = 0
+    await add_user_score(call=call, variables=variables, interactive_name="zabegayev_question_2", points=points)
+
     await call.message.answer(text=result_text)

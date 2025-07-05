@@ -40,7 +40,7 @@ async def sadriev_question_1(call: CallbackQuery, variables: Variables):
     
     if selected_index == correct_answer_index:
         result_text = sadriev_answers["correct"]
-        await add_user_score(call=call, variables=variables, interactive_name="sadriev")
+        await add_user_score(call=call, variables=variables, interactive_name="sadriev_question_1", points=1)
     else:
         result_text = sadriev_answers["incorrect"]
     

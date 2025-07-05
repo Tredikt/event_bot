@@ -117,5 +117,5 @@ async def _send_sales_stages_sequentially(callback: CallbackQuery, variables: Va
     await asyncio.sleep(0.8)
     
     current_text += "\n\n🎉 <i><b>+1 балл</b></i>"
-    await add_user_score(callback, variables, "horoshutina")
+    await add_user_score(call=callback, variables=variables, interactive_name="horoshutina_question_1", points=2)
     await message.edit_text(text=current_text)

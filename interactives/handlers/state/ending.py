@@ -24,7 +24,7 @@ async def ending_state_handler(message: Message, state: FSMContext, variables: V
             rate="insight"
         )
         text = get_feedback_thank_message(interactive_name)
-        await add_user_score(call=message, variables=variables, interactive_name=interactive_name + "_ending")
+        await add_user_score(call=message, variables=variables, interactive_name=interactive_name + "_ending", points=2)
 
         await message.answer(text=text, parse_mode="HTML")
         

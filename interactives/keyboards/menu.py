@@ -11,7 +11,7 @@ class InteractiveKeyboard(KeyboardOperations):
     async def performance_ending(self, interactive_name: str):
         buttons = {
             "👍 Круто, понравилось!": f"ending_{interactive_name}_cool",
-            "🤷 Неплохо": f"ending_{interactive_name}_bore",
+            "🤷 Неплохо": f"ending_{interactive_name}_notbad",
             "⁉️ Есть вопрос к спикеру": f"ask_speaker_{interactive_name}"
         }
         return await self.create_keyboard(buttons=buttons)

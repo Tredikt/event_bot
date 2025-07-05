@@ -7,7 +7,7 @@ from aiogram.enums import ChatAction
 from core.utils.enums import Variables
 from core.utils.answers import belozyortseva_explanations, belozyortseva_next_questions
 from core.utils.answer_choices import answer_choices
-from core.utils.animate_waiting_message import animate_next_question_loading, send_staged_question, send_animation_one_question
+from core.utils.animate_waiting_message import animate_next_question_loading, send_animation_one_question
 from core.utils.scoring_utils import add_user_score
 
 
@@ -53,14 +53,16 @@ async def belozyortseva_callback_handler(call: CallbackQuery, variables: Variabl
     test_data = answer_choices[number_test - 1]
     correct_index = test_data["correct_index"]
     is_correct = selected_index == correct_index
-
     explanation_data = belozyortseva_explanations.get(number_test, {})
+
     if is_correct:
         text = explanation_data.get("correct", "✅ Верно!")
         text += "\n\n🎉 <b>+1 балл!</b>"
-        await add_user_score(call=call, variables=variables, interactive_name="belozyortseva")
+        points = 1
     else:
         text = explanation_data.get("incorrect", "❌ Неверно!")
+        points = 0
+    await add_user_score(call=call, variables=variables, interactive_name="belozyortseva_question_" + str(number_test), points=points)
 
     await call.message.answer(text=text, parse_mode="HTML")
     number_test += 1
