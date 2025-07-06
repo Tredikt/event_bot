@@ -1,6 +1,8 @@
 import asyncio
 from aiogram import Router, F
 from aiogram.types import CallbackQuery
+
+from core.utils.delete_keyboard import delete_keyboard
 from core.utils.enums import Variables
 from core.utils.interactive_messages import get_interactive_message, get_performance_start_message
 from core.utils.speaker_utils import get_speaker_display_name
@@ -37,6 +39,7 @@ async def performance_start_handler(callback: CallbackQuery, variables: Variable
     await variables.keyboards.admin.mark_button_pressed(callback_data=callback.data)
     await AdminPanelService.update_admin_panel(callback=callback, variables=variables)
     text = get_performance_start_message(speaker_name=speaker_name)
+    await variables.db.speaker.add_or_update(name=speaker_name)
 
     asyncio.create_task(variables.broadcast_service.send_custom_message(text=text))
 
@@ -50,7 +53,6 @@ async def interactive_start_handler(callback: CallbackQuery, variables: Variable
     await AdminPanelService.update_admin_panel(callback=callback, variables=variables)
     keyboard = await variables.broadcast_service.get_interactive_keyboard(speaker_name=speaker_name)
     text = get_interactive_message(speaker_name=speaker_name, message_type="start")
-
     asyncio.create_task(variables.broadcast_service.send_interactive_broadcast(
         speaker_name=speaker_name,
         text=text,

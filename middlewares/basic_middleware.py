@@ -24,7 +24,7 @@ class BasicMiddleware(BaseMiddleware):
 
         callback_query = event.callback_query
         message = event.message
-        
+        data["current_speaker"] = await self.db.speaker.get_current_speaker()
         data["variables"] = Variables(
             bot=self.bot,
             db=self.db,

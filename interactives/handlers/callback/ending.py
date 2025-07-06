@@ -23,6 +23,16 @@ async def ending_handler(call: CallbackQuery, state: FSMContext, variables: Vari
     data = call.data.split("_")
     rate = data[-1]
     interactive_name = data[-2]
+
+    if current_speaker != interactive_name:
+        kb = await variables.keyboards.menu.get_empty_keyboard()
+        await call.message.edit_reply_markup(reply_markup=kb)
+        await call.answer(show_alert=True, text="Данный спикер уже не выступает. Невозможно начать данный интерактив")
+        return
+    else:
+        await call.answer()
+        await call.message.delete()
+
     await add_user_score(call=call, variables=variables, interactive_name=f"{interactive_name}_{rate}", points=1)
     await variables.db.feedback.add_or_update(
         telegram_user_id=user_id,
@@ -33,7 +43,6 @@ async def ending_handler(call: CallbackQuery, state: FSMContext, variables: Vari
     await asyncio.sleep(1)
     
     text = get_feedback_message(interactive_name)
-    await call.message.delete()
     await call.message.answer(text=text, parse_mode="HTML")
     await variables.bot.send_chat_action(chat_id=user_id, action=ChatAction.TYPING)
     await asyncio.sleep(1)
@@ -59,7 +68,16 @@ async def ask_speaker_handler(call: CallbackQuery, state: FSMContext, variables:
     await call.answer()
     user_id = str(call.from_user.id)
     interactive_name = call.data.split("_")[-1]
-    
+
+    if current_speaker != interactive_name:
+        kb = await variables.keyboards.menu.get_empty_keyboard()
+        await call.message.edit_reply_markup(reply_markup=kb)
+        await call.answer(show_alert=True, text="Данный спикер уже не выступает. Невозможно начать данный интерактив")
+        return
+    else:
+        await call.answer()
+        await call.message.delete()
+
     await variables.bot.send_chat_action(chat_id=call.from_user.id, action=ChatAction.TYPING)
     await asyncio.sleep(1)
     
