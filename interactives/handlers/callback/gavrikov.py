@@ -11,10 +11,17 @@ router = Router(name="gavrikov_router")
 
 
 @router.callback_query(F.data == "gavrikov_start")
-async def gavrikov_callback_handler(call: CallbackQuery, variables: Variables):
+async def gavrikov_callback_handler(call: CallbackQuery, variables: Variables, current_speaker: str):
     user_id = call.from_user.id
-
-    await call.message.delete()
+    if current_speaker != call.data.split("_")[1]:
+        kb = await variables.keyboards.menu.get_empty_keyboard()
+        await call.message.edit_reply_markup(reply_markup=kb)
+        await call.answer(show_alert=True, text="Данный спикер уже не выступает. Невозможно начать данный интерактив")
+        return
+    else:
+        await call.answer()
+        await call.message.delete()
+        await asyncio.sleep(1)
 
     await variables.bot.send_chat_action(chat_id=user_id, action=ChatAction.TYPING)
     await asyncio.sleep(1)

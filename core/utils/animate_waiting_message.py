@@ -171,7 +171,6 @@ async def send_animation_one_question(
         question_delay: Задержка после "Вопрос...." (по умолчанию 2.0 сек)
     """
     message = await call.message.answer(text=start_text)
-    
     await call.bot.send_chat_action(chat_id=call.message.chat.id, action=ChatAction.TYPING)
     await asyncio.sleep(main_text_delay)
     

@@ -4,6 +4,7 @@ from aiogram.types import CallbackQuery
 from aiogram.types import CallbackQuery
 from aiogram.enums import ChatAction
 
+from core.models import User
 from core.utils.enums import Variables
 from core.utils.answers import belozyortseva_explanations, belozyortseva_next_questions
 from core.utils.answer_choices import answer_choices
@@ -15,11 +16,17 @@ router = Router(name="belozyortseva_router")
 
 
 @router.callback_query(F.data == "start_belozyortseva_interactive")
-async def start_belozyortseva_interactive(call: CallbackQuery, variables: Variables):
+async def start_belozyortseva_interactive(call: CallbackQuery, variables: Variables, current_speaker: str):
     """Обработчик кнопки запуска интерактива - отправляет первый вопрос поэтапно"""
-    await call.answer()
-    await call.message.delete()
-    await asyncio.sleep(1)
+    if current_speaker != call.data.split("_")[1]:
+        kb = await variables.keyboards.menu.get_empty_keyboard()
+        await call.message.edit_reply_markup(reply_markup=kb)
+        await call.answer(show_alert=True, text="Данный спикер уже не выступает. Невозможно начать данный интерактив")
+        return
+    else:
+        await call.answer()
+        await call.message.delete()
+        await asyncio.sleep(1)
     
     test_data = answer_choices[0]
     options = test_data["options"]
@@ -27,7 +34,6 @@ async def start_belozyortseva_interactive(call: CallbackQuery, variables: Variab
         option: f"belozyortseva_test_1_{idx}"
         for idx, option in enumerate(options)
     }
-    
     await send_animation_one_question(
         call=call,
         variables=variables,
