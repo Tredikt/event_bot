@@ -58,6 +58,7 @@ async def horoshutina_start_interactive(call: CallbackQuery, variables: Variable
 
 @router.callback_query(F.data.startswith("horoshutina_"))
 async def process_horoshutina_selection(callback: CallbackQuery, variables: Variables):
+    await callback.answer()
     user_id = callback.from_user.id
     selected_id = callback.data.replace("horoshutina_", "")
     
@@ -79,8 +80,6 @@ async def process_horoshutina_selection(callback: CallbackQuery, variables: Vari
     if await state.is_completed():
         await callback.message.delete()
         await _send_sales_stages_sequentially(callback, variables)
-    
-    await callback.answer()
 
 
 async def handle_correct_selection(state: HoroshutinaState, selected_word: str) -> None:
