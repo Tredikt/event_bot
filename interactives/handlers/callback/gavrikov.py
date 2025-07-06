@@ -21,7 +21,7 @@ async def gavrikov_callback_handler(call: CallbackQuery, variables: Variables):
     await variables.bot.send_chat_action(chat_id=user_id, action=ChatAction.TYPING)
     await asyncio.sleep(1)
 
-    photo = "AgACAgIAAxkBAAIzr2hqLvm5si1sgk__Qi1yZyplJVpmAALY7jEbYIVRSw_hHWc3efnvAQADAgADeQADNgQ"
+    photo = "AgACAgIAAxkBAAIP3WhqVBzKLgJUGDTcMMC5RzughbDoAALe8jEbF0NZS7gvl5T9lwNnAQADAgADeQADNgQ"
     await call.message.answer_photo(
         photo=photo, 
         caption="📍 <b>Вопрос для разогрева\n\nКто понимает, откуда берутся все эти цифры и как формируются начисления?</b>",
