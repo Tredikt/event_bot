@@ -1,6 +1,6 @@
 from typing import Optional, List
 from sqlalchemy import select, func, insert
-from datetime import datetime, timedelta
+from sqlalchemy.exc import IntegrityError
 
 from core.db_templates import BaseRepository
 from core.models.interactive_history import InteractiveHistory
@@ -16,14 +16,18 @@ class InteractiveHistoryRepository(BaseRepository):
         points_earned: int = 1
     ) -> InteractiveHistory:
         """Добавляет запись о прохождении интерактива"""
-        history_record = InteractiveHistory(
-            user_id=user_id,
-            interactive_name=interactive_name,
-            points_earned=points_earned
-        )
-        self.session.add(history_record)
-        await self.session.commit()
-        return history_record
+        try:
+            insert_stmt = insert(InteractiveHistory).values(
+                user_id=user_id,
+                interactive_name=interactive_name,
+                points_earned=points_earned,
+            ).returning(InteractiveHistory)
+            result = await self.session.execute(statement=insert_stmt)
+            await self.session.commit()
+            return result.scalar_one()
+        except IntegrityError:
+            await self.session.rollback()
+            return None
 
     async def get_user_history(self, user_id: str, limit: int = 20) -> List[InteractiveHistory]:
         """Получает историю интерактивов пользователя"""
@@ -62,3 +66,20 @@ class InteractiveHistoryRepository(BaseRepository):
             'unique_users': row.unique_users or 0,
             'total_points': row.total_points or 0
         }
+
+    async def get_by_user_and_interactive(self, user_id: str, interactive_name: str) -> Optional[InteractiveHistory]:
+        """Получает запись по пользователю и названию интерактива"""
+        select_stmt = select(InteractiveHistory).where(
+            InteractiveHistory.user_id == user_id,
+            InteractiveHistory.interactive_name == interactive_name
+        ).options(*self.options)
+        result = await self.session.execute(statement=select_stmt)
+        return result.scalar_one_or_none()
+
+    async def get_all_history(self) -> List[InteractiveHistory]:
+        """Получает всю историю интерактивов для аналитики"""
+        select_stmt = select(InteractiveHistory).order_by(
+            InteractiveHistory.completed_at.desc()
+        ).options(*self.options)
+        result = await self.session.execute(statement=select_stmt)
+        return result.scalars().all() 

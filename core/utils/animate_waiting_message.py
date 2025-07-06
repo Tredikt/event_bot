@@ -49,7 +49,7 @@ async def animate_answer_analysis(message: Message, bot: Bot):
         empty_blocks = 10 - filled_blocks
         bar = "█" * filled_blocks + "░" * empty_blocks
         dots = thinking_animations[i % len(thinking_animations)]
-        progress_text = (f"╔════════════════════╗\n║ {bar} {percent:3d}%     ║\n╚════════════════════╝\n\n🧠 Анализирую ответ{dots}")
+        progress_text = (f"╔════════════════════╗\n║ {bar} {percent:3d}%     ║\n╚════════════════════╝\n\nПринял. Сейчас сверим с правильным ответом 📊{dots}")
         progress_stages.append(progress_text)
     
     loading_message = await message.answer(text=f"```\n{progress_stages[0]}\n```", parse_mode="Markdown")
@@ -72,10 +72,12 @@ async def animate_answer_analysis(message: Message, bot: Bot):
     await loading_message.delete()
 
 
-async def animate_buttons_appearance(message: Message, bot: Bot, buttons_data: dict, callback_prefix: str):
+async def animate_buttons_appearance(message: Message, bot: Bot, buttons_data: dict, callback_prefix: str, final_text: str = None):
     """Постепенно добавляет кнопки к существующему сообщению"""
     builder = InlineKeyboardBuilder()
     await asyncio.sleep(0.8)
+    
+    text_to_use = final_text if final_text is not None else message.text
     
     for idx, (button_text, callback_data) in enumerate(buttons_data.items()):
         await asyncio.sleep(0.6)
@@ -83,8 +85,9 @@ async def animate_buttons_appearance(message: Message, bot: Bot, buttons_data: d
         builder.adjust(1)
         try:
             await message.edit_text(
-                text=message.text,
-                reply_markup=builder.as_markup()
+                text=text_to_use,
+                reply_markup=builder.as_markup(),
+                parse_mode="HTML"
             )
         except Exception as e:
             print(f"Ошибка при добавлении кнопок: {e}")
@@ -108,6 +111,7 @@ async def send_staged_question(
     Args:
         call: CallbackQuery объект
         variables: Variables объект
+        start_text: Стартовый текст (например, "А вот и первый вопрос...")
         main_text: Основной текст (например, "Бэкенд сервиса разделён на две ключевые части")
         question_text: Текст вопроса (например, "Какие?")
         buttons_data: Словарь с данными кнопок {text: callback_data}
@@ -115,17 +119,74 @@ async def send_staged_question(
         main_text_delay: Задержка после основного текста (по умолчанию 2.5 сек)
         question_delay: Задержка после "Вопрос...." (по умолчанию 2.0 сек)
     """
-    await call.message.answer(text=start_text)
+    message = await call.message.answer(text=start_text)
+    
     await call.bot.send_chat_action(chat_id=call.message.chat.id, action=ChatAction.TYPING)
     await asyncio.sleep(main_text_delay)
-    await call.message.answer(text=main_text)
+    
+    combined_text = f"{start_text}\n\n{main_text}"
+    try:
+        await message.edit_text(text=combined_text)
+    except Exception as e:
+        print(f"Ошибка при редактировании сообщения (main_text): {e}")
+    
     await variables.bot.send_chat_action(chat_id=call.message.chat.id, action=ChatAction.TYPING)
     await asyncio.sleep(question_delay)
-    question_message = await call.message.answer(text=question_text)
+    
+    final_text = f"{start_text}\n\n{main_text}\n\n{question_text}"
+    try:
+        await message.edit_text(text=final_text)
+    except Exception as e:
+        print(f"Ошибка при редактировании сообщения (question_text): {e}")
     
     await animate_buttons_appearance(
-        message=question_message,
+        message=message,
         bot=call.bot,
         buttons_data=buttons_data,
-        callback_prefix=callback_prefix
+        callback_prefix=callback_prefix,
+        final_text=final_text
+    )
+
+async def send_animation_one_question(
+    call: CallbackQuery, 
+    variables: Variables,
+    start_text: str,
+    question_text: str, 
+    buttons_data: dict, 
+    callback_prefix: str,
+    main_text_delay: float = 2.5,
+    question_delay: float = 2.0
+):
+    """
+    Универсальная функция для поэтапной отправки вопросов с анимацией (только start_text + question_text)
+    
+    Args:
+        call: CallbackQuery объект
+        variables: Variables объект
+        start_text: Стартовый текст (например, "А вот и первый вопрос...")
+        question_text: Текст вопроса (например, "Какие?")
+        buttons_data: Словарь с данными кнопок {text: callback_data}
+        callback_prefix: Префикс для callback_data кнопок
+        main_text_delay: Задержка после основного текста (по умолчанию 2.5 сек)
+        question_delay: Задержка после "Вопрос...." (по умолчанию 2.0 сек)
+    """
+    message = await call.message.answer(text=start_text)
+    
+    await call.bot.send_chat_action(chat_id=call.message.chat.id, action=ChatAction.TYPING)
+    await asyncio.sleep(main_text_delay)
+    
+    final_text = f"{start_text}\n\n{question_text}"
+    try:
+        await message.edit_text(text=final_text, parse_mode="HTML")
+    except Exception as e:
+        print(f"Ошибка при редактировании сообщения: {e}")
+    
+    await asyncio.sleep(question_delay)
+    
+    await animate_buttons_appearance(
+        message=message,
+        bot=call.bot,
+        buttons_data=buttons_data,
+        callback_prefix=callback_prefix,
+        final_text=final_text
     )

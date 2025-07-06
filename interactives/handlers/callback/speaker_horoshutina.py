@@ -8,7 +8,7 @@ from core.utils.enums import Variables
 from core.utils.answer_choices import horoshutina_sequence
 from core.utils.scoring_utils import add_user_score
 from interactives.states.horoshutina_states import HoroshutinaState
-from core.utils.animate_waiting_message import send_staged_question
+from core.utils.animate_waiting_message import send_animation_one_question
 
 
 async def get_word_by_id(word_id: int) -> str | None:
@@ -38,14 +38,19 @@ async def horoshutina_start_interactive(call: CallbackQuery, variables: Variable
     await call.message.delete()
     await asyncio.sleep(1)
     
+    user_id = call.from_user.id
+    if user_id in variables.keyboards.menu.horoshutina_states:
+        await variables.keyboards.menu.horoshutina_states[user_id].reset()
+    else:
+        variables.keyboards.menu.horoshutina_states[user_id] = HoroshutinaState()
+    
     buttons_data = create_horoshutina_buttons()
     
-    await send_staged_question(
+    await send_animation_one_question(
         call=call,
         variables=variables,
         start_text="Пора проверить ваши знания по продажам!",
-        main_text="Соберите правильную цепочку",
-        question_text="«шагов продаж»:",
+        question_text="<b>Соберите правильную цепочку «шагов продаж»:</b>",
         buttons_data=buttons_data,
         callback_prefix="horoshutina"
     )
@@ -88,8 +93,8 @@ async def _send_sales_stages_sequentially(callback: CallbackQuery, variables: Va
     await variables.bot.send_chat_action(chat_id=callback.message.chat.id, action=ChatAction.TYPING)
     await asyncio.sleep(1.5)
     
-    current_text = "🎉 Прекрасно! Всё верно, этапы продаж:"
-    message = await callback.message.answer(text=current_text)
+    current_text = "🔥 <b>Прекрасно!</b> Всё выстроено правильно — ты точно в фокусе.\n\n✅ <b>Этапы идут в такой последовательности:</b>"
+    message = await callback.message.answer(text=current_text, parse_mode="HTML")
     sales_stages = [
         "1️⃣ Выявление потребности",
         "2️⃣ Показ", 
@@ -111,7 +116,6 @@ async def _send_sales_stages_sequentially(callback: CallbackQuery, variables: Va
     await variables.bot.send_chat_action(chat_id=callback.message.chat.id, action=ChatAction.TYPING)
     await asyncio.sleep(0.8)
     
-    score_text = await add_user_score(callback, variables, "horoshutina")
-    if score_text:
-        current_text += f"\n{score_text}"
-        await message.edit_text(text=current_text)
+    current_text += "\n\n🎉 <i><b>+1 балл</b></i>"
+    await add_user_score(call=callback, variables=variables, interactive_name="horoshutina_question_1", points=2)
+    await message.edit_text(text=current_text)

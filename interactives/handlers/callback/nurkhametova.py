@@ -5,8 +5,8 @@ from aiogram.enums import ChatAction
 
 from core.utils.answer_choices import nurkhametova_correct_answers
 from core.utils.enums import Variables
-from core.utils.nurkhametova_data import explanations, buttons_1, buttons_2
-from core.utils.animate_waiting_message import animate_next_question_loading, send_staged_question
+from core.utils.nurkhametova_data import explanations, buttons_1, buttons_2, nurkhametova_answers
+from core.utils.animate_waiting_message import animate_next_question_loading, send_animation_one_question
 from core.utils.scoring_utils import add_user_score
 
 
@@ -20,12 +20,11 @@ async def nurkhametova_start_interactive(call: CallbackQuery, variables: Variabl
     await call.message.delete()
     await asyncio.sleep(1)
     
-    await send_staged_question(
+    await send_animation_one_question(
         call=call,
         variables=variables,
-        start_text="После развода",
-        main_text="отец запрещает матери видеться с ребёнком без причины.",
-        question_text="Это ущемляет ______ родителя",
+        start_text="📍 <b>Ситуация:</b> после развода отец без объяснений запрещает матери видеться с ребёнком.",
+        question_text="<b>Вопрос: это ущемляет _____ родителя?</b>",
         buttons_data=buttons_1,
         callback_prefix="nurkhametova_question_1"
     )
@@ -36,28 +35,28 @@ async def nurkhametova(call: CallbackQuery, variables: Variables):
     await call.answer()
     selected_index = int(call.data.split("_")[-1])
     key = "question_1"
-    correct_text = explanations[key]
     
     await call.message.edit_reply_markup(reply_markup=None)
     await call.bot.send_chat_action(chat_id=call.message.chat.id, action=ChatAction.TYPING)
     await asyncio.sleep(1.5)
     
     is_correct = selected_index == nurkhametova_correct_answers[key]
-    if not is_correct:
-        text = f"❌ Неверно!\n\n{correct_text}"
+    if is_correct:
+        text = nurkhametova_answers[key]["correct"]
+        points = 1
     else:
-        text = f"✅ Верно!\n\n{correct_text}"
-        text += await add_user_score(call=call, variables=variables, interactive_name="nurkhametova")
+        text = nurkhametova_answers[key]["incorrect"][selected_index]
+        points = 1
+    await add_user_score(call=call, variables=variables, interactive_name="nurkhametova_question_1", points=points)
         
     await call.message.answer(text=text)
     await asyncio.sleep(2)
     await animate_next_question_loading(message=call.message, bot=call.bot)
-    await send_staged_question(
+    await send_animation_one_question(
         call=call,
         variables=variables,
-        start_text="Следующий вопрос:\n\nМигранта депортировали,",
-        main_text="не дав возможности обжаловать решение.",
-        question_text="Какое право нарушено?",
+        start_text="<b>Второй вопрос\n📍 Новый кейс:</b> не предоставили ребенку место в детском саду.",
+        question_text="<b>Вопрос: какое право в этом случае нарушено?</b>",
         buttons_data=buttons_2,
         callback_prefix="nurkhametova_question_2"
     )
@@ -68,17 +67,18 @@ async def nurkhametova1(call: CallbackQuery, variables: Variables):
     await call.answer()
     selected_index = int(call.data.split("_")[-1])
     key = "question_2"
-    correct_text = explanations[key]
 
     await call.message.edit_reply_markup(reply_markup=None)
     await call.bot.send_chat_action(chat_id=call.message.chat.id, action=ChatAction.TYPING)
     await asyncio.sleep(1.5)
     
     is_correct = selected_index == nurkhametova_correct_answers[key]
-    if not is_correct:
-        text = f"❌ Неверно!\n\n{correct_text}"
+    if is_correct:
+        text = nurkhametova_answers[key]["correct"]
+        points = 1
     else:
-        text = f"✅ Верно!\n\n{correct_text}"
-        text += await add_user_score(call=call, variables=variables, interactive_name="nurkhametova")
+        text = nurkhametova_answers[key]["incorrect"][selected_index]
+        points = 1
+    await add_user_score(call=call, variables=variables, interactive_name="nurkhametova_question_2", points=points)
         
     await call.message.answer(text=text)

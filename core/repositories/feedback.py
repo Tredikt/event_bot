@@ -1,10 +1,10 @@
-from typing import Optional
+from typing import Optional, List
 
 from sqlalchemy import insert, select, update
 from sqlalchemy.exc import IntegrityError
 
 from core.db_templates import BaseRepository
-from core.models import User, Feedback
+from core.models import Feedback
 
 
 class FeedbackRepository(BaseRepository):
@@ -30,8 +30,9 @@ class FeedbackRepository(BaseRepository):
             result = await self.session.execute(statement=insert_stmt)
             await self.session.commit()
             return result.scalar_one()
-        except IntegrityError:
-            await self.session.rollback()
+        except IntegrityError as ie:
+            print(f"Ошибка добавления обратной связи: {ie}")
+            # Возможно, запись уже существует (race condition)
             return await self.get_by_telegram_id_and_name(telegram_user_id=telegram_user_id, name=name)
 
     async def get_by_telegram_id_and_name(self, telegram_user_id: str, name: str) -> Optional[Feedback]:
@@ -56,3 +57,11 @@ class FeedbackRepository(BaseRepository):
         result = await self.session.execute(statement=update_stmt)
         await self.session.commit()
         # return result.scalar_one()
+
+    async def get_all_feedback(self) -> List[Feedback]:
+        """Получает все отзывы и инсайты для аналитики"""
+        select_stmt = select(Feedback).order_by(
+            Feedback.created_at.desc()
+        ).options(*self.options)
+        result = await self.session.execute(statement=select_stmt)
+        return result.scalars().all()

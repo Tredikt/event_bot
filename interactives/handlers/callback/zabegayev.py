@@ -6,7 +6,7 @@ from aiogram.enums import ChatAction
 from core.utils.enums import Variables
 from core.utils.answers import zabegayev_answers
 from core.utils.zabegayev_data import buttons_1, buttons_2, zabegayev_correct_answers
-from core.utils.animate_waiting_message import animate_next_question_loading, send_staged_question
+from core.utils.animate_waiting_message import animate_next_question_loading, send_animation_one_question
 from core.utils.scoring_utils import add_user_score
 
 
@@ -20,12 +20,11 @@ async def zabegayev_start_interactive(call: CallbackQuery, variables: Variables)
     await call.message.delete()
     await asyncio.sleep(1)
     
-    await send_staged_question(
+    await send_animation_one_question(
         call=call,
         variables=variables,
-        start_text="Вопрос....",
-        main_text="Legacy-решения требуют сложной установки и настройки.",
-        question_text="Правда или ложь?",
+        start_text="<b>Sprinter требует установки \"толстых клиентов\" в каждую систему.</b>",
+        question_text="Это правда или миф?",
         buttons_data=buttons_1,
         callback_prefix="zabegayev_question_1"
     )
@@ -42,20 +41,22 @@ async def zabegayev_question_1(call: CallbackQuery, variables: Variables):
     await asyncio.sleep(2)
     
     if selected_index == correct_answer_index:
-        result_text = f"✅ Верно!\n\n{zabegayev_answers['zabegaev_1']}"
-        result_text += await add_user_score(call=call, variables=variables, interactive_name="zabegayev")
+        result_text = zabegayev_answers['zabegaev_1']['correct']
+        result_text += "\n\n🎯 <i><b>+1 балл.</b> Едем дальше!</i>"
+        points = 1
     else:
-        result_text = f"❌ Неверно!\n\n{zabegayev_answers['zabegaev_1']}"
-    
+        result_text = zabegayev_answers['zabegaev_1']['incorrect']
+        points = 0
+    await add_user_score(call=call, variables=variables, interactive_name="zabegayev_question_1", points=points)
+
     await call.message.answer(text=result_text)
     await asyncio.sleep(2)
     await animate_next_question_loading(message=call.message, bot=call.bot)
-    await send_staged_question(
+    await send_animation_one_question(
         call=call,
         variables=variables,
-        start_text="Следующий вопрос:\n\nНастройка Sprinter под госсистемы",
-        main_text="(например, 'Электронный бюджет') занимает 3+ месяца из-за сложной интеграции.",
-        question_text="Правда или ложь?",
+        start_text="📍 <b>А теперь так:\nSprinter</b> генерирует сложные документы с динамическими таблицами и условным форматированием, <i>без ручного программирования шаблонов.</i>",
+        question_text="<b>Это правда или нет?</b>",
         buttons_data=buttons_2,
         callback_prefix="zabegayev_question_2"
     )
@@ -72,9 +73,12 @@ async def zabegayev_question_2(call: CallbackQuery, variables: Variables):
     await asyncio.sleep(2)
     
     if selected_index == correct_answer_index:
-        result_text = f"✅ Верно!\n\n{zabegayev_answers['zabegaev_2']}"
-        result_text += await add_user_score(call=call, variables=variables, interactive_name="zabegayev")
+        result_text = zabegayev_answers['zabegaev_2']['correct']
+        result_text += "\n\n🎯 <i><b>+1 балл.</b> Так держать.</i>"
+        points = 1
     else:
-        result_text = f"❌ Миф!\n\n{zabegayev_answers['zabegaev_2']}"
-    
+        result_text = zabegayev_answers['zabegaev_2']['incorrect']
+        points = 0
+    await add_user_score(call=call, variables=variables, interactive_name="zabegayev_question_2", points=points)
+
     await call.message.answer(text=result_text)

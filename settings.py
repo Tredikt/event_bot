@@ -31,4 +31,5 @@ config = Config()
 DB_URL: str = (
      "postgresql+asyncpg://"
      f"{config.DB_USER}:{config.DB_PASSWORD}@{config.DB_HOST}:{config.DB_PORT}/{config.DB_NAME}"
+    # "sqlite+aiosqlite:///database.db"
 )

@@ -7,7 +7,7 @@ from aiogram.enums import ChatAction
 from core.utils.enums import Variables
 from core.utils.answers import belozyortseva_explanations, belozyortseva_next_questions
 from core.utils.answer_choices import answer_choices
-from core.utils.animate_waiting_message import animate_next_question_loading, send_staged_question
+from core.utils.animate_waiting_message import animate_next_question_loading, send_animation_one_question
 from core.utils.scoring_utils import add_user_score
 
 
@@ -28,12 +28,11 @@ async def start_belozyortseva_interactive(call: CallbackQuery, variables: Variab
         for idx, option in enumerate(options)
     }
     
-    await send_staged_question(
+    await send_animation_one_question(
         call=call,
         variables=variables,
-        start_text="Вопрос...",
-        main_text="Бэкенд сервиса разделён на две ключевые части",
-        question_text="Какие?",
+        start_text="А вот и первый вопрос...",
+        question_text="<b>Бэкенд сервиса делится на две главные части.</b> Вопрос на внимательность — <b>какие именно?</b>",
         buttons_data=buttons_data,
         callback_prefix="belozyortseva_test_1"
     )
@@ -54,15 +53,18 @@ async def belozyortseva_callback_handler(call: CallbackQuery, variables: Variabl
     test_data = answer_choices[number_test - 1]
     correct_index = test_data["correct_index"]
     is_correct = selected_index == correct_index
+    explanation_data = belozyortseva_explanations.get(number_test, {})
 
-    correct_explanation = belozyortseva_explanations.get(number_test, "")
     if is_correct:
-        text = f"✅ Верно!\n\n{correct_explanation}"
-        text += await add_user_score(call=call, variables=variables, interactive_name="belozyortseva")
+        text = explanation_data.get("correct", "✅ Верно!")
+        text += "\n\n🎉 <b>+1 балл!</b>"
+        points = 1
     else:
-        text = f"❌ Неверно!\n\n{correct_explanation}"
+        text = explanation_data.get("incorrect", "❌ Неверно!")
+        points = 0
+    await add_user_score(call=call, variables=variables, interactive_name="belozyortseva_question_" + str(number_test), points=points)
 
-    await call.message.answer(text=text)
+    await call.message.answer(text=text, parse_mode="HTML")
     number_test += 1
     await asyncio.sleep(2)
     next_question_text = belozyortseva_next_questions.get(number_test)
@@ -91,12 +93,11 @@ async def _send_second_question_sequence(call: CallbackQuery, variables: Variabl
         for idx, option in enumerate(options)
     }
     
-    await send_staged_question(
+    await send_animation_one_question(
         call=call,
         variables=variables,
-        start_text="Вопрос...",
-        main_text="Фронтенд — это адаптивное веб-приложение, которое общается с сервером",
-        question_text="через…",
+        start_text="Второй вопрос...",
+        question_text="<b>Фронтенд</b> — это адаптивное веб-приложение, которое <b>общается с сервером через</b>",
         buttons_data=buttons_data,
         callback_prefix="belozyortseva_test_2"
     )
