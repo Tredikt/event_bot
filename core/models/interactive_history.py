@@ -13,5 +13,5 @@ class InteractiveHistory(BaseModel):
     interactive_name: Mapped[str] = mapped_column(String(100), nullable=False)
     points_earned: Mapped[int] = mapped_column(Integer, default=1, nullable=False)
     completed_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
-    
+
     user: Mapped["User"] = relationship("User", back_populates="interactive_history") 

@@ -61,4 +61,4 @@ class InteractiveHistoryRepository(BaseRepository):
             'total_completions': row.total_completions or 0,
             'unique_users': row.unique_users or 0,
             'total_points': row.total_points or 0
-        } 
+        }
