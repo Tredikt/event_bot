@@ -68,7 +68,7 @@ await variables.keyboards.admin.mark_button_pressed(callback_data=callback.data)
 await AdminPanelService.update_admin_panel(callback=callback, variables=variables)
 
 if speaker_name == "all":
-    text = "Все выступления окончены."
+    text = "Спасибо, что был с нами на Годовом собрании!\n🎉Помоги нам стать лучше — оставь обратную связь: forms.gle/zsmkbSVUU8oyARjv5\nУвидимся в следующем году! 🚀"
     display_name = "всех выступлений"
     keyboard = await variables.keyboards.interactives.performance_ending(interactive_name="all")
 else:
