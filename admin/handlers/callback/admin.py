@@ -62,17 +62,26 @@ async def interactive_start_handler(callback: CallbackQuery, variables: Variable
 
 @router.callback_query(F.data.startswith("finished_"))
 async def interactive_end_handler(callback: CallbackQuery, variables: Variables):
-    speaker_name = callback.data.split("finished_")[1]
-    await variables.keyboards.admin.mark_button_pressed(callback_data=callback.data)
-    await AdminPanelService.update_admin_panel(callback=callback, variables=variables)
-    text = get_interactive_message(speaker_name=speaker_name, message_type="end")
-    
-    asyncio.create_task(variables.broadcast_service.send_end_broadcast(
-        speaker_name=speaker_name,
-        text=text,
-        keyboard=await variables.keyboards.interactives.performance_ending(interactive_name=speaker_name)
-    ))
-    await variables.db.user.update_feedback_waiting(speaker_name=speaker_name)
-    await callback.answer(text=f"Запущена рассылка об окончании выступления {get_speaker_display_name(speaker_name=speaker_name)}")
+speaker_name = callback.data.split("finished_")[1]
 
+await variables.keyboards.admin.mark_button_pressed(callback_data=callback.data)
+await AdminPanelService.update_admin_panel(callback=callback, variables=variables)
+
+if speaker_name == "all":
+    text = "Все выступления окончены."
+    display_name = "всех выступлений"
+    keyboard = await variables.keyboards.interactives.performance_ending(interactive_name="all")
+else:
+    text = get_interactive_message(speaker_name=speaker_name, message_type="end")
+    display_name = f"выступления {get_speaker_display_name(speaker_name=speaker_name)}"
+    keyboard = await variables.keyboards.interactives.performance_ending(interactive_name=speaker_name)
+    await variables.db.user.update_feedback_waiting(speaker_name=speaker_name)
+
+asyncio.create_task(variables.broadcast_service.send_end_broadcast(
+    speaker_name=speaker_name,
+    text=text,
+    keyboard=keyboard
+))
+
+await callback.answer(text=f"Запущена рассылка об окончании {display_name}")
 

@@ -21,12 +21,22 @@ async def gavrikov_callback_handler(call: CallbackQuery, variables: Variables):
     await variables.bot.send_chat_action(chat_id=user_id, action=ChatAction.TYPING)
     await asyncio.sleep(1)
 
+    keyboard = await variables.keyboards.menu.gavrikov_start()
+
     photo = "AgACAgIAAxkBAAIP3WhqVBzKLgJUGDTcMMC5RzughbDoAALe8jEbF0NZS7gvl5T9lwNnAQADAgADeQADNgQ"
-    await call.message.answer_photo(
-        photo=photo, 
+    await variables.bot.send_photo(
+        chat_id=user_id,
+        photo=photo,
         caption="📍 <b>Вопрос для разогрева\n\nКто понимает, откуда берутся все эти цифры и как формируются начисления?</b>",
-        reply_markup=await variables.keyboards.menu.gavrikov_start()
+        parse_mode="HTML"
     )
+
+    await variables.bot.send_message(
+        chat_id=user_id,
+        text="Выбери свой вариант",
+        reply_markup=keyboard
+    )
+
 
 
 @router.callback_query(F.data.startswith("gavrikov_pictures"))
