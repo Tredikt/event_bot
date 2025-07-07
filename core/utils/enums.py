@@ -1,4 +1,6 @@
 from aiogram import Bot
+from aiogram.types import BotCommand
+
 from pydantic import BaseModel
 
 from core.keyboards_class import Keyboards
@@ -14,3 +16,13 @@ class Variables(BaseModel):
 
     class Config:
         arbitrary_types_allowed = True
+
+
+
+commands = [
+    BotCommand(command='support', description='Связаться с технической поддержкой'),
+    BotCommand(command='event', description='Связаться с организаторами'),
+    BotCommand(command='order', description='Порядок выступления'),
+    BotCommand(command='plan', description='План мероприятия'),
+    BotCommand(command='navigator', description='Навигатор по боту')
+]

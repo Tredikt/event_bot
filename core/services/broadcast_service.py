@@ -20,7 +20,7 @@ class BroadcastService:
     ) -> dict[str, int]:
         """Отправляет интерактив всем пользователям с ограничением скорости"""
         
-        user_batches = self._split_users_into_batches(users)
+        user_batches = await self._split_users_into_batches(users)
         
         tasks = []
         for batch_index, batch in enumerate(user_batches):
@@ -36,9 +36,9 @@ class BroadcastService:
         
         results = await asyncio.gather(*tasks, return_exceptions=True)
         
-        return self._calculate_results(results)
+        return await self._calculate_results(results)
 
-    def _split_users_into_batches(self, users: List[User]) -> List[List[User]]:
+    async def _split_users_into_batches(self, users: List[User]) -> List[List[User]]:
         """Разделяет пользователей на 5 равных частей"""
         
         batch_size = len(users) // self.batch_count
@@ -69,10 +69,11 @@ class BroadcastService:
         
         for i, user in enumerate(batch):
             try:
-                await self._send_message_to_user(
-                    user_id=user.user_id,
+                await self.bot.send_message(
+                    chat_id=user.user_id,
                     text=text,
-                    keyboard=keyboard
+                    reply_markup=keyboard,
+                    parse_mode="HTML"
                 )
                 successful_sends += 1
                 
@@ -89,21 +90,7 @@ class BroadcastService:
             "batch_index": batch_index
         }
 
-    async def _send_message_to_user(
-        self,
-        user_id: str,
-        text: str,
-        keyboard: InlineKeyboardMarkup
-    ) -> None:
-        """Отправляет сообщение конкретному пользователю"""
-        await self.bot.send_message(
-            chat_id=user_id,
-            text=text,
-            reply_markup=keyboard,
-            parse_mode="HTML"
-        )
-
-    def _calculate_results(self, results: List[dict]) -> dict[str, int]:
+    async def _calculate_results(self, results: List[dict]) -> dict[str, int]:
         """Подсчитывает общие результаты рассылки"""
         
         total_successful = 0

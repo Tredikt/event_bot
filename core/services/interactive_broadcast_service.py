@@ -4,14 +4,15 @@ from aiogram.types import InlineKeyboardMarkup
 
 from core.keyboards_class import Keyboards
 from core.models import User
-from core.repositories import UserRepository
 from core.services.broadcast_service import BroadcastService
+from core.utils.get_async_db import get_async_db
 
 
 class InteractiveBroadcastService:
-    def __init__(self, bot: Bot, user_repository: UserRepository):
+    """Сервис для массовой рассылки интерактивов/сообщений."""
+
+    def __init__(self, bot: Bot):
         self.bot = bot
-        self.user_repository = user_repository
         self.broadcast_service = BroadcastService(bot)
 
     async def send_interactive_start(
@@ -99,18 +100,24 @@ class InteractiveBroadcastService:
             keyboard=keyboard
         )
         
-        print(f"Рассылка сообщения завершена. "
+        print("Рассылка сообщения завершена. "
               f"Отправлено: {result['total_sent']}, "
               f"Ошибок: {result['total_failed']}")
         
         return result
 
     async def _get_all_active_users(self) -> List[User]:
-        """Получает всех активных пользователей из базы данных"""
+        """Получает всех активных пользователей из базы данных.
         
+        Создает новую сессию для каждого запроса, чтобы избежать конфликтов.
+        """
         try:
-            users = await self.user_repository.get_all_users()
-            return [user for user in users if user.user_id]
+            db = await get_async_db()
+            try:
+                users = await db.user.get_all_users()
+                return [user for user in users if user.user_id and user.is_active]
+            finally:
+                await db.session.close()
         except Exception as e:
             print(f"Ошибка получения пользователей: {e}")
             return []
@@ -169,16 +176,14 @@ class InteractiveBroadcastService:
         """Получает клавиатуру для конкретного интерактива"""
 
         keyboard_mapping = {
-            "belozertseva": lambda: self._get_keyboard_method("belozyortseva_menu")(kwargs.get("number_test")),
+            "belozertseva": self._get_keyboard_method("belozyortseva_start_interactive"),
+            "nurhametova": self._get_keyboard_method("nurkhametova_start_interactive"),
             "gavrikov": self._get_keyboard_method("gavrikov_menu"),
-            "zabegaev": self._get_keyboard_method("zabegayev_menu"),
-            "zargaryan": self._get_keyboard_method("zargaryan_menu"),
+            "zabegaev": self._get_keyboard_method("zabegayev_start_interactive"),
             "mendubaev": self._get_keyboard_method("mendubaev_menu"),
-            "nurhametova": self._get_keyboard_method("nurkhametova_menu"),
-            "sadriev": self._get_keyboard_method("sadriev_menu"),
-            "horoshutina": self._get_keyboard_method("horoshutina_menu"),
-            "gilmanova": self._get_keyboard_method("gilmanova_menu"),
-            "ending": self._get_keyboard_method("gilmanova_menu"),
+            "sadriev": self._get_keyboard_method("sadriev_start_interactive"),
+            "horoshutina": self._get_keyboard_method("horoshutina_start_interactive"),
+            "ending": self._get_keyboard_method("perfomance_ending"),
         }
 
         keyboard_method = keyboard_mapping.get(speaker_name)
@@ -194,4 +199,4 @@ class InteractiveBroadcastService:
     def _get_keyboard_method(self, method_name: str):
         """Получает метод клавиатуры по имени"""
         keyboards = Keyboards()
-        return getattr(keyboards.interactives, method_name, None) 
+        return getattr(keyboards.interactives, method_name, None)

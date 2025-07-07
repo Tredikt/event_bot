@@ -5,7 +5,6 @@ import sys
 from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
 from aiogram.fsm.storage.memory import MemoryStorage
-from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 
 from core.db_class import DBClass
 from core.utils.get_async_db import get_async_db
@@ -17,13 +16,14 @@ from core.routers import routers
 
 
 loop = asyncio.get_event_loop()
-db: DBClass = loop.run_until_complete(get_async_db())
+middleware_db: DBClass = loop.run_until_complete(get_async_db())
 
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
     datefmt='%Y-%m-%d %H:%M:%S'
 )
+
 
 
 def handle_exception(exc_type, exc_value, exc_traceback):
@@ -38,15 +38,16 @@ sys.excepthook = handle_exception
 
 
 async def main():
+    print(DB_URL)
     storage = MemoryStorage()
 
     bot = Bot(token=config.TG_TOKEN, default=DefaultBotProperties(parse_mode="HTML"))
     dp = Dispatcher(bot=bot, storage=storage)
 
     dp.include_routers(*routers)
-    dp.update.middleware(BasicMiddleware(bot=bot, db=db))
+    dp.update.middleware(BasicMiddleware(bot=bot, db=middleware_db))
 
-    asyncio.create_task(check(bot=bot, db=db))
+    asyncio.create_task(check(bot=bot))
     await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot)
 

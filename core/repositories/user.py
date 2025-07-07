@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Optional
 
 from sqlalchemy import insert, select, update
@@ -31,8 +32,9 @@ class UserRepository(BaseRepository):
             await self.session.commit()
             return await self.get_by_telegram_id(telegram_user_id=telegram_user_id)
         except IntegrityError as ie:
-            print(f"Error: {ie}")
-            await self.session.rollback()
+            print(f"Ошибка добавления пользователя: {ie}")
+            # Возможно, пользователь уже существует (race condition)
+            # Просто возвращаем существующего пользователя
             return await self.get_by_telegram_id(telegram_user_id=telegram_user_id)
 
     async def get_by_id(self, id: int) -> Optional[User]:
@@ -48,8 +50,10 @@ class UserRepository(BaseRepository):
             result = await self.session.execute(statement=select_stmt)
             return result.scalar_one_or_none()
         except SQLAlchemyError as e:
-            await self.session.rollback()
-            raise e
+            print(f"Ошибка получения пользователя: {e}")
+            # Не делаем rollback, так как это может вызвать конфликт сессий
+            # Сессия будет закрыта в middleware
+            return None
     
     async def update_user_info(
         self,
@@ -66,7 +70,17 @@ class UserRepository(BaseRepository):
         result = await self.session.execute(statement=update_stmt)
         await self.session.commit()
         # return result.scalar_one()
-    
+
+    async def update_feedback_waiting(self, speaker_name: str = None):
+        """Обновляет feedback_waiting для всех пользователей и устанавливает текущего спикера"""
+        values = {"feedback_waiting": datetime.now()}
+        if speaker_name:
+            values["current_speaker"] = speaker_name
+        
+        stmt = update(User).values(**values)
+        await self.session.execute(statement=stmt)
+        await self.session.commit()
+
     async def get_all_users(self) -> list[User]:
         """Получает всех пользователей"""
         select_stmt = select(User).order_by(User.id).options(*self.options)
