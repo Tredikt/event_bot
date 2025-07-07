@@ -74,5 +74,5 @@ async def interactive_end_handler(callback: CallbackQuery, variables: Variables)
     await asyncio.create_task(variables.broadcast_service.send_end_broadcast(
         speaker_name=speaker_name,
         text=text,
-        keyboard=await variables.keyboards.interactives.performance_ending(interactive_name=speaker_name)
+        keyboard=keyboard
     ))
