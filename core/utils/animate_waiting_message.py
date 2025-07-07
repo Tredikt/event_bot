@@ -75,12 +75,12 @@ async def animate_answer_analysis(message: Message, bot: Bot):
 async def animate_buttons_appearance(message: Message, bot: Bot, buttons_data: dict, callback_prefix: str, final_text: str = None):
     """Постепенно добавляет кнопки к существующему сообщению"""
     builder = InlineKeyboardBuilder()
-    await asyncio.sleep(0.8)
+    await asyncio.sleep(0.7)
     
     text_to_use = final_text if final_text is not None else message.text
     
     for idx, (button_text, callback_data) in enumerate(buttons_data.items()):
-        await asyncio.sleep(0.6)
+        await asyncio.sleep(0.4)
         builder.button(text=button_text, callback_data=callback_data)
         builder.adjust(1)
         try:
@@ -91,7 +91,7 @@ async def animate_buttons_appearance(message: Message, bot: Bot, buttons_data: d
             )
         except Exception as e:
             print(f"Ошибка при добавлении кнопок: {e}")
-        await asyncio.sleep(0.5)
+        await asyncio.sleep(0.3)
 
 
 async def send_staged_question(
