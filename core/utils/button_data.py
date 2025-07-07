@@ -25,4 +25,5 @@ admin_buttons = [
     
     ("Гильманова - Интерактив", "interactive_gilmanova"),
     ("Гильманова - Закончила выступление", "finished_gilmanova"),
+    ("Выступление всех спикеров окончено", "finished_all")
 ] 
