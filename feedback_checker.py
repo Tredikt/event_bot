@@ -10,7 +10,7 @@ from core.utils.get_async_db import get_async_db
 from core.utils.interactive_messages import get_no_feedback_message
 
 
-async def check(bot: Bot, db: DBClass = None):
+async def check(bot: Bot, db: DBClass | None = None):
     while True:
         try:
             # Создаем новую сессию для каждого запроса
@@ -43,6 +43,11 @@ async def check(bot: Bot, db: DBClass = None):
                             )
                     except Exception as e:
                         print(f"Ошибка обработки пользователя {user.user_id}: {e}")
+                        await current_db.user.update_user_info(
+                            telegram_user_id=user.user_id, 
+                            feedback_waiting=None,
+                            current_speaker=None
+                        )
             finally:
                 # Закрываем сессию после использования
                 await current_db.session.close()

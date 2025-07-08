@@ -31,8 +31,8 @@ async def start_belozyortseva_interactive(call: CallbackQuery, variables: Variab
     await send_animation_one_question(
         call=call,
         variables=variables,
-        start_text="А вот и первый вопрос...",
-        question_text="<b>Бэкенд сервиса делится на две главные части.</b> Вопрос на внимательность — <b>какие именно?</b>",
+        start_text="<b>А вот и первый вопрос...</b>",
+        question_text="Бэкенд сервиса делится на две главные части.\n<b>Вопрос на внимательность — какие именно?</b>",
         buttons_data=buttons_data,
         callback_prefix="belozyortseva_test_1"
     )
@@ -57,7 +57,7 @@ async def belozyortseva_callback_handler(call: CallbackQuery, variables: Variabl
 
     if is_correct:
         text = explanation_data.get("correct", "✅ Верно!")
-        text += "\n\n🎉 <b>+1 балл!</b>"
+        text += "\n🎉 <b>+1 балл!</b>"
         points = 1
     else:
         text = explanation_data.get("incorrect", "❌ Неверно!")
@@ -96,8 +96,8 @@ async def _send_second_question_sequence(call: CallbackQuery, variables: Variabl
     await send_animation_one_question(
         call=call,
         variables=variables,
-        start_text="Второй вопрос...",
-        question_text="<b>Фронтенд</b> — это адаптивное веб-приложение, которое <b>общается с сервером через</b>",
+        start_text="<i>Едем дальше — лови следующий вопрос 🚦</i>",
+        question_text="<i>Давай разберёмся.</i>\n<b>Фронтенд</b> — это адаптивное веб-приложение, которое общается с сервером…",
         buttons_data=buttons_data,
         callback_prefix="belozyortseva_test_2"
     )
