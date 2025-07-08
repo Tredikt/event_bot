@@ -16,18 +16,12 @@ router = Router(name="belozyortseva_router")
 
 
 @router.callback_query(F.data == "start_belozyortseva_interactive")
-async def start_belozyortseva_interactive(call: CallbackQuery, variables: Variables, current_speaker: str):
+async def start_belozyortseva_interactive(call: CallbackQuery, variables: Variables):
     """Обработчик кнопки запуска интерактива - отправляет первый вопрос поэтапно"""
-    if current_speaker != call.data.split("_")[1]:
-        kb = await variables.keyboards.menu.get_empty_keyboard()
-        await call.message.edit_reply_markup(reply_markup=kb)
-        await call.answer(show_alert=True, text="Данный спикер уже не выступает. Невозможно начать данный интерактив")
-        return
-    else:
-        await call.answer()
-        await call.message.delete()
-        await asyncio.sleep(1)
-    
+    await call.answer()
+    await call.message.delete()
+    await asyncio.sleep(1)
+
     test_data = answer_choices[0]
     options = test_data["options"]
     buttons_data = {

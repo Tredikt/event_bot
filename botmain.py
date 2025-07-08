@@ -5,9 +5,10 @@ import sys
 from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
 from aiogram.fsm.storage.memory import MemoryStorage
+from sqlalchemy.ext.asyncio import async_sessionmaker
 
 from core.db_class import DBClass
-from core.utils.get_async_db import get_async_db
+from core.utils.get_async_db import get_async_db, SessionMaker
 from feedback_checker import check
 from middlewares.basic_middleware import BasicMiddleware
 from settings import config, DB_URL
@@ -45,7 +46,7 @@ async def main():
     dp = Dispatcher(bot=bot, storage=storage)
 
     dp.include_routers(*routers)
-    dp.update.middleware(BasicMiddleware(bot=bot, db=middleware_db))
+    dp.update.middleware(BasicMiddleware(bot=bot, db=middleware_db, session=SessionMaker))
 
     asyncio.create_task(check(bot=bot))
     await bot.delete_webhook(drop_pending_updates=True)

@@ -26,18 +26,6 @@ async def admin_message_handler(message: Message, variables: Variables):
         variables.keyboards.admin.set_admin_message_id(sent_message.message_id)
 
 
-@router.message(Command("reset_speaker"))
-async def admin_message_handler(message: Message, variables: Variables):
-    user_id = str(message.from_user.id)
-    username = message.from_user.username
-    admins = config.ADMINS.split(",")
-    admins_usernames = config.ADMINS_USERNAMES.split(",")
-
-    if user_id in admins or username in admins_usernames:
-        await variables.db.speaker.delete_by_id()
-        await message.answer(text="Нынешний спикер удалён")
-
-
 @router.message(Command("get_excel"))
 async def admin_get_excel(message: Message, variables: Variables):
     """Команда для генерации Excel аналитики"""

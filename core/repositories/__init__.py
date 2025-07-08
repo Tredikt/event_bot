@@ -3,4 +3,3 @@ from core.repositories.interactive_history import InteractiveHistoryRepository
 from core.repositories.feedback import FeedbackRepository
 from core.repositories.question import QuestionRepository
 from core.repositories.messages import MessagesRepository
-from core.repositories.speaker import SpeakerRepository

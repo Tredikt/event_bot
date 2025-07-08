@@ -11,9 +11,9 @@ from core.utils.get_async_db import get_async_db
 class InteractiveBroadcastService:
     """Сервис для массовой рассылки интерактивов/сообщений."""
 
-    def __init__(self, bot: Bot):
+    def __init__(self, bot: Bot, db_session):
         self.bot = bot
-        self.broadcast_service = BroadcastService(bot)
+        self.broadcast_service = BroadcastService(bot, db_session)
 
     async def send_interactive_start(
         self,
@@ -37,7 +37,8 @@ class InteractiveBroadcastService:
         result = await self.broadcast_service.send_interactive_to_all_users(
             users=users,
             text=text,
-            keyboard=keyboard
+            keyboard=keyboard,
+            collect_messages=True
         )
         
         print(f"Рассылка интерактива '{interactive_name}' завершена. "
@@ -50,7 +51,8 @@ class InteractiveBroadcastService:
         self,
         interactive_name: str,
         text: str,
-        keyboard: Optional[InlineKeyboardMarkup] = None
+        keyboard: Optional[InlineKeyboardMarkup] = None,
+        messages: bool = False
     ) -> dict[str, int]:
         """Отправляет окончание интерактива всем пользователям"""
         
@@ -68,7 +70,8 @@ class InteractiveBroadcastService:
         result = await self.broadcast_service.send_interactive_to_all_users(
             users=users,
             text=text,
-            keyboard=keyboard
+            keyboard=keyboard,
+            collect_messages=messages
         )
         
         print(f"Рассылка окончания интерактива '{interactive_name}' завершена. "
@@ -97,7 +100,7 @@ class InteractiveBroadcastService:
         result = await self.broadcast_service.send_interactive_to_all_users(
             users=users,
             text=text,
-            keyboard=keyboard
+            keyboard=keyboard,
         )
         
         print("Рассылка сообщения завершена. "
@@ -154,7 +157,7 @@ class InteractiveBroadcastService:
         self,
         speaker_name: str,
         text: str,
-        keyboard: Optional[InlineKeyboardMarkup]
+        keyboard: Optional[InlineKeyboardMarkup],
     ) -> dict[str, int]:
         """Отправляет рассылку об окончании выступления"""
         
@@ -162,7 +165,8 @@ class InteractiveBroadcastService:
             result = await self.send_interactive_end(
                 interactive_name=speaker_name,
                 text=text,
-                keyboard=keyboard
+                keyboard=keyboard,
+                messages=True
             )
             
             print(f"Окончание {speaker_name}: отправлено {result['total_sent']} сообщений, ошибок: {result['total_failed']}")
