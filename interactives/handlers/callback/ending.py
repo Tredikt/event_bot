@@ -69,14 +69,8 @@ async def ask_speaker_handler(call: CallbackQuery, state: FSMContext, variables:
     user_id = str(call.from_user.id)
     interactive_name = call.data.split("_")[-1]
 
-    if current_speaker != interactive_name:
-        kb = await variables.keyboards.menu.get_empty_keyboard()
-        await call.message.edit_reply_markup(reply_markup=kb)
-        await call.answer(show_alert=True, text="Данный спикер уже не выступает. Невозможно начать данный интерактив")
-        return
-    else:
-        await call.answer()
-        await call.message.delete()
+    await call.answer()
+    await call.message.delete()
 
     await variables.bot.send_chat_action(chat_id=call.from_user.id, action=ChatAction.TYPING)
     await asyncio.sleep(1)
