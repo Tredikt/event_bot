@@ -17,7 +17,8 @@ router = Router()
 
 
 @router.callback_query(F.data.startswith("ending"))
-async def ending_handler(call: CallbackQuery, state: FSMContext, variables: Variables, current_speaker: str):
+async def ending_handler(call: CallbackQuery, state: FSMContext, variables: Variables):
+    await call.answer()
     user_id = str(call.from_user.id)
     data = call.data.split("_")
     rate = data[-1]
@@ -63,7 +64,8 @@ async def ending_handler(call: CallbackQuery, state: FSMContext, variables: Vari
 
 
 @router.callback_query(F.data.startswith("ask_speaker"))
-async def ask_speaker_handler(call: CallbackQuery, state: FSMContext, variables: Variables, current_speaker: str):
+async def ask_speaker_handler(call: CallbackQuery, state: FSMContext, variables: Variables):
+    await call.answer()
     user_id = str(call.from_user.id)
     interactive_name = call.data.split("_")[-1]
 

@@ -112,7 +112,10 @@ class AnalyticsService:
         for col, header in enumerate(headers, 1):
             ws.cell(row=1, column=col, value=header)
             ws.cell(row=1, column=col).font = Font(bold=True)
-            ws.cell(row=1, column=col).alignment = Alignment(wrap_text=True)
+            ws.cell(row=1, column=col).alignment = Alignment(wrap_text=True, vertical='top')
+        
+        # Устанавливаем высоту строки заголовков
+        ws.row_dimensions[1].height = 40
         
         # Сортируем пользователей по общей сумме баллов
         sorted_users = sorted(user_data.items(), key=lambda x: x[1]['total_points'], reverse=True)
@@ -122,16 +125,31 @@ class AnalyticsService:
             self._fill_user_row(ws, row, user_id, data, sorted_users)
         
         # Автоширина колонок
-        for column in ws.columns:
+        headers = self._create_headers()
+        for col_index, column in enumerate(ws.columns, 1):
             max_length = 0
             column_letter = column[0].column_letter
+            
+            # Проверяем, является ли это колонкой с текстом инсайта
+            is_insight_column = False
+            if col_index <= len(headers):
+                header = headers[col_index - 1]
+                if "Текст инсайта" in header:
+                    is_insight_column = True
+            
             for cell in column:
                 try:
                     if len(str(cell.value)) > max_length:
                         max_length = len(str(cell.value))
                 except:
                     pass
-            adjusted_width = min(max_length + 2, 50)
+            
+            # Для колонок с инсайтами устанавливаем минимальную ширину 40, максимальную 80
+            if is_insight_column:
+                adjusted_width = max(min(max_length + 2, 80), 40)
+            else:
+                adjusted_width = min(max_length + 2, 50)
+                
             ws.column_dimensions[column_letter].width = adjusted_width
         
         # Сохраняем в память
@@ -209,8 +227,9 @@ class AnalyticsService:
                     activity_name = f"{interactive_name}_notbad"
                 elif rate == "insight":
                     activity_name = f"{interactive_name}_ending"
-                    # Сохраняем текст инсайта
-                    user_data[user_id]['insights'][interactive_name] = inside
+                    # Сохраняем текст инсайта с ключом interactive_name
+                    if inside:  # Сохраняем только если есть текст
+                        user_data[user_id]['insights'][interactive_name] = inside
                 else:
                     continue
                 
@@ -220,6 +239,33 @@ class AnalyticsService:
                     user_data[user_id]['total_points'] += 1
         
         return user_data
+
+    def _calculate_cell_height(self, text: str, column_width: float) -> float:
+        """Вычисляет необходимую высоту ячейки для текста с переносом"""
+        if not text:
+            return 15
+        
+        # Учитываем ширину колонки (в Excel примерно 7 пикселей на символ)
+        chars_per_line = max(int(column_width * 0.7), 15)
+        
+        # Разбиваем текст на слова и подсчитываем строки
+        words = text.split()
+        lines = 1
+        current_line_length = 0
+        
+        for word in words:
+            # Если слово не помещается в текущую строку
+            if current_line_length + len(word) + 1 > chars_per_line:
+                lines += 1
+                current_line_length = len(word)
+            else:
+                current_line_length += len(word) + (1 if current_line_length > 0 else 0)
+        
+        # Учитываем принудительные переносы строк
+        lines += text.count('\n')
+        
+        # Примерно 15 пикселей на строку + отступы
+        return min(lines * 15 + 10, 120)
 
     def _create_headers(self) -> List[str]:
         """Создает заголовки для Excel"""
@@ -231,15 +277,15 @@ class AnalyticsService:
         ]
         
         # Добавляем колонки для каждого интерактива
-        for column_name in self.columns_mapping.values():
+        for activity_key, column_name in self.columns_mapping.items():
             headers.append(column_name)
             
-            # Добавляем колонку с текстом инсайта после соответствующих активностей
-            if "Оставил инсайт" in column_name:
-                for speaker, text_column in self.insight_text_columns.items():
-                    if speaker.lower() in column_name.lower():
-                        headers.append(text_column)
-                        break
+            # Добавляем колонку с текстом инсайта после активностей "ending"
+            if "_ending" in activity_key:
+                # Извлекаем имя спикера из ключа активности
+                speaker_name = activity_key.replace("_ending", "")
+                if speaker_name in self.insight_text_columns:
+                    headers.append(self.insight_text_columns[speaker_name])
         
         return headers
 
@@ -264,17 +310,34 @@ class AnalyticsService:
         ws.cell(row=row, column=col, value=data['total_points'])
         col += 1
         
+        # Переменная для отслеживания максимальной высоты строки
+        max_height = 15  # Минимальная высота строки
+        
         # Активности
-        for activity_name, column_name in self.columns_mapping.items():
-            value = data['activities'].get(activity_name, 0)
+        for activity_key, column_name in self.columns_mapping.items():
+            value = data['activities'].get(activity_key, 0)
             ws.cell(row=row, column=col, value=value if value > 0 else "")
             col += 1
             
-            # Добавляем текст инсайта если это соответствующая активность
-            if "Оставил инсайт" in column_name:
-                for speaker, text_column in self.insight_text_columns.items():
-                    if speaker.lower() in column_name.lower():
-                        insight_text = data['insights'].get(speaker, "")
-                        ws.cell(row=row, column=col, value=insight_text)
-                        col += 1
-                        break 
+            # Добавляем текст инсайта если это активность "_ending"
+            if "_ending" in activity_key:
+                # Извлекаем имя спикера из ключа активности
+                speaker_name = activity_key.replace("_ending", "")
+                if speaker_name in self.insight_text_columns:
+                    insight_text = data['insights'].get(speaker_name, "")
+                    cell = ws.cell(row=row, column=col, value=insight_text)
+                    
+                    # Добавляем перенос текста для ячеек с инсайтами
+                    if insight_text:
+                        cell.alignment = Alignment(wrap_text=True, vertical='top')
+                        
+                        # Вычисляем необходимую высоту для этой ячейки
+                        column_width = ws.column_dimensions[cell.column_letter].width or 40
+                        cell_height = self._calculate_cell_height(insight_text, column_width)
+                        
+                        max_height = max(max_height, cell_height)
+                    
+                    col += 1
+        
+        # Устанавливаем высоту строки на основе самой высокой ячейки
+        ws.row_dimensions[row].height = max_height 
