@@ -4,7 +4,7 @@ from aiogram.types import Message
 from aiogram.enums import ChatAction
 
 from core.utils.enums import Variables, commands
-from core.utils.start_texts import first_part, second_part, third_part, fourth_part, fifth_part
+from core.utils.start_texts import first_part, second_part, third_part, fourth_part
 
 import asyncio
 
@@ -27,12 +27,8 @@ async def start_command_handler(message: Message, variables: Variables):
     await asyncio.sleep(2)
     await message.answer(third_part, parse_mode="HTML")
 
-    await asyncio.sleep(4)
-    await message.chat.do(ChatAction.TYPING)
-    await asyncio.sleep(1.5)
-    await message.answer(fourth_part, parse_mode="HTML")
 
     await asyncio.sleep(3)
     await message.chat.do(ChatAction.TYPING)
     await asyncio.sleep(1)
-    await message.answer(fifth_part, parse_mode="HTML")
+    await message.answer(fourth_part, parse_mode="HTML")

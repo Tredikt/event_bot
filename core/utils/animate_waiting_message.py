@@ -14,7 +14,7 @@ async def animate_next_question_loading(message: Message, bot: Bot):
         filled_blocks = percent // 10
         empty_blocks = 10 - filled_blocks
         bar = "█" * filled_blocks + "░" * empty_blocks
-        progress_text = (f"╔════════════════════╗\n║ {bar} {percent:3d}%     ║\n╚════════════════════╝\n\n🎯 Готовлю следующий вопрос...")
+        progress_text = (f"╔════════════════════╗\n║ {bar} {percent:3d}%     ║\n╚════════════════════╝\n\n*Супер, принял твой ответ. Сейчас проверю его… 🧠*")
         
         progress_stages.append(progress_text)
     
