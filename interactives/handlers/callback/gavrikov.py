@@ -15,8 +15,9 @@ router = Router(name="gavrikov_router")
 async def gavrikov_callback_handler(call: CallbackQuery, variables: Variables):
     await call.answer()
     user_id = call.from_user.id
-
+    await call.answer()
     await call.message.delete()
+    await asyncio.sleep(1)
 
     await variables.bot.send_chat_action(chat_id=user_id, action=ChatAction.TYPING)
     await asyncio.sleep(1)

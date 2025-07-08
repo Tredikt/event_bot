@@ -1,9 +1,7 @@
 """initial revision
-
 Revision ID: a5d470a41b28
-Revises: 
+Revises:
 Create Date: 2025-07-05 17:02:52.061551
-
 """
 from alembic import op
 import sqlalchemy as sa
@@ -76,4 +74,4 @@ def downgrade() -> None:
     op.drop_table('interactive_history')
     op.drop_table('feedback')
     op.drop_table('user')
-    # ### end Alembic commands ### 
+    # ### end Alembic commands ###

@@ -5,7 +5,8 @@ from core.repositories import (
     UserRepository,
     InteractiveHistoryRepository,
     FeedbackRepository,
-    QuestionRepository
+    QuestionRepository,
+    MessagesRepository,
 )
 from core.services.interactive_service import InteractiveService
 
@@ -23,5 +24,6 @@ class DBClass:
         self.feedback = FeedbackRepository(session=session)
         self.interactive_history = InteractiveHistoryRepository(session=session)
         self.question = QuestionRepository(session=session)
+        self.messages = MessagesRepository(session=session)
 
         self.interactive_service = InteractiveService(db=self)

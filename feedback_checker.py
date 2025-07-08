@@ -5,6 +5,7 @@ import pytz
 from aiogram import Bot
 
 from core.db_class import DBClass
+from core.utils.delete_keyboard import delete_keyboard
 from core.utils.get_async_db import get_async_db
 from core.utils.interactive_messages import get_no_feedback_message
 
@@ -25,6 +26,9 @@ async def check(bot: Bot, db: DBClass = None):
                         if (user.feedback_waiting + timedelta(minutes=2)) < now:
                         # if (user.feedback_waiting + timedelta(seconds=15)) < now:
                             # Используем current_speaker из базы данных, fallback на belozertseva
+                            messages = await current_db.messages.get_by_chat_id(chat_id=user.user_id)
+                            await delete_keyboard(bot=bot, db=current_db, messages=messages)
+                            await current_db.messages.delete_by_chat_id(chat_id=user.user_id)
                             speaker_name = user.current_speaker or "belozertseva"
                             message_text = get_no_feedback_message(speaker_name)
                             await bot.send_message(
@@ -33,7 +37,7 @@ async def check(bot: Bot, db: DBClass = None):
                                 parse_mode="HTML"
                             )
                             await current_db.user.update_user_info(
-                                telegram_user_id=user.user_id, 
+                                telegram_user_id=user.user_id,
                                 feedback_waiting=None,
                                 current_speaker=None
                             )

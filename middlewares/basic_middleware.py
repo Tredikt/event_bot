@@ -10,11 +10,11 @@ from core.services.interactive_broadcast_service import InteractiveBroadcastServ
 
 
 class BasicMiddleware(BaseMiddleware):
-    def __init__(self, bot: Bot, db: DBClass):
+    def __init__(self, bot: Bot, db: DBClass, session):
         self.bot = bot
         self.db = db
+        self.session_pool = session
         self.keyboards = Keyboards()
-        self.broadcast_service = InteractiveBroadcastService(bot=bot)
 
     async def __call__(
             self,
@@ -24,13 +24,14 @@ class BasicMiddleware(BaseMiddleware):
 
         callback_query = event.callback_query
         message = event.message
-        
-        data["variables"] = Variables(
-            bot=self.bot,
-            db=self.db,
-            keyboards=self.keyboards,
-            broadcast_service=self.broadcast_service
-        )
+        async with self.session_pool() as session:
+            broadcast_service = InteractiveBroadcastService(bot=self.bot, db_session=session)
+            data["variables"] = Variables(
+                bot=self.bot,
+                db=self.db,
+                keyboards=self.keyboards,
+                broadcast_service=broadcast_service
+            )
 
         if callback_query:
             print(callback_query.data)

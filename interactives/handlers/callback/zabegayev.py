@@ -14,7 +14,7 @@ router = Router(name="zabegayev_callback_router")
 
 
 @router.callback_query(F.data == "zabegayev_start_interactive")
-async def zabegayev_start_interactive(call: CallbackQuery, variables: Variables):
+async def zabegayev_start_interactive(call: CallbackQuery, variables: Variables, current_speaker: str):
     """Обработчик кнопки запуска интерактива - отправляет первый вопрос поэтапно"""
     await call.answer()
     await call.message.delete()
