@@ -14,6 +14,7 @@ from middlewares.basic_middleware import BasicMiddleware
 from settings import config, DB_URL
 
 from core.routers import routers
+from core.utils.enums import commands
 
 
 loop = asyncio.get_event_loop()
@@ -49,6 +50,7 @@ async def main():
     dp.update.middleware(BasicMiddleware(bot=bot, db=middleware_db, session=SessionMaker))
 
     asyncio.create_task(check(bot=bot))
+    await bot.set_my_commands(commands=commands)
     await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot)
 

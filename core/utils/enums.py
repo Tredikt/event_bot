@@ -22,7 +22,5 @@ class Variables(BaseModel):
 commands = [
     BotCommand(command='support', description='Связаться с технической поддержкой'),
     BotCommand(command='event', description='Связаться с организаторами'),
-    BotCommand(command='order', description='Порядок выступления'),
-    BotCommand(command='plan', description='План мероприятия'),
-    BotCommand(command='navigator', description='Навигатор по боту')
+    BotCommand(command='order', description='Порядок выступления')
 ]

@@ -30,7 +30,8 @@ class BroadcastService:
         users: List[User],
         text: str,
         keyboard: InlineKeyboardMarkup = None,
-        collect_messages: bool = False
+        collect_messages: bool = False,
+        disable_web_page_preview: bool = False
     ) -> Union[dict[str, int], None]:
         """
         Рассылает текст + инлайн-клавиатуру всем пользователям партиями.
@@ -45,7 +46,8 @@ class BroadcastService:
                     text=text,
                     keyboard=keyboard,
                     batch_index=i,
-                    collect_messages=collect_messages
+                    collect_messages=collect_messages,
+                    disable_web_page_preview=disable_web_page_preview
                 )
             )
             for i, b in enumerate(batches)
@@ -83,7 +85,8 @@ class BroadcastService:
         text: str,
         keyboard: InlineKeyboardMarkup,
         batch_index: int,
-        collect_messages: bool = False
+        collect_messages: bool = False,
+        disable_web_page_preview: bool = False
     ) -> Union[dict[str, int], List[Tuple[int, int]]]:
         """
         Отсылает одному батчу пользователей, не более messages_per_second в секунду.
@@ -100,6 +103,7 @@ class BroadcastService:
                     text=text,
                     reply_markup=keyboard,
                     parse_mode="HTML",
+                    disable_web_page_preview=disable_web_page_preview
                 )
                 successful += 1
                 if collect_messages:
