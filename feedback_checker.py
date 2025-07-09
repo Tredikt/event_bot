@@ -23,13 +23,15 @@ async def check(bot: Bot, db: DBClass | None = None):
                 for user in users:
                     # print(user.feedback_waiting, now)
                     try:
-                        if (user.feedback_waiting + timedelta(minutes=2)) < now:
+                        if (user.feedback_waiting + timedelta(seconds=15)) < now:
                         # if (user.feedback_waiting + timedelta(seconds=15)) < now:
                             # Используем current_speaker из базы данных, fallback на belozertseva
                             messages = await current_db.messages.get_by_chat_id(chat_id=user.user_id)
+                            speaker_name = user.current_speaker or "belozertseva"
+                            if speaker_name == "all":
+                                continue
                             await delete_keyboard(bot=bot, db=current_db, messages=messages)
                             await current_db.messages.delete_by_chat_id(chat_id=user.user_id)
-                            speaker_name = user.current_speaker or "belozertseva"
                             message_text = get_no_feedback_message(speaker_name)
                             await bot.send_message(
                                 chat_id=user.user_id,

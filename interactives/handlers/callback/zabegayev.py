@@ -14,7 +14,7 @@ router = Router(name="zabegayev_callback_router")
 
 
 @router.callback_query(F.data == "zabegayev_start_interactive")
-async def zabegayev_start_interactive(call: CallbackQuery, variables: Variables, current_speaker: str):
+async def zabegayev_start_interactive(call: CallbackQuery, variables: Variables):
     """Обработчик кнопки запуска интерактива - отправляет первый вопрос поэтапно"""
     await call.answer()
     await call.message.delete()
@@ -24,7 +24,7 @@ async def zabegayev_start_interactive(call: CallbackQuery, variables: Variables,
         call=call,
         variables=variables,
         start_text="<b>Sprinter требует установки \"толстых клиентов\" в каждую систему.</b>",
-        question_text="Это правда или миф?",
+        question_text="Это правда или ложь?",
         buttons_data=buttons_1,
         callback_prefix="zabegayev_question_1"
     )

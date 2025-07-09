@@ -23,6 +23,8 @@ async def ending_handler(call: CallbackQuery, state: FSMContext, variables: Vari
     data = call.data.split("_")
     rate = data[-1]
     interactive_name = data[-2]
+    user = await variables.db.user.get_by_telegram_id(telegram_user_id=user_id)
+    current_speaker = user.current_speaker
 
     if current_speaker != interactive_name:
         kb = await variables.keyboards.menu.get_empty_keyboard()
@@ -76,7 +78,6 @@ async def ask_speaker_handler(call: CallbackQuery, state: FSMContext, variables:
     await asyncio.sleep(1)
     
     insight_text = get_speaker_insight_message(interactive_name)
-    await call.message.delete()
     await call.message.answer(
         text=insight_text,
         parse_mode="HTML"

@@ -14,7 +14,7 @@ router = Router(name="nurkhametova_callback_router")
 
 
 @router.callback_query(F.data == "nurkhametova_start_interactive")
-async def nurkhametova_start_interactive(call: CallbackQuery, variables: Variables, current_speaker: str):
+async def nurkhametova_start_interactive(call: CallbackQuery, variables: Variables):
     """Обработчик кнопки запуска интерактива - отправляет первый вопрос поэтапно"""
     await call.answer()
     await call.message.delete()
