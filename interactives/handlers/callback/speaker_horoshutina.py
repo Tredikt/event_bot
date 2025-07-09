@@ -32,7 +32,7 @@ router = Router(name="speaker_horoshutina_callback")
 
 
 @router.callback_query(F.data == "horoshutina_start_interactive")
-async def horoshutina_start_interactive(call: CallbackQuery, variables: Variables, current_speaker: str):
+async def horoshutina_start_interactive(call: CallbackQuery, variables: Variables):
     """Обработчик кнопки запуска интерактива - отправляет вопрос поэтапно"""
     await call.answer()
     await call.message.delete()
