@@ -25,7 +25,7 @@ class MessagesRepository:
                 chat_id, message_id, *_ = item
             except Exception:
                 continue
-            rows.append({"chat_id": chat_id, "message_id": message_id})
+            rows.append({"chat_id": str(chat_id), "message_id": message_id})
 
         if not rows:
             return
@@ -34,14 +34,14 @@ class MessagesRepository:
         await self.session.execute(stmt)
         await self.session.commit()
 
-    async def get_all(self) -> list[Tuple[int, int]]:
+    async def get_all(self) -> list[Tuple[str, int]]:
         """
         Возвращает список всех сохранённых (chat_id, message_id).
         """
         stmt = select(Messages.chat_id, Messages.message_id)
         result = await self.session.execute(stmt)
         # result.fetchall() даст список кортежей
-        return result.fetchall()
+        return list(result.fetchall())
 
     async def delete_all(self):
         stmt = delete(Messages)
@@ -51,7 +51,7 @@ class MessagesRepository:
     async def get_by_chat_id(self, chat_id: str) -> List[Messages]:
         stmt = select(Messages).where(Messages.chat_id == chat_id)
         result = await self.session.execute(stmt)
-        return result.scalars().all()
+        return list(result.scalars().all())
 
     async def delete_by_chat_id(self, chat_id: str) -> None:
         stmt = delete(Messages).where(Messages.chat_id == chat_id)
