@@ -52,7 +52,8 @@ class InteractiveBroadcastService:
         interactive_name: str,
         text: str,
         keyboard: Optional[InlineKeyboardMarkup] = None,
-        messages: bool = False
+        messages: bool = False,
+        disable_web_page_preview: bool = False
     ) -> dict[str, int]:
         """Отправляет окончание интерактива всем пользователям"""
         
@@ -71,7 +72,8 @@ class InteractiveBroadcastService:
             users=users,
             text=text,
             keyboard=keyboard,
-            collect_messages=messages
+            collect_messages=messages,
+            disable_web_page_preview=disable_web_page_preview
         )
         
         print(f"Рассылка окончания интерактива '{interactive_name}' завершена. "
@@ -158,6 +160,7 @@ class InteractiveBroadcastService:
         speaker_name: str,
         text: str,
         keyboard: Optional[InlineKeyboardMarkup],
+        disable_web_page_preview: bool = False
     ) -> dict[str, int]:
         """Отправляет рассылку об окончании выступления"""
         
@@ -166,7 +169,8 @@ class InteractiveBroadcastService:
                 interactive_name=speaker_name,
                 text=text,
                 keyboard=keyboard,
-                messages=True
+                messages=True,
+                disable_web_page_preview=disable_web_page_preview
             )
             
             print(f"Окончание {speaker_name}: отправлено {result['total_sent']} сообщений, ошибок: {result['total_failed']}")
