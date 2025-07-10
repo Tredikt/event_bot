@@ -23,7 +23,7 @@ async def check(bot: Bot, db: DBClass | None = None):
                 for user in users:
                     # print(user.feedback_waiting, now)
                     try:
-                        if (user.feedback_waiting + timedelta(seconds=15)) < now:
+                        if (user.feedback_waiting + timedelta(minutes=2)) < now:
                         # if (user.feedback_waiting + timedelta(seconds=15)) < now:
                             # Используем current_speaker из базы данных, fallback на belozertseva
                             messages = await current_db.messages.get_by_chat_id(chat_id=user.user_id)
