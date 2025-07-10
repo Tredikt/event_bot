@@ -116,7 +116,7 @@ interactive_messages = {
         "end": "<b>Как тебе выступление Юлии?</b>\n<i>Если хочешь ещё раз пройтись по ключевым идеям — материалы в <b><a href='https://t.me/Easyontelegram_bot?startapp=courses_ae7f1124-c3e0-45be-9104-b0364321aa8a_fb61d487-6dc2-43ec-8b1c-c5ed8e78b024'>easy</a></b>. Открывай, когда будет удобно.</i>"
     },
     "gilmanova": {
-        "end": "❓ <b>Как тебе это выступление?</b>\n<i>Материалы Эльвиры Гильмановой уже в <b>easy</b>.</i>"
+        "end": "❓ <b>Как тебе это выступление?</b>\n<i>Материалы Эльвиры Гильмановой уже в <b><a href='https://t.me/Easyontelegram_bot?startapp=courses_6ef3b7ab-a326-41f5-8cd6-1bd802cd7ccd_7a71928e-1ebf-43a0-b414-2cb1e7bc618f'>easy</a></b>.</i>"
     }
 }
 
